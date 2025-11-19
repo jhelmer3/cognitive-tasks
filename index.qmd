@@ -1,0 +1,54 @@
+---
+title: "Cognitive Task Modeling"
+subtitle: "Analysis Report"
+date: last-modified
+author: "Jessica Helmer"
+---
+
+## Overview
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Denominator Neglect
+
+The FPT superstar.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Denominator Neglect](/Reports/denominator-neglect_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Raven Matrices
+
+Nevermore.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Raven](/Reports/raven_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Decision Rules
+
+Best Buy Simulator.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Decision Rules](/Reports/decision-rules_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+

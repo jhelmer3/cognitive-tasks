@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Cognitive Task Modeling"
+  description: "Progress and report on the Forecasting Proficiency Test's cognitive task modeling work"
+  site-url: "https://jhelmer3.github.io/advice-taking-metaanalysis/"
+  navbar:
+    left:
+      - text: Home
+        href: index.qmd
+      - text: "Reports"
+        menu:
+          - Reports/denominator-neglect_report.qmd
+          - Reports/raven_report.qmd
+          - Reports/decision-rules_report.qmd
+          - Reports/bayesian-update_report.qmd
+      - text: "Methods"
+        menu:
+          - Reports/Methods/2PL.qmd
+    tools:
+      - icon: github
+        href: https://github.com/jhelmer3/advice-taking-metaanalysis
+  page-footer:
+    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true

@@ -1,0 +1,14 @@
+/* css styles */
+.v-center-container {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.l-center-container {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  height: 90%;
+}

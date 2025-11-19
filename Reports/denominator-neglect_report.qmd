@@ -1,0 +1,301 @@
+---
+title: "Denominator Neglect"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+#### Setup
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+
+```{r}
+dn_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv")
+
+anchoraig_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/task_aig_version.csv")
+```
+
+```{r}
+anchor_ids <- anchoraig_full %>%
+  filter(task == "denominator_neglect_version_A" |
+           task == "denominator_neglect_version_B") %>%
+  mutate(task_version = factor(ifelse(task == "denominator_neglect_version_A", "A", "B"))) %>%
+  select(!task) %>%
+  filter(AIG_version == "anchor" & task_version == "B") %>%
+  pull(session_id)
+
+dn_long <- dn_full %>%
+  arrange(session_id, trial_id) %>%
+  filter(session_id %in% anchor_ids & task_version == "B") %>%
+  mutate(proportion_difference = abs(left_lottery_gold_prop - right_lottery_gold_prop),
+         trial_id = paste0("item_", trial_id)) |> 
+  select(-c(session_restart_id, time_elapsed, custom_timer_ended_trial,
+            trial_index, trial, response, trial_type))
+
+dn_items <- dn_long %>%
+  select(trial_id, choice_type, proportion_difference) %>%
+  unique() %>%
+  separate_wider_delim(trial_id, delim = "_", names = c("trial", "item")) %>%
+  mutate(cond = paste0(choice_type, " ", round(proportion_difference * 100, 0), "%")) %>%
+  select(item, cond)
+
+dn <- dn_long %>%
+  select(session_id, trial_id, correct) %>% # no choice_type or proportion_difference
+  pivot_wider(id_cols = session_id,
+              names_from = trial_id, values_from = correct) %>% 
+  select(-session_id) %>%
+  drop_na()
+```
+
+
+## Denominator Neglect
+
+Denominator Neglect is a ratio comparison task in which participants choose between lotteries of gold and silver coins. Participants' goal is to get the most gold coins over the course of the trials and therefore should select the lottery with the highest proportion of gold coins. 
+
+### Methods
+
+
+### Modeling
+
+```{r}
+#| eval: false
+dn_list <- list(J = nrow(dn),
+                K = ncol(dn),
+                y = dn)
+
+dn_m <- stan(here::here("Models", "2pl-code.stan"), 
+             data = dn_list,
+             chains = 4,
+             iter = 2500,
+             seed = 50401)
+saveRDS(dn_m, here::here("Models", "denominator-neglect_2pl.rds"))
+```
+
+``` {r}
+dn_m <- readRDS(here::here("Models", "denominator-neglect_2pl.rds"))
+```
+
+Probabilities of correct response given difficulty and discrimination estimates and hypothetical $\theta$ values.
+
+```{r}
+ps <- rstan::extract(dn_m, c("a", "b")) |>
+  as.data.frame() |>
+  mutate(rep = row_number()) |>
+  filter(rep %in% 1:50) |>
+  pivot_longer(-rep,
+               names_to = "item", values_to = "est") |>
+  separate_wider_delim(item, ".", names = c("param", "item")) |>
+  pivot_wider(id_cols = c(item, rep),
+              names_from = param, values_from = est) |>
+  expand_grid(th = seq(-6, 6, length.out = 100)) |>
+  mutate(p_1 = exp(a * (th - b)) / (1 + exp(a * (th - b))),
+         p_0 = 1 - p_1,
+         info = a^2 * (p_1 * p_0),
+         choice_type = ifelse(as.numeric(item) <= 24, "conflict", "harmony"))
+```
+
+### Results
+
+Below are the item response curves.
+
+```{r}
+#| fig-width: 10.5
+#| fig-height: 10
+readRDS(here::here("Figures", "Denominator Neglect", "irc_denominator-neglect.rds"))
+```
+
+And below are the information curves.
+
+```{r}
+#| fig-width: 10.5
+#| fig-height: 10
+readRDS(here::here("Figures", "Denominator Neglect", "ic_denominator-neglect.rds"))
+```
+
+Test information curve
+
+```{r}
+tic <- ps %>%
+  summarize(.by = c(rep, th),
+            test_info = sum(info)) |>
+  ggplot(aes(x = th, y = test_info, group = rep)) +
+  geom_line(alpha = .3, color = "slategray3") +
+  geom_line(data = ps |> summarize(.by = c(rep, th),
+            test_info = sum(info)) |>
+              summarize(.by = th,
+                        test_info = mean(test_info)),
+            aes(x = th, y = test_info),
+            inherit.aes = F, linewidth = .8) +
+  scale_y_continuous(breaks = c(0, 15, 30)) +
+  scale_x_continuous(breaks = c(-4, 0, 4)) +
+  coord_cartesian(xlim = c(-5, 5), ylim = c(0, 30)) +
+  labs(y = "Test I(ϴ)", x = "ϴ") +
+  theme_classic(base_size = 14) +
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())
+
+# saveRDS(tic, here::here("Figures", "Denominator Neglect", "tic.rds")) 
+
+tic
+```
+
+
+```{r}
+
+top_items <- data.frame(conf_item = as.numeric(),
+                        harm_item = as.numeric(),
+                        test_info_mean = as.numeric(),
+                        test_info_sd = as.numeric())
+
+for (i in seq(24)) {
+  top_items <- expand_grid(conf_item = ps |> filter(choice_type == "conflict") |>
+                             filter(!(item %in% top_items$conf_item)) |>
+                             pull(item) |>
+                             unique(),
+                           harm_item = ps |> filter(choice_type == "harmony") |>
+                             filter(!(item %in% top_items$harm_item)) |>
+                             pull(item) |>
+                             unique()) |>
+    pmap(\(conf_item, harm_item){
+      ps |>
+        filter(item == conf_item | item == harm_item |
+                 item %in% top_items$conf_item | item %in% top_items$harm_item) |>
+        summarize(.by = c(rep, th),
+                  test_info = sum(info)) |>
+        summarize(.by = rep,
+                  test_info = sum(test_info)) |>
+        summarize(rank = i,
+                  conf_item = conf_item,
+                  harm_item = harm_item,
+                  test_info_mean = mean(test_info),
+                  test_info_sd = sd(test_info)) 
+    }) |>
+    list_rbind() |>
+    arrange(desc(test_info_mean)) |>
+    head(1) |>
+    rbind(top_items) |>
+    arrange(rank)
+}
+
+
+top_items |>
+  ggplot(aes(x = rank, y = test_info_mean / rank)) +
+  geom_line(alpha = 1, color = "slategray3") +
+  scale_y_continuous(breaks = c(25, 30)) +
+  scale_x_continuous(breaks = c(1, 12, 24)) +
+  #coord_cartesian(xlim = c(-5, 5), ylim = c(0, 30)) +
+  labs(y = "Test I(ϴ) per Item Pair", x = "Number of Item Pairs") +
+  theme_classic(base_size = 14) +
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())
+```
+
+
+```{r}
+#| fig-width: 3.3
+#| fig-height: 3
+#| fig-align: center
+top_items
+
+dndat <- dn_long |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+            select(subject_id, sscore_standardized) |>
+            summarize(.by = subject_id,
+                      sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, trial_id, correct, sscore) |>
+  mutate(item = str_split_i(trial_id, "_", 2),
+         .keep = "unused")
+
+saveRDS(dndat, here::here("Data", "Denominator Neglect", "dndat.rds"))
+
+dn_func <- function(n_items) {
+  pmap(expand_grid(n_items = n_items), 
+          \(n_items) {
+            dndat |>
+              filter(item %in% c(top_items |> head(n_items) |> pull(conf_item),
+                                 top_items |> head(n_items) |> pull(harm_item))) |>
+              pivot_wider(names_from = item, values_from = correct) |>
+              mutate(meanscore = rowMeans(across(!c(subject_id, sscore)), na.rm = T),
+                     .keep = "unused") |> # alert alert na.rm = T
+              select(sscore, meanscore) |>
+              drop_na() |>
+              summarize(n_items = n_items,
+                        cor = cor(sscore, meanscore) |> abs())
+          }) |>
+    list_rbind()
+}
+
+dn_cors <- map(1:24, dn_func) |>
+  list_rbind()
+
+dn_cors
+
+dn_cors |>
+  ggplot(aes(x = n_items, y = cor)) +
+  geom_line(linewidth = 1.5, color = "slategray") +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20, 24)) +
+  coord_cartesian(ylim = c(.1, .8)) +
+  labs(y = "Correlation with S-Scores", x = "Number of Conflict-Harmony Item Pairs") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() 
+
+```
+
+
+### Methods
+
+To analyze how this task performed with fewer items, for each list of items, we subsetted various numbers of items from the test and calculated the magnitude of the sum scores on those items' correlations with s-scores. We subsetted these items in two ways: (1) By selecting pairs of items in the order of their summed item information and (2) selecting item pairs randomly. For (1), these correlations were deterministic based on the number of items included because the items were selected by their order, but for (2) for each number of items, we repeated this 1,000 times.
+
+```{r}
+#| fig-width: 3.3
+#| fig-height: 3
+#| fig-align: center
+readRDS(here::here("Data", "Denominator Neglect", "dn_all.rds")) |>
+  summarize(.by = n_items,
+            across(cor, list(mean = mean))) |>
+  ggplot(aes(x = n_items, y = cor_mean)) +
+  # geom_ribbon(data = readRDS(here::here("Data", "Denominator Neglect", "dn_noinfo.rds")) |> 
+  #               summarize(.by = n_items,
+  #                         across(cor, list(mean = mean,
+  #                                          lower = ~ quantile(.x, 0.05, names = FALSE),
+  #                                          upper = ~ quantile(.x, 0.95, names = FALSE)))),
+  #             aes(ymin = cor_lower, ymax = cor_upper),
+  #             alpha = .5, fill = "thistle3") +
+  # geom_line(data = readRDS(here::here("Data", "Denominator Neglect", "dn_noinfo.rds")) |> 
+  #             summarize(.by = n_items,
+  #                       across(cor, list(mean = mean,
+  #                                        lower = ~ quantile(.x, 0.05, names = FALSE),
+  #                                        upper = ~ quantile(.x, 0.95, names = FALSE)))),
+  #           linewidth = 1, color = "thistle3") +
+  geom_line(linewidth = 1.5, color = "slategray") +
+  # annotate("text", label = str_wrap("Using summed information gives an advange over randomly selecting item pairs at small item counts",
+  #                                   width = 28), 
+  #          x = 2.4, y = .63, hjust = 0, vjust = 0,
+  #          color = "thistle4", lineheight = .8) +
+  # annotate("curve", arrow = arrow(length = unit(2.5, "mm")),
+  #          x = 2.2, xend = 1.9, y = .61, yend = .5,
+  #          color = "thistle4") +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20, 24)) +
+  coord_cartesian(ylim = c(.1, .8)) +
+  labs(y = "Correlation with S-Scores", x = "Number of Conflict-Harmony Item Pairs") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() 
+```
+
+<!-- Well, not anymore I guess! -->

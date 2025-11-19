@@ -1,0 +1,112 @@
+---
+title: "Bayesian Update"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+#### Setup
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+```{r}
+bu_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_bayesian_update.csv")
+
+anchoraig_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/task_aig_version.csv")
+```
+
+```{r}
+dndat <- readRDS(here::here("Data", "Denominator Neglect", "dndat.rds"))
+```
+
+```{r}
+anchor_ids <- anchoraig_full %>%
+  filter(task == "bayesian_update_easy" |
+           task == "bayesian_update_hard") %>%
+  mutate(task_version = factor(ifelse(task == "bayesian_update_easy", "easy", "hard"))) %>%
+  select(!task) %>%
+  filter(AIG_version == "anchor" & task_version == "easy") %>%
+  pull(session_id)
+
+bu_long <- bu_full %>%
+  arrange(session_id, unique_trial) %>%
+  filter(session_id %in% anchor_ids & version == "easy") |>
+  select(session_id, unique_trial, score) |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+            select(subject_id, sscore_standardized) |>
+            summarize(.by = subject_id,
+                      sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, unique_trial, score, sscore) |>
+  summarize(.by = c(subject_id, unique_trial),
+            score = mean(score),
+            sscore = first(sscore))
+```
+
+
+```{r}
+bu_func <- function(n_items) {
+  pmap(expand_grid(n_items = n_items), 
+          \(n_items) {
+            bu_long |>
+              filter(unique_trial %in% sample(unique_trial, n_items)) |>
+              select(sscore, score) |>
+              drop_na() |>
+              summarize(n_items = n_items,
+                        cor = cor(sscore, score) |> abs())
+          }) |>
+    list_rbind()
+}
+
+bu_func(2)
+
+bu_func <- function(n_items, rep = 1) {
+  pmap(expand_grid(n_items = n_items, rep = rep), 
+          \(n_items, rep) {
+            
+            bu_long |>
+              filter(unique_trial %in% sample(unique_trial, n_items)) |>
+              select(sscore, score) |>
+              drop_na() |>
+              summarize(n_items = n_items,
+                        rep = rep,
+                        cor = cor(sscore, score) |> abs())
+          }) |>
+    list_rbind()
+}
+
+bu_cors <- bu_func(1:7, 1:20)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
