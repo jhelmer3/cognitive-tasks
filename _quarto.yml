@@ -5,7 +5,7 @@ project:
 website:
   title: "Cognitive Task Modeling"
   description: "Progress and report on the Forecasting Proficiency Test's cognitive task modeling work"
-  site-url: "https://jhelmer3.github.io/advice-taking-metaanalysis/"
+  site-url: "https://jhelmer3.github.io/cognitive-tasks/"
   navbar:
     left:
       - text: Home

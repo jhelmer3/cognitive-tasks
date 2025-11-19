@@ -154,7 +154,7 @@ tic
 
 
 ```{r}
-
+#| eval: false
 top_items <- data.frame(conf_item = as.numeric(),
                         harm_item = as.numeric(),
                         test_info_mean = as.numeric(),
@@ -189,7 +189,10 @@ for (i in seq(24)) {
     rbind(top_items) |>
     arrange(rank)
 }
+```
 
+```{r}
+top_items <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
 
 top_items |>
   ggplot(aes(x = rank, y = test_info_mean / rank)) +

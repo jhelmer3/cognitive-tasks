@@ -1,1 +1,1 @@
-Sitemap: https://jhelmer3.github.io/advice-taking-metaanalysis/sitemap.xml
+Sitemap: https://jhelmer3.github.io/cognitive-tasks/sitemap.xml
