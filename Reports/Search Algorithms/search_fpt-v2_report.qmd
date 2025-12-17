@@ -1,0 +1,653 @@
+---
+title: "FPT Version Two"
+subtitle: "Search Algorithm"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+dn_dat_c <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
+
+bu_dat_h <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
+
+dn_top_items <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+
+```
+
+#### Cleaning
+
+::: panel-tabset
+#### Denominator Neglect
+
+```{r}
+dn_dat_c <- dn_dat_c |>
+  left_join(dn_top_items |> 
+              pivot_longer(c(conf_item, harm_item),
+                           names_to = "choice_type", values_to = "item") |>
+              select(item, rank),
+            by = "item") |>
+    mutate(task = "dn.c",
+           item = paste0(task, "_", rank),
+           # still need time per item
+           time = 3.43 / (length(unique(item)) * 2),
+           score = correct,
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+:::
+
+#### Bayesian Update
+
+```{r}
+bu_dat_h <- bu_dat_h |>
+    mutate(task = "bu.h",
+           item = paste0(task, "_", unique_trial),
+           time = 6.56 / length(unique(item)),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+
+#### Combined
+
+Deciding if I want to keep this with the new strategy
+
+```{r}
+#| code-fold: show
+v2_dat <- rbind(dn_dat_c, 
+                bu_dat_h)
+```
+:::
+
+
+## Search Algorithm: FPT Version 2
+
+The FPT Version 2 includes two cognitive tasks.
+
+* Denominator Neglect: Combined
+
+* Bayesian Update: Hard
+
+### Methods
+
+This algorithm seeks to maximize the $R^2$ of predicting s-scores per minute for a set of cognitive task items of average testing time `t`.
+
+* For all items of the FPT Version 2 cognitive tasks, calculate the $R^2$ of predicting s-scores of each single item.
+
+* Divide that $R^2$ by the average time it takes to complete an item of that task.
+
+* Identify the item with the maximum $R^2$ per testing time.
+
+* Add that item to the test.
+
+  + Include information of the the task, item number, its $R^2$, and its average testing time.
+
+* For all remaining items, calculate the $R^2$ of a test containing that item and the already included item with s-scores. 
+
+  + Within this test, average the score within task and then within person to get a person score.
+
+* Divide that $R^2$ by the average time it would take to complete the total proposed test.
+
+* Identify the proposed test with the maximum $R^2$ per testing time.
+
+* Continue until the testing time reaches the desired `t`.
+
+Notes:
+
+* For Denominator Neglect, items need to be considered as conflict-harmony pairs to ensure an equal number of conflict and harmony items land on the test.
+
+To manage individual task needs, it may be helpful to identify the maximum correlation per testing time within each task and then compare across tasks. I don't think that will add to any runtime because it will be the same total number of comparisons. 
+
+This means for Denominator Neglect, we can either calculate the correlations across all pairs of possible conflict-harmony items, or we could refer to the top Denominator Neglect items list per the IRT results, and take those as the pairs. To save a little runtime, I'm going to use the pairs list to set the pairs at least to start. 
+
+```{r}
+#| eval: false
+# this is copied from Cleaning until i find a more elegant solution
+dn_dat_c <- dn_dat_c |>
+  left_join(dn_top_items |> 
+              pivot_longer(c(conf_item, harm_item),
+                           names_to = "choice_type", values_to = "item") |>
+              select(item, rank),
+            by = "item") |>
+    mutate(task = "dn.c",
+           item = paste0(task, "_", rank),
+           time = 3.43 / length(unique(item)),
+           score = correct,
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+Task: initialize test dataframe.
+
+```{r}
+test <- data.frame(task = as.character(),
+                   item = as.character(),
+                   test_r2 = as.numeric(),
+                   time = as.numeric(),
+                   r2_rate = as.numeric())
+```
+
+Task: for Denominator Neglect, identify the $R^2$ predicting s-scores for each item pair. And their rates per minute.
+
+```{r}
+dn_r2s <- dn_dat_c |>
+  summarize(.by = c(subject_id, item),
+            score = mean(score),
+            sscore = first(sscore),
+            time = sum(time),
+            task = first(task)) |>
+  drop_na() |>
+  summarize(.by = item,
+            task = first(task),
+            test_r2 = summary(lm(sscore ~ score, data = data.frame(sscore, score)))$r.squared,
+            time = first(time),
+            r2_rate = test_r2 / first(time)) |>
+  arrange(desc(r2_rate))
+dn_r2s
+```
+
+Task: identify the item with the highest $R^2$ rate.
+
+```{r}
+dn_max_r2 <- dn_r2s |>
+  filter(r2_rate == max(r2_rate))
+```
+
+Task: for Bayesian Update, identify the $R^2$ predicting s-scores for each item. And their rates per minute.
+
+```{r}
+bu_r2s <- bu_dat_h |>
+  
+  # this summarize() doesn't actually do anything for BU
+  summarize(.by = c(subject_id, item),
+            score = mean(score),
+            sscore = first(sscore),
+            time = sum(time),
+            task = first(task)) |>
+  drop_na() |>
+  summarize(.by = item,
+            task = first(task),
+            test_r2 = summary(lm(sscore ~ score, data = data.frame(sscore, score)))$r.squared,
+            time = first(time),
+            r2_rate = test_r2 / first(time)) |>
+  arrange(desc(r2_rate))
+bu_r2s
+```
+
+Task: identify the item with the highest $R^2$
+
+```{r}
+bu_max_r2 <- bu_r2s |>
+  filter(r2_rate == max(r2_rate))
+```
+
+Task: of all tasks, identify the item with the highest $R^2$
+
+```{r}
+max_r2 <- rbind(dn_max_r2,
+      bu_max_r2) |>
+  filter(r2_rate == max(r2_rate))
+max_r2
+```
+
+Task: add that item to the test
+
+```{r}
+test <- rbind(test, max_r2)
+```
+
+Now comes the harder part. Need to generalize this to working with (1) already having items within test and (2) each linear model including each task separately.
+
+Starting with Bayesian Update because right away will need separate terms in the linear model.
+
+Task: for Bayesian Update, identify the $R^2$ predicting s-scores for each item. And their rates per minute. Include the currently included items. Okay now its looking like a combined dataframe would be helpful. Joining every rep seems ridiculous. Or maybe I should just join in the set test. I'm convinced we should have a combined set. Not sure if we should only have combined, but I'm going to adjust up above.
+
+```{r}
+map(bu_dat_h |> pull(item) |> unique(), 
+    ~ rbind(bu_dat_h |>
+        filter(item == .x),
+      v2_dat |>
+        filter(item %in% pull(test, item))) |> 
+  summarize(.by = c(task, subject_id),
+            score = mean(score),
+            sscore = first(sscore),
+            time = sum(time),
+            task = first(task)) |>
+  mutate(.by = subject_id,
+         time = sum(time)) |>
+  pivot_wider(names_from = task, values_from = score) |>
+  summarize(task = str_split_i(.x, "_", 1),
+            item = .x,
+            test_r2 = summary(lm(sscore ~ dn.c + bu.h,
+                                 data = data.frame(sscore, dn.c, bu.h)))$r.squared,
+            time = first(time),
+            r2_rate = test_r2 / first(time))) |>
+  list_rbind() |>
+  arrange(desc(r2_rate))
+```
+
+Okay, now I'd like to iterate over trying both Bayesian Update items AND Denominator Neglect items. I think I need to change the linear model call so it only includes predictors that are in the data. This could probably be an `if` thing, but I could also do some dynamic formulas. Let's work on it.
+
+```{r}
+v2_dat |> 
+  filter(!(item %in% pull(test, item))) |>
+  pull(item) |>
+  unique() |> 
+  map(~ rbind(v2_dat |>
+                filter(item == .x),
+              v2_dat |>
+                filter(item %in% pull(test, item))) |> 
+        summarize(.by = c(task, subject_id),
+                  score = mean(score),
+                  sscore = first(sscore),
+                  time = sum(time),
+                  task = first(task)) |>
+        mutate(.by = subject_id,
+               time = sum(time)) |> 
+        mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+        pivot_wider(names_from = task, values_from = score) |>
+        summarize(task = str_split_i(.x, "_", 1),
+                  item = .x,
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = cur_data()))$r.squared,
+                  time = first(time),
+                  r2_rate = test_r2 / first(time))) |>
+  list_rbind() |>
+  arrange(desc(r2_rate))
+
+```
+
+Great. We are able to get out the $R^2$ rate for all items after one item is in the test. And, this works if no items are in the test too.
+
+```{r}
+test <- data.frame(task = as.character(),
+                   item = as.character(),
+                   test_r2 = as.numeric(),
+                   time = as.numeric(),
+                   r2_rate = as.numeric())
+
+v2_dat |> 
+  filter(!(item %in% pull(test, item))) |>
+  pull(item) |>
+  unique() |> 
+  map(~ rbind(v2_dat |>
+                filter(item == .x),
+              v2_dat |>
+                filter(item %in% pull(test, item))) |> 
+        summarize(.by = c(task, subject_id),
+                  score = mean(score),
+                  sscore = first(sscore),
+                  time = sum(time),
+                  task = first(task)) |>
+        mutate(.by = subject_id,
+               time = sum(time)) |> 
+        mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+        pivot_wider(names_from = task, values_from = score) |>
+        summarize(task = str_split_i(.x, "_", 1),
+                  item = .x,
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = cur_data()))$r.squared,
+                  time = first(time),
+                  r2_rate = test_r2 / first(time))) |>
+  list_rbind() |>
+  arrange(desc(r2_rate))
+```
+
+So now, we can start putting together this phrase that finds the $R^2$ rates and adding them to the test. Instead of getting a dataframe of all the items' $R^2$ rate, I'd like to start getting back the test itself as items get added.
+
+```{r}
+#| eval: false
+test <- data.frame(i = as.numeric(),
+                   task = as.character(),
+                   item = as.character(),
+                   test_r2 = as.numeric(),
+                   time = as.numeric(),
+                   r2_rate = as.numeric())
+
+repeat {
+  test <- v2_dat |> 
+    filter(!(item %in% pull(test, item))) |>
+    pull(item) |>
+    unique() |> 
+    map(~ rbind(v2_dat |>
+                  filter(item == .x),
+                v2_dat |>
+                  filter(item %in% pull(test, item))) |> 
+          summarize(.by = c(task, subject_id),
+                    score = mean(score),
+                    sscore = first(sscore),
+                    time = sum(time),
+                    task = first(task)) |>
+          mutate(.by = subject_id,
+                 time = sum(time)) |> 
+          mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+          pivot_wider(names_from = task, values_from = score) |>
+          summarize(i = nrow(test) + 1,
+                    task = str_split_i(.x, "_", 1),
+                    item = .x,
+                    test_r2 = summary(lm(as.formula(first(formula)),
+                                         data = cur_data()))$r.squared,
+                    time = first(time),
+                    r2_rate = test_r2 / first(time))) |>
+    list_rbind() |>
+    filter(r2_rate == max(r2_rate)) |>
+    rbind(test)
+  
+  if (test |> pull(time) |> max() > 1) break
+}
+```
+
+Ok cool. So that can get us the items that would be included in a one-minute test by optimizing for $R^2$ rate per minute in a linear model assessing items across Denominator Neglect and Bayesian Update. Looks like only Denominator Neglect makes the cut right now. 
+
+But really, I don't know how valuable it is to keep it like that as time-based. I know I said I would do that in the setup, but wouldn't it be better to just run it across all items and get the time / $R^2$ curve? Then we could always just look at desired time cutoffs. 
+
+Is this stepwise strategy better than an all-combinations one? Probably not.
+
+Anyway. Let's get this for all items. I'll just have it iterate over integers through the total potential number of items. 
+
+```{r}
+#| eval: false
+test <- data.frame(i = as.numeric(),
+                   task = as.character(),
+                   item = as.character(),
+                   test_r2 = as.numeric(),
+                   time = as.numeric(),
+                   r2_rate = as.numeric())
+
+walk(seq(1, v2_dat |> pull(item) |> unique() |> length()), 
+     \(i) {test <<- v2_dat |> 
+       filter(!(item %in% pull(test, item))) |>
+       pull(item) |>
+       unique() |> 
+       map(~ rbind(v2_dat |>
+                     filter(item == .x),
+                   v2_dat |>
+                     filter(item %in% pull(test, item))) |> 
+             summarize(.by = c(task, subject_id),
+                       score = mean(score),
+                       sscore = first(sscore),
+                       time = sum(time),
+                       task = first(task)) |>
+             mutate(.by = subject_id,
+                    time = sum(time)) |> 
+             mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+             pivot_wider(names_from = task, values_from = score) |>
+             summarize(i = i,
+                       task = str_split_i(.x, "_", 1),
+                       item = .x,
+                       test_r2 = summary(lm(as.formula(first(formula)),
+                                            data = cur_data()))$r.squared,
+                       time = first(time),
+                       r2_rate = test_r2 / first(time))) |>
+       list_rbind() |>
+       filter(r2_rate == max(r2_rate)) |>
+       rbind(test)}, 
+     .progress = T)
+test
+```
+
+
+<!-- ```{r} -->
+<!-- test -->
+
+
+<!-- x <- "bu.h_6" -->
+
+<!-- rbind(v2_dat |> -->
+<!--         filter(item == x), -->
+<!--       v2_dat |> -->
+<!--         filter(item %in% pull(test, item))) |>  -->
+<!--   summarize(.by = c(task, subject_id), -->
+<!--             score = mean(score), -->
+<!--             sscore = first(sscore), -->
+<!--             time = sum(time), -->
+<!--             task = first(task)) |> -->
+<!--   mutate(.by = subject_id, -->
+<!--          time = sum(time)) |>  -->
+<!--   mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |> -->
+<!--   pivot_wider(names_from = task, values_from = score) |> -->
+<!--   summarize(task = str_split_i(x, "_", 1), -->
+<!--             item = x, -->
+<!--             test_r2 = summary(lm(as.formula(first(formula)), -->
+<!--                                  data = cur_data()))$r.squared, -->
+<!--             added_r2 = first(test_r2) - test |> -->
+<!--               filter(i == max(i)) |> -->
+<!--               pull(test_r2), -->
+<!--             added_time = first(time) - test |> -->
+<!--               filter(i == max(i)) |> -->
+<!--               pull(time), -->
+<!--             time = first(time), -->
+<!--             r2_rate = first(added_r2 / added_time)) -->
+<!-- ``` -->
+
+```{r}
+#| eval: false
+test <- data.frame(rep = 0,
+                   task = "INIT",
+                   item = "INIT",
+                   test_r2 = 0,
+                   time = 0,
+                   added_r2 = 0,
+                   added_time = 0,
+                   r2_rate = 0)
+
+walk(seq(1, v2_dat |> pull(item) |> unique() |> length()), 
+     \(i) {test <<- v2_dat |> 
+       filter(!(item %in% pull(test, item))) |>
+       pull(item) |>
+       unique() |> 
+       map(~ rbind(v2_dat |>
+                     filter(item == .x),
+                   v2_dat |>
+                     filter(item %in% pull(test, item))) |> 
+             summarize(.by = c(task, subject_id),
+                       score = mean(score),
+                       sscore = first(sscore),
+                       time = sum(time),
+                       task = first(task)) |>
+             mutate(.by = subject_id,
+                    time = sum(time)) |> 
+             mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+             pivot_wider(names_from = task, values_from = score) |>
+             summarize(rep = i,
+                       task = str_split_i(.x, "_", 1),
+                       item = .x,
+                       test_r2 = summary(lm(as.formula(first(formula)),
+                                            data = cur_data()))$r.squared,
+                       added_r2 = first(test_r2) - test |>
+                         head(1) |>
+                         pull(test_r2),
+                       added_time = first(time) - test |>
+                         head(1) |>
+                         pull(time),
+                       time = first(time),
+                       r2_rate = first(added_r2 / added_time))) |>
+       list_rbind() |>
+       filter(r2_rate == max(r2_rate)) |>
+       rbind(test) |>
+       filter(item != "INIT")}, 
+     .progress = T)
+test
+
+saveRDS(test, here::here("Data", "Search Algorithm", "v2test_dat.rds"))
+```
+
+
+```{r}
+test <- readRDS(here::here("Data", "Search Algorithm", "v2test_dat.rds"))
+```
+
+
+```{r}
+test |>
+  ggplot(aes(x = time, y = test_r2)) +
+  geom_line() +
+  geom_point(aes(color = task), size = 2) +
+  theme_classic() +
+  guides(x = guide_axis(cap = "both"),
+         y = guide_axis(cap = "both"))
+
+
+```
+
+Idk why:
+
+```{r}
+v2_dat |>
+  summarize(.by = c(subject_id, task),
+            score = mean(score))
+```
+
+
+
+
+Ok something's at least a little off. I'm thinking now that the $R^2$ rate shouldn't be the resulting $R^2$ divided by the new total time but instead the $R^2$ gain divided by the gain in time? Are these the exact same thing?
+
+It's tweaking me out that the $R^2$ decreases throughout. Is that saying that maybe some items are so noisy that they're making the task a worse predictor? Is this a sum score issue?
+
+```{r}
+
+data.frame(y = rnorm(100)) |>
+  mutate(x1 = y + rnorm(100, 0),
+         x2 = y + rnorm(100),
+         x3 = y + rnorm(100),
+         x4 = y + rnorm(100),
+         x = x1 + x2 + x3 + x4) |>
+  lm(y ~ x, data = _) |>
+  summary()
+
+data.frame(y = rnorm(100)) |>
+  mutate(x1 = y + rnorm(100, 0, 10),
+         x2 = y + rnorm(100),
+         x3 = y + rnorm(100),
+         x4 = y + rnorm(100),
+         x = x1 + x2 + x3 + x4) |>
+  lm(y ~ x, data = _) |>
+  summary()
+
+v2_dat |>
+  summarize(.by = c(subject_id, task),
+            sscore = first(sscore),
+            score = mean(score)) |>
+  pivot_wider(names_from = task, values_from = score) |>
+  lm(sscore ~ dn.c + bu.h, data = _) |>
+  summary() |>
+  pluck("r.squared")
+
+```
+
+
+```{r}
+#| eval: false
+# todo: conflict-harmony pairs
+ranked_items <- data.frame(tank = as.numeric(),
+                           task = as.character(),
+                           item = as.character(),
+                           test_cor = as.numeric(),
+                           total_time = as.numeric())
+
+repeat {
+  pmap(list(it = v2_dat |> pull(item) |> unique()), \(it) 
+       {
+         v2_dat |>
+           filter(item %in% it | item %in% pull(ranked_items, item)) |>
+           summarize(.by = c(task, subject_id),
+                     task_score = mean(score),
+                     sscore = first(sscore),
+                     time = first(time)) |>
+           drop_na() |>
+           # to-do: change to lm()
+           summarize(it = it,
+                     test_cor = cor(task_score, sscore),
+                     time = first(time))
+  }) |> 
+    list_rbind() |>
+    mutate(cor_rate = test_cor / 
+             sum(ranked_items |> pull(total_time), time, na.rm = T)) |>
+    filter(cor_rate == max(cor_rate)) |>
+    mutate(rank = nrow(ranked_items) + 1,
+           task = str_split_i(it , "_", i = 1),
+           item = it,
+           .keep = "unused",
+           .before = everything()) |>
+    mutate(total_time = sum(ranked_items |> 
+                              arrange(total_time) |>
+                              pull(total_time) |>
+                              last(), time, na.rm = T)) |>
+    rbind(ranked_items) -> ranked_items
+  
+  if ((ranked_items |> pull(time) |> sum()) > 1) break
+}
+
+ranked_items
+
+# dn_top_items |>
+#   filter(conf_item == 8 | harm_item == 8) |>
+#   select(conf_item, harm_item)
+
+```
+
+## Archive
+
+```{r}
+#| eval: false
+ranked_items <- data.frame(task = as.character(),
+                           item = as.character(),
+                           item_cor = as.numeric(),
+                           test_cor = as.numeric())
+
+
+test_cor <- v2_dat |>
+  filter(item %in% pull(ranked_items, item)) |>
+  summarize(.by = c(task, subject_id),
+            task_score = mean(score),
+            sscore = first(sscore)) |>
+  select(task_score, sscore) |>
+  cor()
+
+highest_cor <- c("start" = 0)
+
+v2_dat |>
+  filter(item == "bu_h1" | item %in% pull(ranked_items, item)) |>
+  summarize(.by = c(task, subject_id),
+            task_score = mean(score),
+            sscore = first(sscore)) |>
+  select(task_score, sscore) |>
+  drop_na() |>
+  summarize(cor = cor(task_score, sscore)) |>
+  pull(cor)
+
+if (.3 > highest_cor) highest_cor <- c("bu_h0" = .2)
+
+
+
+```
+

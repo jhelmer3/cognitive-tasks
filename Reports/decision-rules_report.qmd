@@ -62,6 +62,35 @@ dr_wide <- dr |>
   select(-subject_id)
 ```
 
+#### Cleaning for Search Algorithm
+
+```{r}
+admc.dr_dat <- admc |>
+  left_join(session,
+            by = "session_id") |>
+  filter(trial_name == "admc_dr_trial") |> 
+  mutate(.by = admc_id,
+         admc_response = as.numeric(admc_response),
+         
+         # scoring ADMC-DR by "correct" being all items correctly selected
+         # manually inputted the full correct score (i.e., 1, 2, or 3)
+         score = case_when(admc_id %in% c("dr9", "dr10") ~ ifelse(admc_response == 3, 1, 0),
+                             admc_id %in% c("dr8") ~ ifelse(admc_response == 2, 1, 0),
+                             .default = ifelse(admc_response == 1, 1, 0))) |>
+
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+              select(subject_id, sscore_standardized) |>
+              
+              # mean sscores per person
+              summarize(.by = subject_id,
+                        sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, admc_id, score, sscore)
+
+dir.create(here::here("Data", "ADMC Decision Rules"))
+saveRDS(admc.dr_dat, here::here("Data", "ADMC Decision Rules", "admc.dr_dat.rds"))
+```
+
 
 ### Modeling
 

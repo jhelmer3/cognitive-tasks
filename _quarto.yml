@@ -16,19 +16,26 @@ website:
           - Reports/raven_report.qmd
           - Reports/decision-rules_report.qmd
           - Reports/bayesian-update_report.qmd
+          - Reports/number-series_report.qmd
+          - Reports/coherence-forecasting-scale_report.qmd
+      - text: "Search Algorithms"
+        menu: 
+          - Reports/Search Algorithms/search_fpt-v2_report.qmd
+          - Reports/Search Algorithms/search_fpt-v3_report.qmd
+          - Reports/Search Algorithms/search_fpt-v4_report.qmd
+          - Reports/Search Algorithms/search_fpt-v5_report.qmd
       - text: "Methods"
         menu:
           - Reports/Methods/2PL.qmd
     tools:
       - icon: github
-        href: https://github.com/jhelmer3/advice-taking-metaanalysis
+        href: https://jhelmer3.github.io/cognitive-tasks/
   page-footer:
     right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
+    theme: 
+      - cosmo.scss
     css: styles.css
     toc: true

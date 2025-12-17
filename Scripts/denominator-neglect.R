@@ -280,7 +280,7 @@ items_ranked <- ps |>
               pivot_wider(names_from = choice_type, values_from = item),
             by = "rank")
 
-dndat <- dn_long |>
+dn_dat <- dn_long |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
             by = "session_id") |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
@@ -292,6 +292,8 @@ dndat <- dn_long |>
   mutate(item = str_split_i(trial_id, "_", 2),
          .keep = "unused")
 
+saveRDS(dn_dat, here::here("Data", "Denominator Neglect", "dn_dat.rds"))
+
 dn_func <- function(n_items) {
   pmap_df(expand_grid(n_items = n_items), 
           \(n_items, rep) {
@@ -299,7 +301,7 @@ dn_func <- function(n_items) {
             included_items <- items_ranked |> head(n_items) |>
               select(conflict, harmony) |> c() |> unlist() |> unname()
             
-            dndat |>
+            dn_dat |>
               filter(item %in% included_items) |>
               pivot_wider(names_from = item, values_from = correct) |> # need to figure out why 2000
               mutate(meanscore = rowMeans(across(!c(subject_id, sscore)), na.rm = T)) |> # alert alert na.rm = T
@@ -321,7 +323,7 @@ dn_func_notinfo <- function(n_items, rep = 1) {
                                   filter(rank %in% sample(unique(rank), n_items)) |>
                                   select(harmony)) |> unlist() |> unname()
             
-            dndat |>
+            dn_dat |>
               filter(item %in% included_items) |>
               pivot_wider(names_from = item, values_from = correct) |> 
               mutate(meanscore = rowMeans(across(!c(subject_id, sscore)), na.rm = T)) |> # alert alert na.rm = T

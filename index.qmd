@@ -11,7 +11,7 @@ author: "Jessica Helmer"
 ::: {.column width="70%"}
 ### Denominator Neglect
 
-The FPT superstar.
+FPT superstar.
 :::
 
 ::: {.column width="5%"}
@@ -21,6 +21,7 @@ The FPT superstar.
 [Denominator Neglect](/Reports/denominator-neglect_report.qmd){.btn .btn-outline-primary .btn role="button"}
 :::
 ::::
+
 
 :::: {.columns .v-center-container}
 ::: {.column width="70%"}
@@ -37,6 +38,7 @@ Nevermore.
 :::
 ::::
 
+
 :::: {.columns .v-center-container}
 ::: {.column width="70%"}
 ### Decision Rules
@@ -49,6 +51,54 @@ Best Buy Simulator.
 
 ::: {.column width="25%" .l-center-container}
 [Decision Rules](/Reports/decision-rules_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Bayesian Update
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Bayesian Update](/Reports/bayesian-update_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Coherence Forecasting Scale
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Coherence Forecasting Scale](/Reports/coherence-forecasting-scale_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Number Series
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Number Series](/Reports/number-series_report.qmd){.btn .btn-outline-primary .btn role="button"}
 :::
 ::::
 

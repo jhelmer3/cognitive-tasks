@@ -14,72 +14,45 @@ knitr:
       dev: "ragg_png"
 ---
 
+::: panel-tabset
 #### Setup
 
 ```{r}
 #| message: false
+#| code-fold: show
 library(tidyverse)
 ```
 
+#### Reading
+
 ```{r}
+#| code-fold: show
 bu_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_bayesian_update.csv")
 
 anchoraig_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/task_aig_version.csv")
+
+dn_dat <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat.rds"))
+
+dn_topitems <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
 ```
 
-```{r}
-dndat <- readRDS(here::here("Data", "Denominator Neglect", "dndat.rds"))
-```
+#### Functions
 
 ```{r}
-anchor_ids <- anchoraig_full %>%
-  filter(task == "bayesian_update_easy" |
-           task == "bayesian_update_hard") %>%
-  mutate(task_version = factor(ifelse(task == "bayesian_update_easy", "easy", "hard"))) %>%
-  select(!task) %>%
-  filter(AIG_version == "anchor" & task_version == "easy") %>%
-  pull(session_id)
-
-bu_long <- bu_full %>%
-  arrange(session_id, unique_trial) %>%
-  filter(session_id %in% anchor_ids & version == "easy") |>
-  select(session_id, unique_trial, score) |>
-  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
-            by = "session_id") |>
-  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
-            select(subject_id, sscore_standardized) |>
-            summarize(.by = subject_id,
-                      sscore = mean(sscore_standardized)),
-            by = "subject_id") |>
-  select(subject_id, unique_trial, score, sscore) |>
-  summarize(.by = c(subject_id, unique_trial),
-            score = mean(score),
-            sscore = first(sscore))
-```
-
-
-```{r}
-bu_func <- function(n_items) {
-  pmap(expand_grid(n_items = n_items), 
-          \(n_items) {
-            bu_long |>
-              filter(unique_trial %in% sample(unique_trial, n_items)) |>
-              select(sscore, score) |>
-              drop_na() |>
-              summarize(n_items = n_items,
-                        cor = cor(sscore, score) |> abs())
-          }) |>
-    list_rbind()
-}
-
-bu_func(2)
-
-bu_func <- function(n_items, rep = 1) {
+#| code-fold: show
+# calculates the correlation between a randomly sample group of `n_items` and s-scores
+bu_func <- function(data, n_items, rep = 1:1) {
   pmap(expand_grid(n_items = n_items, rep = rep), 
           \(n_items, rep) {
             
-            bu_long |>
-              filter(unique_trial %in% sample(unique_trial, n_items)) |>
+            data |>
+              filter(unique_trial %in% sample(unique(unique_trial), n_items)) |>
+              
+              # get person-level scores for both `sscore` and BU (`score`)
+              summarize(.by = subject_id,
+                        sscore = first(sscore),
+                        score = mean(score),
+                        n_items = n()) |>
               select(sscore, score) |>
               drop_na() |>
               summarize(n_items = n_items,
@@ -89,13 +62,319 @@ bu_func <- function(n_items, rep = 1) {
     list_rbind()
 }
 
-bu_cors <- bu_func(1:7, 1:20)
+# calculates the R^2 of a linear model with `n_items` BU items and the top five DN items
+bu_r2_func <- function(data, n_items, rep = 1) {
+  pmap(expand_grid(n_items = n_items, rep = rep), 
+       \(n_items, rep) {
+         
+         data |>
+           filter(unique_trial %in% sample(unique(unique_trial), n_items)) |>
+           summarize(.by = subject_id,
+                     sscore = first(sscore),
+                     correct = first(correct),
+                     score = mean(score),
+                     n_items = n()) |>
+           select(sscore, score, correct) |>
+           drop_na() |>
+           summarize(n_items = n_items,
+                     rep = rep,
+                     r2 = lm(sscore ~ score + correct,
+                             data = data.frame(sscore, score, correct)) |> 
+                       summary() |>
+                       pluck("r.squared"))
+       }) |>
+    list_rbind()
+}
+```
 
+#### Cleaning
+
+::: panel-tabset
+#### Easy
+```{r}
+#| code-fold: show
+anchor_ids_e <- anchoraig_full %>%
+  filter(task == "bayesian_update_easy" |
+           task == "bayesian_update_hard") %>%
+  mutate(task_version = factor(ifelse(task == "bayesian_update_easy", "easy", "hard"))) %>%
+  select(!task) %>%
+  
+  # because participants did more than one version in a session, need to specify both anchor and AIG both here and in the following assignment to get just the specific quadrant
+  filter(AIG_version == "anchor" & task_version == "easy") %>%
+  pull(session_id)
+
+bu_dat_e <- bu_full %>%
+  arrange(session_id, unique_trial) %>%
+  
+  # only anchor version and only easy version
+  filter(session_id %in% anchor_ids_e & version == "easy") |>
+  select(session_id, unique_trial, score) |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+            select(subject_id, sscore_standardized) |>
+              
+            # mean sscores per person
+            summarize(.by = subject_id,
+                      sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, unique_trial, score, sscore) |>
+  
+  # mean score per BU item (over the five trials)
+  # suggestion (maybe): do some trial-level stuff at some point?
+  summarize(.by = c(subject_id, unique_trial),
+            score = mean(score),
+            sscore = first(sscore))
+
+saveRDS(bu_dat_e, here::here("Data", "Bayesian Update", "bu_dat_e.rds"))
+```
+
+#### Hard
+```{r}
+#| code-fold: show
+anchor_ids_h <- anchoraig_full %>%
+  filter(task == "bayesian_update_easy" |
+           task == "bayesian_update_hard") %>%
+  mutate(task_version = factor(ifelse(task == "bayesian_update_easy", "easy", "hard"))) %>%
+  select(!task) %>%
+  
+  # because participants did more than one version in a session, need to specify both anchor and AIG both here and in the following assignment to get just the specific quadrant
+  filter(AIG_version == "anchor" & task_version == "hard") %>%
+  pull(session_id)
+
+bu_dat_h <- bu_full %>%
+  arrange(session_id, unique_trial) %>%
+  
+  # only anchor version and only easy version
+  filter(session_id %in% anchor_ids_h & version == "hard") |>
+  select(session_id, unique_trial, score) |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+            select(subject_id, sscore_standardized) |>
+              
+            # mean sscores per person
+            summarize(.by = subject_id,
+                      sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, unique_trial, score, sscore) |>
+  
+  # mean score per BU item (over the five trials)
+  # suggestion (maybe): do some trial-level stuff at some point?
+  summarize(.by = c(subject_id, unique_trial),
+            score = mean(score),
+            sscore = first(sscore))
+
+saveRDS(bu_dat_h, here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
+```
+:::
+
+:::
+
+
+```{r from script}
+library(tidyverse)
+
+bu_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_bayesian_update.csv")
+
+anchoraig_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/task_aig_version.csv")
+
+bu_full |>
+  summarize(.by = trial,
+            draw = list(unique(current_draw)))
+
+anchor_ids_h <- anchoraig_full %>%
+  filter(task == "bayesian_update_hard" & AIG_version == "anchor") |>
+  pull(session_id)
+
+bu_full %>%
+  filter(session_id %in% anchor_ids_h & version == "hard") |>
+  summarize(.by = trial,
+            ball_split = unique(ball_split),
+            draw = unique(current_draw))
 
 ```
 
+The following analysis only focuses on Bayesian Update: Easy
+
+### Correlations Between Bayesian Update and S-Scores
+
+The overall correlation between mean scores on Bayesian Update and s-scores was `r (bu_dat_e |> summarize(.by = subject_id, sscore = first(sscore), score = mean(score)) |> drop_na() |> select(sscore, score) |> cor() |> round(2))[1, 2]`.
+
+```{r}
+#| column: margin
+#| fig-height: 2.5
+#| fig-width: 2.5
+#| warning: false
+bu_dat_e |>
+  filter(unique_trial %in% sample(unique(unique_trial), 8)) |>
+  summarize(.by = subject_id,
+            sscore = first(sscore),
+            score = mean(score)) |>
+  ggplot(aes(x = score, y = sscore)) +
+  geom_point() +
+  # chore: italicize "r"
+  geom_label(label = paste("r =", (bu_dat_e |>
+                                       summarize(.by = subject_id, sscore = first(sscore), score = mean(score)) |> 
+                                       drop_na() |>
+                                       select(sscore, score) |>
+                                       cor() |> 
+                                      round(2))[1, 2]),
+             x = Inf, y = Inf, hjust = 1, vjust = 1) +
+  labs(y = "S-Score", x = "Bayesian Update") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() +
+  theme(aspect.ratio = 1)
+```
+
+We randomly selected $n$ items where $n \in [1, 8]$ and calculated the correlations between person-level mean scores on those $n$ items and s-scores, doing 100 replications per $n$.
+
+```{r}
+#| eval: false
+bu_cors <- bu_func(bu_dat_e, 1:8, 1:100)
+saveRDS(bu_cors, here::here("Data", "Bayesian Update", "bu_cors.rds"))
+```
 
 
+```{r}
+bu_cors <- readRDS(here::here("Data", "Bayesian Update", "bu_cors.rds"))
+
+bu_cors |>
+    summarize(.by = c(n_items),
+            across(cor, list(mean = mean,
+                             lower = ~ quantile(.x, 0.05, names = FALSE),
+                             upper = ~ quantile(.x, 0.95, names = FALSE)))) |>
+  ggplot(aes(x = n_items, y = cor_mean)) +
+  geom_line(linewidth = 1.5, color = "slategray") +
+  geom_ribbon(aes(ymin = cor_lower, ymax = cor_upper),
+              alpha = .3, fill = "slategray") +
+  scale_x_continuous(breaks = c(1, 3, 6, 8)) +
+  scale_y_continuous(breaks = c(.2, .4, .6)) +
+  coord_cartesian(ylim = c(.2, .6)) +
+  labs(y = "Correlation with S-Score", x = "Number of Items") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() 
+```
+
+## Correlations Between Bayesian Update and S-Score Residuals
+
+We first residualized out the effect of the top five Denominator Neglect items.
+
+```{r}
+dn_topfive <- dn_topitems |>
+  pivot_longer(c(conf_item, harm_item),
+               names_to = "choice_type", values_to = "item") |>
+  filter(rank <= 5) |>
+  pull(item)
+
+dn_topfivedat <- dn_dat |> 
+  filter(item %in% dn_topfive) |> 
+  summarize(.by = subject_id,
+            sscore = first(sscore),
+            correct = mean(correct)) |> # alert alert
+  drop_na()
+
+dn_resids <- data.frame(subject_id = dn_topfivedat$subject_id,
+      residuals = lm(sscore ~ correct, data = dn_topfivedat)$residuals)
+```
+
+The overall correlation between mean scores on Bayesian Update and s-score residuals was `r (bu_dat_e |> left_join(dn_resids, by = "subject_id") |> mutate(sscore = residuals) |> summarize(.by = subject_id, sscore = first(sscore), score = mean(score)) |> drop_na() |> select(sscore, score) |> cor() |> round(2))[1, 2]`.
+
+```{r}
+#| column: margin
+#| fig-height: 2.5
+#| fig-width: 2.5
+#| warning: false
+bu_dat_e |>
+  left_join(dn_resids, by = "subject_id") |>
+  mutate(sscore = residuals) |>
+  summarize(.by = subject_id,
+            sscore = first(sscore),
+            score = mean(score)) |>
+  ggplot(aes(x = score, y = sscore)) +
+  geom_point() +
+  # chore: italicize "r"
+  geom_label(label = paste("r =", (bu_dat_e |>
+  left_join(dn_resids, by = "subject_id") |>
+  mutate(sscore = residuals) |>
+                                       summarize(.by = subject_id, sscore = first(sscore), score = mean(score)) |> 
+                                       drop_na() |>
+                                       select(sscore, score) |>
+                                       cor() |> 
+                                      round(2))[1, 2]),
+             x = Inf, y = Inf, hjust = 1, vjust = 1) +
+  labs(y = "S-Score Residuals", x = "Bayesian Update") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() +
+  theme(aspect.ratio = 1)
+```
+
+```{r}
+#| eval: false
+bu_cors_postdn <- bu_dat_e |>
+  left_join(dn_resids, 
+            by = "subject_id") |>
+  mutate(sscore = residuals) |>
+  bu_func(1:8, 1:100)
+
+saveRDS(bu_cors_postdn, here::here("Data", "Bayesian Update", "bu_cors_postdn.rds"))
+```
+
+```{r}
+bu_cors_postdn <- readRDS(here::here("Data", "Bayesian Update", "bu_cors_postdn.rds"))
+
+bu_cors_postdn |>
+  summarize(.by = c(n_items),
+            across(cor, list(mean = mean,
+                             lower = ~ quantile(.x, 0.05, names = FALSE),
+                             upper = ~ quantile(.x, 0.95, names = FALSE)))) |>
+  ggplot(aes(x = n_items, y = cor_mean)) +
+  geom_line(linewidth = 1.5, color = "slategray") +
+  geom_ribbon(aes(ymin = cor_lower, ymax = cor_upper),
+              alpha = .3, fill = "slategray") +
+  scale_x_continuous(breaks = c(1, 3, 6, 8)) +
+  scale_y_continuous(breaks = c(.2, .3, .4)) +
+  coord_cartesian(ylim = c(.2, .4)) +
+  labs(y = "Correlation with S-Score Residuals", x = "Number of Items",
+       caption = "Top five Denominator Neglect items\nresidualized out of s-scores") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() 
+```
+
+### $R^2$ Post-DN and BN
+
+To see how successful the combinations of the five Denominator Neglect items and $n$ Bayesian Update items are at capturing forecasting ability, here is the $R^2$ of a simple linear model with increasing $n$ of Bayesian Update items in the person-level means scores.
+
+```{r}
+#| eval: false
+bu_r2 <- bu_dat_e |>
+           left_join(dn_topfivedat,
+                     by = c("subject_id", "sscore")) |>
+  bu_r2_func(1:8, 1:100)
+
+saveRDS(bu_r2, here::here("Data", "Bayesian Update", "bu_r2.rds"))
+```
+
+```{r}
+bu_r2 <- readRDS(here::here("Data", "Bayesian Update", "bu_r2.rds"))
+
+bu_r2 |>
+  summarize(.by = c(n_items),
+            across(r2, list(mean = mean,
+                             lower = ~ quantile(.x, 0.05, names = FALSE),
+                             upper = ~ quantile(.x, 0.95, names = FALSE)))) |>
+  ggplot(aes(x = n_items, y = r2_mean)) +
+  geom_line(linewidth = 1.5, color = "slategray") +
+  geom_ribbon(aes(ymin = r2_lower, ymax = r2_upper),
+              alpha = .3, fill = "slategray") +
+  scale_x_continuous(breaks = c(1, 3, 6, 8)) +
+  scale_y_continuous(breaks = c(.2, .3, .4)) +
+  coord_cartesian(ylim = c(.2, .4)) +
+  labs(y = "R^2", x = "Number of BU Items",
+       caption = "Top five Denominator Neglect items included in model") +
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
+  theme_classic() 
+```
 
 
 

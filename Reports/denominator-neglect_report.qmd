@@ -19,6 +19,7 @@ knitr:
 ```{r}
 #| message: false
 library(tidyverse)
+library(rstan)
 ```
 
 
@@ -61,9 +62,79 @@ dn <- dn_long %>%
 ```
 
 
+#### Cleaning
+
+::: panel-tabset
+#### Combined
+```{r}
+anchor_ids_c <- anchoraig_full %>%
+  filter(task == "denominator_neglect_version_A" |
+           task == "denominator_neglect_version_B") %>%
+  mutate(task_version = factor(ifelse(task == "denominator_neglect_version_A", "A", "B"))) %>%
+  select(!task) %>%
+  filter(AIG_version == "anchor" & task_version == "B") %>%
+  pull(session_id)
+
+dn_dat_c <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv") %>%
+  arrange(session_id, trial_id) %>%
+  filter(session_id %in% anchor_ids_c & task_version == "B") %>%
+  mutate(proportion_difference = abs(left_lottery_gold_prop - right_lottery_gold_prop),
+         trial_id = paste0("item_", trial_id)) |> 
+  select(-c(session_restart_id, time_elapsed, custom_timer_ended_trial,
+            trial_index, trial, response, trial_type)) |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+              select(subject_id, sscore_standardized) |>
+              summarize(.by = subject_id,
+                        sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) |>
+  mutate(item = str_split_i(trial_id, "_", 2),
+         .keep = "unused")
+
+saveRDS(dn_dat_c, here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
+```
+
+#### Separate
+```{r}
+anchor_ids_s <- anchoraig_full %>%
+  filter(task == "denominator_neglect_version_A" |
+           task == "denominator_neglect_version_B") %>%
+  mutate(task_version = factor(ifelse(task == "denominator_neglect_version_A", "A", "B"))) %>%
+  select(!task) %>%
+  filter(AIG_version == "anchor" & task_version == "B") %>%
+  pull(session_id)
+
+dn_dat_s <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv") %>%
+  arrange(session_id, trial_id) %>%
+  filter(session_id %in% anchor_ids_s & task_version == "B") %>%
+  mutate(proportion_difference = abs(left_lottery_gold_prop - right_lottery_gold_prop),
+         trial_id = paste0("item_", trial_id)) |> 
+  select(-c(session_restart_id, time_elapsed, custom_timer_ended_trial,
+            trial_index, trial, response, trial_type)) |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+              select(subject_id, sscore_standardized) |>
+              summarize(.by = subject_id,
+                        sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) |>
+  mutate(item = str_split_i(trial_id, "_", 2),
+         .keep = "unused")
+
+saveRDS(dn_dat_c, here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
+```
+:::
+
 ## Denominator Neglect
 
 Denominator Neglect is a ratio comparison task in which participants choose between lotteries of gold and silver coins. Participants' goal is to get the most gold coins over the course of the trials and therefore should select the lottery with the highest proportion of gold coins. 
+
+## Denominator Neglect: Combined
+
+The following analysis focuses only on the combined version
 
 ### Methods
 
@@ -302,3 +373,169 @@ readRDS(here::here("Data", "Denominator Neglect", "dn_all.rds")) |>
 ```
 
 <!-- Well, not anymore I guess! -->
+
+## Denominator Neglect: Combined
+
+The following analysis focuses only on the combied version
+
+### Methods
+
+
+### Modeling
+
+```{r}
+anchor_ids_s <- anchoraig_full %>%
+  filter(task == "denominator_neglect_version_A" |
+           task == "denominator_neglect_version_B") %>%
+  mutate(task_version = factor(ifelse(task == "denominator_neglect_version_A", "A", "B"))) %>%
+  select(!task) %>%
+  filter(AIG_version == "anchor" & task_version == "A") %>%
+  pull(session_id)
+
+dn_long_s <- dn_full %>%
+  arrange(session_id, trial_id) %>%
+  filter(session_id %in% anchor_ids_s & task_version == "A") %>%
+  mutate(proportion_difference = abs(left_lottery_gold_prop - right_lottery_gold_prop),
+         trial_id = paste0("item_", trial_id)) |> 
+  select(-c(session_restart_id, time_elapsed, custom_timer_ended_trial,
+            trial_index, trial, response, trial_type))
+
+# dn_items <- dn_long %>%
+#   select(trial_id, choice_type, proportion_difference) %>%
+#   unique() %>%
+#   separate_wider_delim(trial_id, delim = "_", names = c("trial", "item")) %>%
+#   mutate(cond = paste0(choice_type, " ", round(proportion_difference * 100, 0), "%")) %>%
+#   select(item, cond)
+
+dn_s <- dn_long_s %>%
+  select(session_id, trial_id, correct) %>% # no choice_type or proportion_difference
+  pivot_wider(id_cols = session_id,
+              names_from = trial_id, values_from = correct) %>% 
+  select(-session_id) %>%
+  drop_na()
+```
+
+
+```{r}
+#| eval: false
+dn_list_s <- list(J = nrow(dn_s),
+                  K = ncol(dn_s),
+                  y = dn_s)
+
+dn_m_s <- stan(here::here("Models", "2pl-code.stan"), 
+               data = dn_list_s,
+               chains = 4,
+               iter = 2500,
+               seed = 50401)
+saveRDS(dn_m_s, here::here("Models", "denominator-neglect-s_2pl.rds"))
+```
+
+``` {r}
+dn_m_s <- readRDS(here::here("Models", "denominator-neglect-s_2pl.rds"))
+```
+
+Probabilities of correct response given difficulty and discrimination estimates and hypothetical $\theta$ values.
+
+```{r}
+ps_s <- rstan::extract(dn_m_s, c("a", "b")) |>
+  as.data.frame() |>
+  mutate(rep = row_number()) |>
+  filter(rep %in% 1:50) |>
+  pivot_longer(-rep,
+               names_to = "item", values_to = "est") |>
+  separate_wider_delim(item, ".", names = c("param", "item")) |>
+  pivot_wider(id_cols = c(item, rep),
+              names_from = param, values_from = est) |>
+  expand_grid(th = seq(-6, 6, length.out = 100)) |>
+  mutate(p_1 = exp(a * (th - b)) / (1 + exp(a * (th - b))),
+         p_0 = 1 - p_1,
+         info = a^2 * (p_1 * p_0),
+         choice_type = ifelse(as.numeric(item) <= 24, "conflict", "harmony"))
+```
+
+### Results
+
+Test information curve
+
+```{r}
+tic_s <- ps_s %>%
+  summarize(.by = c(rep, th),
+            test_info = sum(info)) |>
+  ggplot(aes(x = th, y = test_info, group = rep)) +
+  geom_line(alpha = .3, color = "slategray3") +
+  geom_line(data = ps |> summarize(.by = c(rep, th),
+            test_info = sum(info)) |>
+              summarize(.by = th,
+                        test_info = mean(test_info)),
+            aes(x = th, y = test_info),
+            inherit.aes = F, linewidth = .8) +
+  scale_y_continuous(breaks = c(0, 15, 30)) +
+  scale_x_continuous(breaks = c(-4, 0, 4)) +
+  coord_cartesian(xlim = c(-5, 5), ylim = c(0, 30)) +
+  labs(y = "Test I(ϴ)", x = "ϴ") +
+  theme_classic(base_size = 14) +
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())
+
+saveRDS(tic_s, here::here("Figures", "Denominator Neglect", "tic_s.rds")) 
+
+tic_s
+```
+
+
+```{r}
+#| eval: false
+top_items_s <- data.frame(conf_item = as.numeric(),
+                          harm_item = as.numeric(),
+                          test_info_mean = as.numeric(),
+                          test_info_sd = as.numeric())
+
+for (i in seq(24)) {
+  top_items_s <- expand_grid(conf_item = ps_s |> filter(choice_type == "conflict") |>
+                               filter(!(item %in% top_items_s$conf_item)) |>
+                               pull(item) |>
+                               unique(),
+                             harm_item = ps_s |> filter(choice_type == "harmony") |>
+                               filter(!(item %in% top_items_s$harm_item)) |>
+                               pull(item) |>
+                               unique()) |>
+    pmap(\(conf_item, harm_item){
+      ps |>
+        filter(item == conf_item | item == harm_item |
+                 item %in% top_items_s$conf_item | item %in% top_items_s$harm_item) |>
+        summarize(.by = c(rep, th),
+                  test_info = sum(info)) |>
+        summarize(.by = rep,
+                  test_info = sum(test_info)) |>
+        summarize(rank = i,
+                  conf_item = conf_item,
+                  harm_item = harm_item,
+                  test_info_mean = mean(test_info),
+                  test_info_sd = sd(test_info)) 
+    }) |>
+    list_rbind() |>
+    arrange(desc(test_info_mean)) |>
+    head(1) |>
+    rbind(top_items_s) |>
+    arrange(rank)
+}
+
+saveRDS(top_items_s, here::here("Data", "Denominator Neglect", "top_items_s.rds"))
+```
+
+```{r}
+top_items_s <- readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds"))
+
+top_items_s |>
+  ggplot(aes(x = rank, y = test_info_mean / rank)) +
+  geom_line(alpha = 1, color = "slategray3") +
+  scale_y_continuous(breaks = c(25, 30)) +
+  scale_x_continuous(breaks = c(1, 12, 24)) +
+  #coord_cartesian(xlim = c(-5, 5), ylim = c(0, 30)) +
+  labs(y = "Test I(ϴ) per Item Pair", x = "Number of Item Pairs") +
+  theme_classic(base_size = 14) +
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())
+```
+
+

@@ -1,0 +1,67 @@
+---
+title: "Coherence Forecasting Scale"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+::: panel-tabset
+
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+cfs_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_coherence_forecasting_scores.csv")
+
+session <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv")
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+
+```
+
+#### Cleaning
+
+I do not know how to handle CFS scores!!
+
+```{r}
+#| code-fold: show
+#| eval: false
+#| include: false
+ns_dat <- ns_full |>
+  left_join(session,
+            by = "session_id") |>
+  left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
+              select(subject_id, sscore_standardized) |>
+              
+              # mean sscores per person
+              summarize(.by = subject_id,
+                        sscore = mean(sscore_standardized)),
+            by = "subject_id") |>
+  select(subject_id, ns_id, score = correct, sscore)
+
+dir.create(here::here("Data", "Number Series"))
+saveRDS(ns_dat, here::here("Data", "Number Series", "ns_dat.rds"))
+```
+
+:::

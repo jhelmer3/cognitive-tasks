@@ -1,27 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Search Algorithms/search_fpt-v5_report.html</loc>
+    <lastmod>2025-12-17T22:55:42.638Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Search Algorithms/search_fpt-v3_report.html</loc>
+    <lastmod>2025-12-17T22:55:08.746Z</lastmod>
+  </url>
+  <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/raven_report.html</loc>
     <lastmod>2025-11-11T23:31:19.948Z</lastmod>
   </url>
   <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/denominator-neglect_report.html</loc>
-    <lastmod>2025-11-19T23:19:32.131Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/bayesian-update_report.html</loc>
-    <lastmod>2025-11-19T19:28:03.786Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/index.html</loc>
-    <lastmod>2025-11-18T20:14:19.050Z</lastmod>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Methods/2PL.html</loc>
+    <lastmod>2025-11-19T15:14:12.607Z</lastmod>
   </url>
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/decision-rules_report.html</loc>
-    <lastmod>2025-11-19T20:03:22.176Z</lastmod>
+    <lastmod>2025-12-17T22:55:08.760Z</lastmod>
   </url>
   <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Methods/2PL.html</loc>
-    <lastmod>2025-11-19T15:14:12.607Z</lastmod>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/bayesian-update_report.html</loc>
+    <lastmod>2025-12-17T22:55:08.750Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/index.html</loc>
+    <lastmod>2025-12-17T22:55:09.292Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/coherence-forecasting-scale_report.html</loc>
+    <lastmod>2025-12-17T22:55:08.758Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/denominator-neglect_report.html</loc>
+    <lastmod>2025-12-17T22:55:09.268Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/number-series_report.html</loc>
+    <lastmod>2025-12-17T22:55:09.286Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Search Algorithms/search_fpt-v2_report.html</loc>
+    <lastmod>2025-12-17T22:55:08.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Search Algorithms/search_fpt-v4_report.html</loc>
+    <lastmod>2025-12-17T22:55:08.746Z</lastmod>
   </url>
 </urlset>

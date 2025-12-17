@@ -1,0 +1,256 @@
+---
+title: "FPT Version Five"
+subtitle: "Search Algorithm"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+dn_dat_c <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
+
+bu_dat_h <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
+
+admc.dr_dat <- readRDS(here::here("Data", "ADMC Decision Rules", "admc.dr_dat.rds"))
+
+ns_dat <- readRDS(here::here("Data", "Number Series", "ns_dat.rds"))
+
+dn_dat_s <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
+
+bu_dat_e <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_e.rds"))
+
+dn_top_items_c <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
+dn_top_items_s <- readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+
+```
+
+#### Cleaning
+
+::: panel-tabset
+
+#### Denominator Neglect
+
+```{r}
+dn_dat_c <- dn_dat_c |>
+  left_join(dn_top_items_c |> 
+              pivot_longer(c(conf_item, harm_item),
+                           names_to = "choice_type", values_to = "item") |>
+              select(item, rank),
+            by = "item") |>
+    mutate(task = "dn.c",
+           item = paste0(task, "_", rank),
+           # still need time per item
+           time = 3.43 / (length(unique(item)) * 2),
+           score = correct,
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+
+dn_dat_s <- dn_dat_s |>
+  left_join(dn_top_items_s |> 
+              pivot_longer(c(conf_item, harm_item),
+                           names_to = "choice_type", values_to = "item") |>
+              select(item, rank),
+            by = "item") |>
+    mutate(task = "dn.s",
+           item = paste0(task, "_", rank),
+           # still need time per item
+           time = 4.45 / (length(unique(item)) * 2),
+           score = correct,
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+#### Bayesian Update
+
+```{r}
+bu_dat_h <- bu_dat_h |>
+    mutate(task = "bu.h",
+           item = paste0(task, "_", unique_trial),
+           time = 6.56 / length(unique(item)),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+
+bu_dat_e <- bu_dat_e |>
+    mutate(task = "bu.e",
+           item = paste0(task, "_", unique_trial),
+           time = 7.26 / length(unique(item)),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+#### ADMC: Decision Rules
+
+```{r}
+admc.dr_dat <- admc.dr_dat |>
+    mutate(task = "admc.dr",
+           item = paste0(task, "_", admc_id),
+           time = 5.87 / length(unique(item)),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+#### Number Series
+
+```{r}
+ns_dat <- ns_dat |>
+    mutate(task = "ns",
+           item = paste0(task, "_", ns_id),
+           time = 3.70 / length(unique(item)),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+#### Combined
+
+```{r}
+#| code-fold: show
+v5_dat <- rbind(dn_dat_c, 
+                bu_dat_h,
+                admc.dr_dat,
+                ns_dat,
+                dn_dat_s,
+                bu_dat_e)
+```
+
+Note that all time information is based on the median time (from FPT preprint) for the entire task divided by number of items.
+:::
+
+:::
+
+## Search Algorithm: FPT Version 5
+
+The FPT Version 5 includes five cognitive tasks.
+
+* Denominator Neglect: Combined
+
+* Bayesian Update: Hard
+
+* ADMC: Decision Rules
+
+* Number Series
+
+* Cognitive Reflection Test
+
+* Matrix Reasoning
+
+* Denominator Neglect: Separate
+
+* Bayesian Update: Easy
+
+I don't know what to do with the CRT as of now, so this will only have Denominator Neglect: Combined, Bayesian Update: Hard, ADMC: Decision Rules, Number Series.
+
+I also don't know what to do with Raven.
+
+### Methods
+
+This algorithm seeks to maximize the $R^2$ of predicting s-scores per minute for a set of cognitive task items of average testing time `t`.
+
+
+```{r}
+#| eval: false
+test <- data.frame(rep = 0,
+                   task = "INIT",
+                   item = "INIT",
+                   test_r2 = 0,
+                   time = 0,
+                   added_r2 = 0,
+                   added_time = 0,
+                   r2_rate = 0)
+
+walk(seq(1, v5_dat |> pull(item) |> unique() |> length()), 
+     \(i) {test <<- v5_dat |> 
+       filter(!(item %in% pull(test, item))) |>
+       pull(item) |>
+       unique() |> 
+       map(~ rbind(v5_dat |>
+                     filter(item == .x),
+                   v5_dat |>
+                     filter(item %in% pull(test, item))) |> 
+             summarize(.by = c(task, subject_id),
+                       score = mean(score),
+                       sscore = first(sscore),
+                       time = sum(time),
+                       task = first(task)) |>
+             mutate(.by = subject_id,
+                    time = sum(time)) |> 
+             mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+             pivot_wider(names_from = task, values_from = score) |>
+             summarize(rep = i,
+                       task = str_split_i(.x, "_", 1),
+                       item = .x,
+                       test_r2 = summary(lm(as.formula(first(formula)),
+                                            data = pick(everything())))$r.squared,
+                       added_r2 = first(test_r2) - test |>
+                         head(1) |>
+                         pull(test_r2),
+                       added_time = first(time) - test |>
+                         head(1) |>
+                         pull(time),
+                       time = first(time),
+                       r2_rate = first(added_r2 / added_time))) |>
+       list_rbind() |>
+       filter(r2_rate == max(r2_rate)) |>
+       rbind(test) |>
+       filter(item != "INIT")}, 
+     .progress = T)
+test
+
+saveRDS(test, here::here("Data", "Search Algorithm", "v5test_dat.rds"))
+```
+
+```{r}
+test <- readRDS(here::here("Data", "Search Algorithm", "v5test_dat.rds"))
+```
+
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+test |>
+  ggplot(aes(x = time, y = test_r2)) +
+  geomtextpath::geom_textsegment(data = filter(test, test_r2 == max(test_r2)),
+               aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "PEAK"),
+               color = "gray80", linewidth = .3, linetype = "longdash") +
+  geom_segment(data = filter(test, test_r2 == max(test_r2)),
+               aes(y = -Inf, yend = test_r2, x = time),
+               color = "gray80", linewidth = .3, linetype = "longdash") +
+  geom_line() +
+  geom_point(aes(color = task), size = 2) +
+  guides(x = guide_axis(cap = "both"),
+         y = guide_axis(cap = "both")) +
+  labs(x = "Time (minutes)", y = "Test R^2") +
+  theme_classic()
+```
+
+So this method still uses a pretty crude way of measuring time. It does not account for (1) the time it takes to read instructions / do practice items, (2) any between-item difference in average time. Could
+
+* Make doing an item from a new task account for its upfront time cost
+
+* Other stuff
