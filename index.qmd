@@ -102,3 +102,19 @@ Best Buy Simulator.
 :::
 ::::
 
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Time Series
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Time Series](/Reports/time-series_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+

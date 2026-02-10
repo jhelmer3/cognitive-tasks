@@ -17,6 +17,7 @@ website:
           - Reports/decision-rules_report.qmd
           - Reports/bayesian-update_report.qmd
           - Reports/number-series_report.qmd
+          - Reports/time-series_report.qmd
           - Reports/coherence-forecasting-scale_report.qmd
       - text: "Search Algorithms"
         menu: 
