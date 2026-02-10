@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2025-12-17">
+<meta name="dcterms.date" content="2026-02-10">
 
 <title>FPT Version Two – Cognitive Task Modeling</title>
 <style>
@@ -272,7 +272,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 17, 2025</p>
+      <p class="date">February 10, 2026</p>
     </div>
   </div>
   
@@ -285,7 +285,7 @@ window.Quarto = {
 
 
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Setup</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Reading</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Functions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Cleaning</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false">Bayesian Update</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false">Combined</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Setup</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Reading</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Functions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Cleaning</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
@@ -299,65 +299,77 @@ window.Quarto = {
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dn_dat_c <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_c.rds"</span>))</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dn_dat_c_full <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_c.rds"</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bu_dat_h <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_h.rds"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bu_dat_h_full <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_h.rds"</span>))</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>dn_top_items <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"top_items.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>dn_top_items <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"top_items.rds"</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>startup_costs <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"startup_costs.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_startup <span class="ot">&lt;-</span> <span class="cf">function</span>(input_task) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  startup_costs <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(task <span class="sc">==</span> input_task) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(startup)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </div>
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Denominator Neglect</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Denominator Neglect</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Bayesian Update</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Combined</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dn_dat_c <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dn_top_items <span class="sc">|&gt;</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_longer</span>(<span class="fu">c</span>(conf_item, harm_item),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">names_to =</span> <span class="st">"choice_type"</span>, <span class="at">values_to =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(item, rank),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"dn.c"</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, rank),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>           <span class="co"># still need time per item</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> <span class="fl">3.43</span> <span class="sc">/</span> (<span class="fu">length</span>(<span class="fu">unique</span>(item)) <span class="sc">*</span> <span class="dv">2</span>),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">score =</span> correct,</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dn_dat_c <span class="ot">&lt;-</span> dn_dat_c_full <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dn_top_items <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_longer</span>(<span class="fu">c</span>(conf_item, harm_item),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">names_to =</span> <span class="st">"choice_type"</span>, <span class="at">values_to =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(item, rank),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"dn.c"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, rank),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="co"># still need time per item</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>           <span class="co"># currently (time in paper - startup cost) / number of items</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> (<span class="fl">3.43</span> <span class="sc">-</span> <span class="fu">get_startup</span>(<span class="fu">first</span>(task))) <span class="sc">/</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>             (<span class="fu">length</span>(<span class="fu">unique</span>(item)) <span class="sc">*</span> <span class="dv">2</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">score =</span> correct,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
-</div>
-</div>
-</div>
-<div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bu_dat_h <span class="ot">&lt;-</span> bu_dat_h <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"bu.h"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, unique_trial),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> <span class="fl">6.56</span> <span class="sc">/</span> <span class="fu">length</span>(<span class="fu">unique</span>(item)),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bu_dat_h <span class="ot">&lt;-</span> bu_dat_h_full <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"bu.h"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, unique_trial),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> (<span class="fl">6.56</span> <span class="sc">-</span> <span class="fu">get_startup</span>(<span class="fu">first</span>(task))) <span class="sc">/</span> <span class="fu">length</span>(<span class="fu">unique</span>(item)),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
-<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
-<p>Deciding if I want to keep this with the new strategy</p>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dn_dat_c, </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                bu_dat_h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dn_dat_c, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                bu_dat_h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -397,147 +409,147 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is copied from Cleaning until i find a more elegant solution</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dn_dat_c <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dn_top_items <span class="sc">|&gt;</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_longer</span>(<span class="fu">c</span>(conf_item, harm_item),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">names_to =</span> <span class="st">"choice_type"</span>, <span class="at">values_to =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(item, rank),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"dn.c"</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, rank),</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> <span class="fl">3.43</span> <span class="sc">/</span> <span class="fu">length</span>(<span class="fu">unique</span>(item)),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">score =</span> correct,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is copied from Cleaning until i find a more elegant solution</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dn_dat_c <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dn_top_items <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pivot_longer</span>(<span class="fu">c</span>(conf_item, harm_item),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">names_to =</span> <span class="st">"choice_type"</span>, <span class="at">values_to =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(item, rank),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"dn.c"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, rank),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> <span class="fl">3.43</span> <span class="sc">/</span> <span class="fu">length</span>(<span class="fu">unique</span>(item)),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">score =</span> correct,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(subject_id, sscore, task, item, score, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Task: initialize test dataframe.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Task: for Denominator Neglect, identify the <span class="math inline">\(R^2\)</span> predicting s-scores for each item pair. And their rates per minute.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dn_r2s <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, item),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> item,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task),</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> score, <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, score)))<span class="sc">$</span>r.squared,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>dn_r2s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dn_r2s <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, item),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> item,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> score, <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, score)))<span class="sc">$</span>r.squared,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>dn_r2s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>      item task    test_r2      time   r2_rate
-1   dn.c_1 dn.c 0.16864766 0.1429167 1.1800420
-2  dn.c_13 dn.c 0.14667889 0.1429167 1.0263246
-3  dn.c_10 dn.c 0.14246156 0.1429167 0.9968156
-4   dn.c_5 dn.c 0.13415138 0.1429167 0.9386686
-5   dn.c_6 dn.c 0.13093856 0.1429167 0.9161881
-6  dn.c_19 dn.c 0.12985682 0.1429167 0.9086191
-7  dn.c_16 dn.c 0.12976019 0.1429167 0.9079430
-8   dn.c_4 dn.c 0.12917141 0.1429167 0.9038233
-9  dn.c_12 dn.c 0.12793298 0.1429167 0.8951579
-10 dn.c_14 dn.c 0.12111792 0.1429167 0.8474723
-11  dn.c_7 dn.c 0.11802329 0.1429167 0.8258190
-12 dn.c_11 dn.c 0.11442960 0.1429167 0.8006736
-13  dn.c_2 dn.c 0.11293893 0.1429167 0.7902432
-14 dn.c_21 dn.c 0.11197012 0.1429167 0.7834644
-15  dn.c_9 dn.c 0.10782963 0.1429167 0.7544931
-16 dn.c_15 dn.c 0.10636893 0.1429167 0.7442724
-17 dn.c_23 dn.c 0.10293338 0.1429167 0.7202335
-18  dn.c_8 dn.c 0.10285300 0.1429167 0.7196711
-19 dn.c_24 dn.c 0.09667912 0.1429167 0.6764720
-20  dn.c_3 dn.c 0.09312134 0.1429167 0.6515779
-21 dn.c_20 dn.c 0.09292729 0.1429167 0.6502201
-22 dn.c_17 dn.c 0.09174215 0.1429167 0.6419276
-23 dn.c_18 dn.c 0.08094097 0.1429167 0.5663508
-24 dn.c_22 dn.c 0.07829387 0.1429167 0.5478289</code></pre>
+<pre><code>      item task    test_r2       time   r2_rate
+1   dn.c_1 dn.c 0.16864766 0.08872847 1.9007164
+2  dn.c_13 dn.c 0.14667889 0.08872847 1.6531209
+3  dn.c_10 dn.c 0.14246156 0.08872847 1.6055902
+4   dn.c_5 dn.c 0.13415138 0.08872847 1.5119316
+5   dn.c_6 dn.c 0.13093856 0.08872847 1.4757220
+6  dn.c_19 dn.c 0.12985682 0.08872847 1.4635304
+7  dn.c_16 dn.c 0.12976019 0.08872847 1.4624414
+8   dn.c_4 dn.c 0.12917141 0.08872847 1.4558057
+9  dn.c_12 dn.c 0.12793298 0.08872847 1.4418481
+10 dn.c_14 dn.c 0.12111792 0.08872847 1.3650401
+11  dn.c_7 dn.c 0.11802329 0.08872847 1.3301626
+12 dn.c_11 dn.c 0.11442960 0.08872847 1.2896604
+13  dn.c_2 dn.c 0.11293893 0.08872847 1.2728600
+14 dn.c_21 dn.c 0.11197012 0.08872847 1.2619412
+15  dn.c_9 dn.c 0.10782963 0.08872847 1.2152766
+16 dn.c_15 dn.c 0.10636893 0.08872847 1.1988140
+17 dn.c_23 dn.c 0.10293338 0.08872847 1.1600941
+18  dn.c_8 dn.c 0.10285300 0.08872847 1.1591882
+19 dn.c_24 dn.c 0.09667912 0.08872847 1.0896065
+20  dn.c_3 dn.c 0.09312134 0.08872847 1.0495091
+21 dn.c_20 dn.c 0.09292729 0.08872847 1.0473222
+22 dn.c_17 dn.c 0.09174215 0.08872847 1.0339652
+23 dn.c_18 dn.c 0.08094097 0.08872847 0.9122322
+24 dn.c_22 dn.c 0.07829387 0.08872847 0.8823985</code></pre>
 </div>
 </div>
 <p>Task: identify the item with the highest <span class="math inline">\(R^2\)</span> rate.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dn_max_r2 <span class="ot">&lt;-</span> dn_r2s <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dn_max_r2 <span class="ot">&lt;-</span> dn_r2s <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Task: for Bayesian Update, identify the <span class="math inline">\(R^2\)</span> predicting s-scores for each item. And their rates per minute.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bu_r2s <span class="ot">&lt;-</span> bu_dat_h <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this summarize() doesn't actually do anything for BU</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, item),</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> item,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> score, <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, score)))<span class="sc">$</span>r.squared,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>bu_r2s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bu_r2s <span class="ot">&lt;-</span> bu_dat_h <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this summarize() doesn't actually do anything for BU</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, item),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> item,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> score, <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, score)))<span class="sc">$</span>r.squared,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>bu_r2s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>    item task   test_r2 time   r2_rate
-1 bu.h_6 bu.h 0.1582450 0.82 0.1929817
-2 bu.h_2 bu.h 0.1488402 0.82 0.1815125
-3 bu.h_7 bu.h 0.1367507 0.82 0.1667691
-4 bu.h_3 bu.h 0.1323354 0.82 0.1613846
-5 bu.h_4 bu.h 0.1312685 0.82 0.1600835
-6 bu.h_5 bu.h 0.1280508 0.82 0.1561595
-7 bu.h_1 bu.h 0.1274959 0.82 0.1554829
-8 bu.h_0 bu.h 0.1249573 0.82 0.1523870</code></pre>
+<pre><code>    item task   test_r2     time   r2_rate
+1 bu.h_6 bu.h 0.1582450 0.506451 0.3124586
+2 bu.h_2 bu.h 0.1488402 0.506451 0.2938887
+3 bu.h_7 bu.h 0.1367507 0.506451 0.2700176
+4 bu.h_3 bu.h 0.1323354 0.506451 0.2612995
+5 bu.h_4 bu.h 0.1312685 0.506451 0.2591929
+6 bu.h_5 bu.h 0.1280508 0.506451 0.2528394
+7 bu.h_1 bu.h 0.1274959 0.506451 0.2517439
+8 bu.h_0 bu.h 0.1249573 0.506451 0.2467313</code></pre>
 </div>
 </div>
 <p>Task: identify the item with the highest <span class="math inline">\(R^2\)</span></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bu_max_r2 <span class="ot">&lt;-</span> bu_r2s <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>bu_max_r2 <span class="ot">&lt;-</span> bu_r2s <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Task: of all tasks, identify the item with the highest <span class="math inline">\(R^2\)</span></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>max_r2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dn_max_r2,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>      bu_max_r2) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>max_r2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>max_r2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dn_max_r2,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>      bu_max_r2) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>max_r2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>    item task   test_r2      time  r2_rate
-1 dn.c_1 dn.c 0.1686477 0.1429167 1.180042</code></pre>
+<pre><code>    item task   test_r2       time  r2_rate
+1 dn.c_1 dn.c 0.1686477 0.08872847 1.900716</code></pre>
 </div>
 </div>
 <p>Task: add that item to the test</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">rbind</span>(test, max_r2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">rbind</span>(test, max_r2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Now comes the harder part. Need to generalize this to working with (1) already having items within test and (2) each linear model including each task separately.</p>
@@ -546,71 +558,71 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(bu_dat_h <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>(), </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">rbind</span>(bu_dat_h <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">item =</span> .x,</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> dn.c <span class="sc">+</span> bu.h,</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, dn.c, bu.h)))<span class="sc">$</span>r.squared,</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(bu_dat_h <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>(), </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">rbind</span>(bu_dat_h <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>      v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">item =</span> .x,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(sscore <span class="sc">~</span> dn.c <span class="sc">+</span> bu.h,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> <span class="fu">data.frame</span>(sscore, dn.c, bu.h)))<span class="sc">$</span>r.squared,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 5
   task  item   test_r2  time r2_rate
   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-1 bu.h  bu.h_6   0.262 0.963   0.272
-2 bu.h  bu.h_2   0.248 0.963   0.258
-3 bu.h  bu.h_7   0.246 0.963   0.256
-4 bu.h  bu.h_5   0.244 0.963   0.253
-5 bu.h  bu.h_1   0.240 0.963   0.249
-6 bu.h  bu.h_0   0.238 0.963   0.247
-7 bu.h  bu.h_4   0.238 0.963   0.247
-8 bu.h  bu.h_3   0.237 0.963   0.246</code></pre>
+1 bu.h  bu.h_6   0.262 0.595   0.440
+2 bu.h  bu.h_2   0.248 0.595   0.417
+3 bu.h  bu.h_7   0.246 0.595   0.414
+4 bu.h  bu.h_5   0.244 0.595   0.409
+5 bu.h  bu.h_1   0.240 0.595   0.402
+6 bu.h  bu.h_0   0.238 0.595   0.400
+7 bu.h  bu.h_4   0.238 0.595   0.399
+8 bu.h  bu.h_3   0.237 0.595   0.398</code></pre>
 </div>
 </div>
 <p>Okay, now I’d like to iterate over trying both Bayesian Update items AND Denominator Neglect items. I think I need to change the linear model call so it only includes predictors that are in the data. This could probably be an <code>if</code> thing, but I could also do some dynamic formulas. Let’s work on it.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>              v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">item =</span> .x,</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>              v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">item =</span> .x,</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There was 1 warning in `summarize()`.
@@ -624,16 +636,16 @@ Caused by warning:
 <pre><code># A tibble: 31 × 5
    task  item    test_r2  time r2_rate
    &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1 dn.c  dn.c_13   0.242 0.286   0.847
- 2 dn.c  dn.c_16   0.237 0.286   0.830
- 3 dn.c  dn.c_14   0.233 0.286   0.817
- 4 dn.c  dn.c_6    0.231 0.286   0.807
- 5 dn.c  dn.c_10   0.230 0.286   0.805
- 6 dn.c  dn.c_5    0.229 0.286   0.802
- 7 dn.c  dn.c_2    0.226 0.286   0.791
- 8 dn.c  dn.c_19   0.224 0.286   0.785
- 9 dn.c  dn.c_12   0.216 0.286   0.757
-10 dn.c  dn.c_11   0.216 0.286   0.757
+ 1 dn.c  dn.c_13   0.242 0.177    1.36
+ 2 dn.c  dn.c_16   0.237 0.177    1.34
+ 3 dn.c  dn.c_14   0.233 0.177    1.32
+ 4 dn.c  dn.c_6    0.231 0.177    1.30
+ 5 dn.c  dn.c_10   0.230 0.177    1.30
+ 6 dn.c  dn.c_5    0.229 0.177    1.29
+ 7 dn.c  dn.c_2    0.226 0.177    1.27
+ 8 dn.c  dn.c_19   0.224 0.177    1.27
+ 9 dn.c  dn.c_12   0.216 0.177    1.22
+10 dn.c  dn.c_11   0.216 0.177    1.22
 # ℹ 21 more rows</code></pre>
 </div>
 </div>
@@ -641,103 +653,56 @@ Caused by warning:
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span> </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>              v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>                  <span class="at">item =</span> .x,</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>              v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarize</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>                  <span class="at">item =</span> .x,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(r2_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 32 × 5
-   task  item    test_r2  time r2_rate
-   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1 dn.c  dn.c_1    0.169 0.143   1.18 
- 2 dn.c  dn.c_13   0.147 0.143   1.03 
- 3 dn.c  dn.c_10   0.142 0.143   0.997
- 4 dn.c  dn.c_5    0.134 0.143   0.939
- 5 dn.c  dn.c_6    0.131 0.143   0.916
- 6 dn.c  dn.c_19   0.130 0.143   0.909
- 7 dn.c  dn.c_16   0.130 0.143   0.908
- 8 dn.c  dn.c_4    0.129 0.143   0.904
- 9 dn.c  dn.c_12   0.128 0.143   0.895
-10 dn.c  dn.c_14   0.121 0.143   0.847
+   task  item    test_r2   time r2_rate
+   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1 dn.c  dn.c_1    0.169 0.0887    1.90
+ 2 dn.c  dn.c_13   0.147 0.0887    1.65
+ 3 dn.c  dn.c_10   0.142 0.0887    1.61
+ 4 dn.c  dn.c_5    0.134 0.0887    1.51
+ 5 dn.c  dn.c_6    0.131 0.0887    1.48
+ 6 dn.c  dn.c_19   0.130 0.0887    1.46
+ 7 dn.c  dn.c_16   0.130 0.0887    1.46
+ 8 dn.c  dn.c_4    0.129 0.0887    1.46
+ 9 dn.c  dn.c_12   0.128 0.0887    1.44
+10 dn.c  dn.c_14   0.121 0.0887    1.37
 # ℹ 22 more rows</code></pre>
 </div>
 </div>
 <p>So now, we can start putting together this phrase that finds the <span class="math inline">\(R^2\)</span> rates and adding them to the test. Instead of getting a dataframe of all the items’ <span class="math inline">\(R^2\)</span> rate, I’d like to start getting back the test itself as items get added.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">i =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>                v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>                    <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>          <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarize</span>(<span class="at">i =</span> <span class="fu">nrow</span>(test) <span class="sc">+</span> <span class="dv">1</span>,</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>                    <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>                    <span class="at">item =</span> .x,</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>                    <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(test)</span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (test <span class="sc">|&gt;</span> <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">max</span>() <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="cf">break</span></span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>Ok cool. So that can get us the items that would be included in a one-minute test by optimizing for <span class="math inline">\(R^2\)</span> rate per minute in a linear model assessing items across Denominator Neglect and Bayesian Update. Looks like only Denominator Neglect makes the cut right now.</p>
-<p>But really, I don’t know how valuable it is to keep it like that as time-based. I know I said I would do that in the setup, but wouldn’t it be better to just run it across all items and get the time / <span class="math inline">\(R^2\)</span> curve? Then we could always just look at desired time cutoffs.</p>
-<p>Is this stepwise strategy better than an all-combinations one? Probably not.</p>
-<p>Anyway. Let’s get this for all items. I’ll just have it iterate over integers through the total potential number of items.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -748,36 +713,83 @@ Caused by warning:
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>                   v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">i =</span> i,</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test)}, </span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>                v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>                    <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>          <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarize</span>(<span class="at">i =</span> <span class="fu">nrow</span>(test) <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>                    <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>                    <span class="at">item =</span> .x,</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>                    <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(test)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (test <span class="sc">|&gt;</span> <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">max</span>() <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="cf">break</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Ok cool. So that can get us the items that would be included in a one-minute test by optimizing for <span class="math inline">\(R^2\)</span> rate per minute in a linear model assessing items across Denominator Neglect and Bayesian Update. Looks like only Denominator Neglect makes the cut right now.</p>
+<p>But really, I don’t know how valuable it is to keep it like that as time-based. I know I said I would do that in the setup, but wouldn’t it be better to just run it across all items and get the time / <span class="math inline">\(R^2\)</span> curve? Then we could always just look at desired time cutoffs.</p>
+<p>Is this stepwise strategy better than an all-combinations one? Probably not.</p>
+<p>Anyway. Let’s get this for all items. I’ll just have it iterate over integers through the total potential number of items.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">i =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>                   v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">i =</span> i,</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> test_r2 <span class="sc">/</span> <span class="fu">first</span>(time))) <span class="sc">|&gt;</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test)}, </span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <!-- ```{r} -->
@@ -812,72 +824,84 @@ Caused by warning:
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>                   v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">rep =</span> i,</span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(test_r2),</span>
-<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(time),</span>
-<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
-<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
-<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
-<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
-<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>test</span>
-<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithm"</span>, <span class="st">"v2test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v2_dat <span class="sc">|&gt;</span> </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>       <span class="co"># get just those items not in the test (run through everything left)</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># just the data from the tested item</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>                   v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># just the data from the existing test</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>             <span class="co"># get task-specific scores, sum task time</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>             <span class="co"># keeping track of the total time (repeated on all rows)</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>             <span class="co"># building model formula string of just those tasks already included</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>             <span class="co"># need task data in separate columns for lm()</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">rep =</span> i,</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>                       <span class="co"># extract task name from item name</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>                       <span class="co"># extract R^2 (repeated on all rows)</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">cur_data</span>()))<span class="sc">$</span>r.squared,</span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>                       <span class="co"># get increase in R^2</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(test_r2),</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>                       <span class="co"># get increase in time</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(time),</span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>test</span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v2test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithm"</span>, <span class="st">"v2test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v2test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>test <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -891,9 +915,9 @@ Caused by warning:
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, task),</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, task),</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>               subject_id task       score
@@ -3270,14 +3294,14 @@ Caused by warning:
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x1 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>),</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">x2 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x3 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">x4 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3 <span class="sc">+</span> x4) <span class="sc">|&gt;</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x1 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">x2 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x3 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">x4 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3 <span class="sc">+</span> x4) <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -3288,29 +3312,29 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.37286 -0.28270  0.00213  0.28339  1.05098 
+-1.57842 -0.30224 -0.00699  0.31407  1.27696 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.031709   0.043211  -0.734    0.465    
-x            0.198184   0.009398  21.088   &lt;2e-16 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.10321    0.04988   2.069   0.0412 *  
+x            0.19877    0.01007  19.735   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4246 on 98 degrees of freedom
-Multiple R-squared:  0.8194,    Adjusted R-squared:  0.8176 
-F-statistic: 444.7 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4988 on 98 degrees of freedom
+Multiple R-squared:  0.799, Adjusted R-squared:  0.7969 
+F-statistic: 389.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x1 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>),</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">x2 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x3 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">x4 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3 <span class="sc">+</span> x4) <span class="sc">|&gt;</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x1 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">x2 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x3 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">x4 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3 <span class="sc">+</span> x4) <span class="sc">|&gt;</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -3320,30 +3344,30 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
         rnorm(100), x4 = y + rnorm(100), x = x1 + x2 + x3 + x4))
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--1.91125 -0.64750 -0.03642  0.54375  2.42064 
+    Min      1Q  Median      3Q     Max 
+-1.7585 -0.6506 -0.0906  0.5444  3.1861 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 0.200334   0.088943   2.252   0.0265 *  
-x           0.034306   0.008419   4.075 9.36e-05 ***
+(Intercept) -0.05688    0.09485  -0.600 0.550070    
+x            0.02672    0.00787   3.395 0.000992 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.8876 on 98 degrees of freedom
-Multiple R-squared:  0.1449,    Adjusted R-squared:  0.1362 
-F-statistic:  16.6 on 1 and 98 DF,  p-value: 9.357e-05</code></pre>
+Residual standard error: 0.9483 on 98 degrees of freedom
+Multiple R-squared:  0.1052,    Adjusted R-squared:  0.09612 
+F-statistic: 11.53 on 1 and 98 DF,  p-value: 0.0009915</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, task),</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score)) <span class="sc">|&gt;</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(sscore <span class="sc">~</span> dn.c <span class="sc">+</span> bu.h, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">|&gt;</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"r.squared"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, task),</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score)) <span class="sc">|&gt;</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(sscore <span class="sc">~</span> dn.c <span class="sc">+</span> bu.h, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"r.squared"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3495512</code></pre>
@@ -3352,51 +3376,51 @@ F-statistic:  16.6 on 1 and 98 DF,  p-value: 9.357e-05</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># todo: conflict-harmony pairs</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ranked_items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tank =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_cor =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">total_time =</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(<span class="fu">list</span>(<span class="at">it =</span> v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>()), \(it) </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>       {</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>         v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">%in%</span> it <span class="sc">|</span> item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>           <span class="co"># to-do: change to lm()</span></span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">it =</span> it,</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test_cor =</span> <span class="fu">cor</span>(task_score, sscore),</span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time))</span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">|&gt;</span> </span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">cor_rate =</span> test_cor <span class="sc">/</span> </span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">sum</span>(ranked_items <span class="sc">|&gt;</span> <span class="fu">pull</span>(total_time), time, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(cor_rate <span class="sc">==</span> <span class="fu">max</span>(cor_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">nrow</span>(ranked_items) <span class="sc">+</span> <span class="dv">1</span>,</span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">task =</span> <span class="fu">str_split_i</span>(it , <span class="st">"_"</span>, <span class="at">i =</span> <span class="dv">1</span>),</span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> it,</span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>,</span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">.before =</span> <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">total_time =</span> <span class="fu">sum</span>(ranked_items <span class="sc">|&gt;</span> </span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">arrange</span>(total_time) <span class="sc">|&gt;</span></span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">pull</span>(total_time) <span class="sc">|&gt;</span></span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">last</span>(), time, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(ranked_items) <span class="ot">-&gt;</span> ranked_items</span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> ((ranked_items <span class="sc">|&gt;</span> <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">sum</span>()) <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="cf">break</span></span>
-<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>ranked_items</span>
-<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a><span class="co"># dn_top_items |&gt;</span></span>
-<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(conf_item == 8 | harm_item == 8) |&gt;</span></span>
-<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(conf_item, harm_item)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># todo: conflict-harmony pairs</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>ranked_items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tank =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_cor =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">total_time =</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(<span class="fu">list</span>(<span class="at">it =</span> v2_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>()), \(it) </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>       {</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>         v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">%in%</span> it <span class="sc">|</span> item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>           <span class="co"># to-do: change to lm()</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">it =</span> it,</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test_cor =</span> <span class="fu">cor</span>(task_score, sscore),</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time))</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">|&gt;</span> </span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">cor_rate =</span> test_cor <span class="sc">/</span> </span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">sum</span>(ranked_items <span class="sc">|&gt;</span> <span class="fu">pull</span>(total_time), time, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(cor_rate <span class="sc">==</span> <span class="fu">max</span>(cor_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">nrow</span>(ranked_items) <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">task =</span> <span class="fu">str_split_i</span>(it , <span class="st">"_"</span>, <span class="at">i =</span> <span class="dv">1</span>),</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> it,</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>,</span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">.before =</span> <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">total_time =</span> <span class="fu">sum</span>(ranked_items <span class="sc">|&gt;</span> </span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">arrange</span>(total_time) <span class="sc">|&gt;</span></span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">pull</span>(total_time) <span class="sc">|&gt;</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">last</span>(), time, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(ranked_items) <span class="ot">-&gt;</span> ranked_items</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> ((ranked_items <span class="sc">|&gt;</span> <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">sum</span>()) <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="cf">break</span></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>ranked_items</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a><span class="co"># dn_top_items |&gt;</span></span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(conf_item == 8 | harm_item == 8) |&gt;</span></span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(conf_item, harm_item)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3406,33 +3430,33 @@ F-statistic:  16.6 on 1 and 98 DF,  p-value: 9.357e-05</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ranked_items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item_cor =</span> <span class="fu">as.numeric</span>(),</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_cor =</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>test_cor <span class="ot">&lt;-</span> v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore)) <span class="sc">|&gt;</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(task_score, sscore) <span class="sc">|&gt;</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>highest_cor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"start"</span> <span class="ot">=</span> <span class="dv">0</span>)</span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">==</span> <span class="st">"bu_h1"</span> <span class="sc">|</span> item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore)) <span class="sc">|&gt;</span></span>
-<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(task_score, sscore) <span class="sc">|&gt;</span></span>
-<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">cor =</span> <span class="fu">cor</span>(task_score, sscore)) <span class="sc">|&gt;</span></span>
-<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(cor)</span>
-<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (.<span class="dv">3</span> <span class="sc">&gt;</span> highest_cor) highest_cor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"bu_h0"</span> <span class="ot">=</span> .<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ranked_items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">task =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> <span class="fu">as.character</span>(),</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item_cor =</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_cor =</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>test_cor <span class="ot">&lt;-</span> v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore)) <span class="sc">|&gt;</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(task_score, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>highest_cor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"start"</span> <span class="ot">=</span> <span class="dv">0</span>)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>v2_dat <span class="sc">|&gt;</span></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">==</span> <span class="st">"bu_h1"</span> <span class="sc">|</span> item <span class="sc">%in%</span> <span class="fu">pull</span>(ranked_items, item)) <span class="sc">|&gt;</span></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">task_score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore)) <span class="sc">|&gt;</span></span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(task_score, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">cor =</span> <span class="fu">cor</span>(task_score, sscore)) <span class="sc">|&gt;</span></span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(cor)</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (.<span class="dv">3</span> <span class="sc">&gt;</span> highest_cor) highest_cor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"bu_h0"</span> <span class="ot">=</span> .<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 

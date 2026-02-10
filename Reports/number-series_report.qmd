@@ -44,6 +44,7 @@ session <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fp
 
 ```{r}
 #| code-fold: show
+#| eval: false
 ns_dat <- ns_full |>
   left_join(session,
             by = "session_id") |>
@@ -54,6 +55,7 @@ ns_dat <- ns_full |>
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
+  mutate(ns_id = tolower(ns_id)) |>
   select(subject_id, ns_id, score = correct, sscore)
 
 dir.create(here::here("Data", "Number Series"))

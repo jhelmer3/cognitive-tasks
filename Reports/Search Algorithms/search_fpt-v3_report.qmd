@@ -186,11 +186,11 @@ walk(seq(1, v3_dat |> pull(item) |> unique() |> length()),
      .progress = T)
 test
 
-saveRDS(test, here::here("Data", "Search Algorithm", "v3test_dat.rds"))
+saveRDS(test, here::here("Data", "Search Algorithms", "v3test_dat.rds"))
 ```
 
 ```{r}
-test <- readRDS(here::here("Data", "Search Algorithm", "v3test_dat.rds"))
+test <- readRDS(here::here("Data", "Search Algorithms", "v3test_dat.rds"))
 ```
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2025-12-17">
+<meta name="dcterms.date" content="2026-02-10">
 
 <title>Denominator Neglect – Cognitive Task Modeling</title>
 <style>
@@ -255,6 +255,7 @@ window.Quarto = {
   <li><a href="#modeling-1" id="toc-modeling-1" class="nav-link" data-scroll-target="#modeling-1">Modeling</a></li>
   <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a></li>
   </ul></li>
+  <li><a href="#item-rank-in-search-alg" id="toc-item-rank-in-search-alg" class="nav-link" data-scroll-target="#item-rank-in-search-alg">Item Rank in Search Alg</a></li>
   </ul>
 </nav>
     </div>
@@ -280,7 +281,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 17, 2025</p>
+      <p class="date">February 10, 2026</p>
     </div>
   </div>
   
@@ -375,7 +376,7 @@ window.Quarto = {
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) <span class="sc">|&gt;</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">str_split_i</span>(trial_id, <span class="st">"_"</span>, <span class="dv">2</span>),</span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">.keep =</span> <span class="st">"unused"</span>)</span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
@@ -409,11 +410,11 @@ window.Quarto = {
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) <span class="sc">|&gt;</span></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">str_split_i</span>(trial_id, <span class="st">"_"</span>, <span class="dv">2</span>),</span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">.keep =</span> <span class="st">"unused"</span>)</span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dn_dat_c, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_s.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dn_dat_s, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_s.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -931,9 +932,57 @@ window.Quarto = {
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="item-rank-in-search-alg" class="level2">
+<h2 class="anchored" data-anchor-id="item-rank-in-search-alg">Item Rank in Search Alg</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_dat.rds"</span>))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dn_dat_c <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"top_items.rds"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">pivot_longer</span>(<span class="fu">c</span>(conf_item, harm_item),</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">names_to =</span> <span class="st">"choice_type"</span>, <span class="at">values_to =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(item, rank),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">by =</span> <span class="st">"item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">paste0</span>(<span class="st">"dn.c_"</span>, item)) <span class="sc">|&gt;</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(test <span class="sc">|&gt;</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(task <span class="sc">==</span> <span class="st">"dn.c"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>              <span class="co"># specific to denominator neglect's item pairs</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">as.integer</span>(<span class="fu">str_split_i</span>(item, <span class="st">"_"</span>, <span class="dv">2</span>)),</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">.keep =</span> <span class="st">"unused"</span>),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"rank"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alg_rank =</span> <span class="fu">factor</span>(rep, <span class="at">ordered =</span> T),</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">proportion_difference_scaled =</span> proportion_difference <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(as.numeric(alg_rank) ~ proportion_difference_scaled * small_lottery_gold_prop, dat) |&gt;</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   summary()</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(<span class="fu">as.numeric</span>(alg_rank) <span class="sc">~</span> proportion_difference_scaled <span class="sc">*</span> small_lottery_gold_prop, dat) <span class="sc">|&gt;</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  ggeffects<span class="sc">::</span><span class="fu">ggpredict</span>(<span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"proportion_difference_scaled"</span>, <span class="st">"small_lottery_gold_prop"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>() <span class="sc">+</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Rank from Search (R^2 / time)"</span>) <span class="sc">+</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"Difference in Proportions"</span>, <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">scale =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">"Small Lottery Gold Proportion"</span>, </span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"0.1"</span> <span class="ot">=</span> <span class="st">"#bbcedf"</span>, <span class="st">"0.2"</span> <span class="ot">=</span> <span class="st">"#698aa4"</span>, <span class="st">"0.3"</span> <span class="ot">=</span> <span class="st">"#004c6d"</span>)) <span class="sc">+</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">"Small Lottery Gold Proportion"</span>, </span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"0.1"</span> <span class="ot">=</span> <span class="st">"#bbcedf"</span>, <span class="st">"0.2"</span> <span class="ot">=</span> <span class="st">"#698aa4"</span>, <span class="st">"0.3"</span> <span class="ot">=</span> <span class="st">"#004c6d"</span>)) <span class="sc">+</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="denominator-neglect_report_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

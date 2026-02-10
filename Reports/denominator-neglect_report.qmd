@@ -89,7 +89,7 @@ dn_dat_c <- rio::import("https://raw.githubusercontent.com/forecastingresearch/f
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) |>
+  select(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) |>
   mutate(item = str_split_i(trial_id, "_", 2),
          .keep = "unused")
 
@@ -120,11 +120,11 @@ dn_dat_s <- rio::import("https://raw.githubusercontent.com/forecastingresearch/f
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, trial_id, choice_type, proportion_difference, correct, sscore) |>
+  select(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) |>
   mutate(item = str_split_i(trial_id, "_", 2),
          .keep = "unused")
 
-saveRDS(dn_dat_c, here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
+saveRDS(dn_dat_s, here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
 ```
 :::
 
@@ -536,6 +536,47 @@ top_items_s |>
   theme_classic(base_size = 14) +
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())
+```
+
+## Item Rank in Search Alg
+
+```{r}
+#| message: false
+test <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
+
+
+dat <- dn_dat_c |>
+  left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items.rds")) |> 
+            pivot_longer(c(conf_item, harm_item),
+                         names_to = "choice_type", values_to = "item") |>
+            select(item, rank),
+          by = "item") |>
+  mutate(item = paste0("dn.c_", item)) |>
+  left_join(test |>
+              filter(task == "dn.c") |>
+              # specific to denominator neglect's item pairs
+              mutate(rank = as.integer(str_split_i(item, "_", 2)),
+                     .keep = "unused"),
+            by = "rank") |>
+  mutate(alg_rank = factor(rep, ordered = T),
+         proportion_difference_scaled = proportion_difference * 100)
+
+# lm(as.numeric(alg_rank) ~ proportion_difference_scaled * small_lottery_gold_prop, dat) |>
+#   summary()
+
+lm(as.numeric(alg_rank) ~ proportion_difference_scaled * small_lottery_gold_prop, dat) |>
+  ggeffects::ggpredict(terms = c("proportion_difference_scaled", "small_lottery_gold_prop")) |>
+  plot() +
+  theme_classic() +
+  labs(title = NULL, y = "Rank from Search (R^2 / time)") +
+  scale_x_continuous("Difference in Proportions", labels = scales::label_percent(scale = 1)) +
+  scale_color_manual("Small Lottery Gold Proportion", 
+                     values = c("0.1" = "#bbcedf", "0.2" = "#698aa4", "0.3" = "#004c6d")) +
+  scale_fill_manual("Small Lottery Gold Proportion", 
+                     values = c("0.1" = "#bbcedf", "0.2" = "#698aa4", "0.3" = "#004c6d")) +
+  coord_cartesian(xlim = c(1, 8))
+
+
 ```
 
 

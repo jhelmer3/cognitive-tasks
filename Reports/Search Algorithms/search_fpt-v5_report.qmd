@@ -40,15 +40,23 @@ dn_dat_s <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
 
 bu_dat_e <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_e.rds"))
 
+ts_dat <- readRDS(here::here("Data", "Time Series", "ts_dat.rds"))
+
 dn_top_items_c <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
 dn_top_items_s <- readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 ```
 
 #### Functions
 
 ```{r}
 #| code-fold: show
-
+get_startup <- function(input_task) {
+  startup_costs |>
+    filter(task == input_task) |>
+    pull(startup)
+}
 ```
 
 #### Cleaning
@@ -67,7 +75,8 @@ dn_dat_c <- dn_dat_c |>
     mutate(task = "dn.c",
            item = paste0(task, "_", rank),
            # still need time per item
-           time = 3.43 / (length(unique(item)) * 2),
+           time = (3.43 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            score = correct,
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
@@ -81,7 +90,8 @@ dn_dat_s <- dn_dat_s |>
     mutate(task = "dn.s",
            item = paste0(task, "_", rank),
            # still need time per item
-           time = 4.45 / (length(unique(item)) * 2),
+           time = (4.45 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            score = correct,
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
@@ -93,14 +103,16 @@ dn_dat_s <- dn_dat_s |>
 bu_dat_h <- bu_dat_h |>
     mutate(task = "bu.h",
            item = paste0(task, "_", unique_trial),
-           time = 6.56 / length(unique(item)),
+           time = (6.56 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 
 bu_dat_e <- bu_dat_e |>
     mutate(task = "bu.e",
            item = paste0(task, "_", unique_trial),
-           time = 7.26 / length(unique(item)),
+           time = (7.26 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -111,7 +123,8 @@ bu_dat_e <- bu_dat_e |>
 admc.dr_dat <- admc.dr_dat |>
     mutate(task = "admc.dr",
            item = paste0(task, "_", admc_id),
-           time = 5.87 / length(unique(item)),
+           time = (5.87 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -122,7 +135,20 @@ admc.dr_dat <- admc.dr_dat |>
 ns_dat <- ns_dat |>
     mutate(task = "ns",
            item = paste0(task, "_", ns_id),
-           time = 3.70 / length(unique(item)),
+           time = (3.70 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
+           .keep = "unused") |>
+    select(subject_id, sscore, task, item, score, time)
+```
+
+#### Number Series
+
+```{r}
+ts_dat <- ts_dat |>
+    mutate(task = "ts",
+           item = paste0(task, "_", ts_id),
+           time = (5.83 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -136,7 +162,8 @@ v5_dat <- rbind(dn_dat_c,
                 admc.dr_dat,
                 ns_dat,
                 dn_dat_s,
-                bu_dat_e)
+                bu_dat_e,
+                ts_dat)
 ```
 
 Note that all time information is based on the median time (from FPT preprint) for the entire task divided by number of items.
@@ -156,7 +183,7 @@ The FPT Version 5 includes five cognitive tasks.
 
 * Number Series
 
-* Cognitive Reflection Test
+* Coherence Forecasting Test
 
 * Matrix Reasoning
 
@@ -164,9 +191,11 @@ The FPT Version 5 includes five cognitive tasks.
 
 * Bayesian Update: Easy
 
-I don't know what to do with the CRT as of now, so this will only have Denominator Neglect: Combined, Bayesian Update: Hard, ADMC: Decision Rules, Number Series.
+I don't know what to do with the CFT as of now, so this will only have Denominator Neglect: Combined, Bayesian Update: Hard, ADMC: Decision Rules, Number Series.
 
 I also don't know what to do with Raven.
+
+Going to add Time Series as well!
 
 ### Methods
 
@@ -198,6 +227,7 @@ walk(seq(1, v5_dat |> pull(item) |> unique() |> length()),
                        sscore = first(sscore),
                        time = sum(time),
                        task = first(task)) |>
+             mutate(time = time + map_dbl(task, get_startup)) |>
              mutate(.by = subject_id,
                     time = sum(time)) |> 
              mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
@@ -222,19 +252,27 @@ walk(seq(1, v5_dat |> pull(item) |> unique() |> length()),
      .progress = T)
 test
 
-saveRDS(test, here::here("Data", "Search Algorithm", "v5test_dat.rds"))
+saveRDS(test, here::here("Data", "Search Algorithms", "v5test_dat.rds"))
 ```
 
 ```{r}
-test <- readRDS(here::here("Data", "Search Algorithm", "v5test_dat.rds"))
+test <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
 ```
 
 
 ```{r}
 #| fig-width: 6
 #| fig-height: 3.5
-test |>
+
+v5test_plt <- test |>
   ggplot(aes(x = time, y = test_r2)) +
+  geomtextpath::geom_textsegment(data = test |> filter(time < 10.49) |> filter(time == max(time)),
+               aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "10 MIN"),
+               color = "gray80", linewidth = .3, linetype = "longdash") +
+  geom_segment(data = test |> filter(time < 10.49) |> filter(time == max(time)),
+               aes(y = -Inf, yend = test_r2, x = time),
+               color = "gray80", linewidth = .3, linetype = "longdash") +
+  
   geomtextpath::geom_textsegment(data = filter(test, test_r2 == max(test_r2)),
                aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "PEAK"),
                color = "gray80", linewidth = .3, linetype = "longdash") +
@@ -243,10 +281,31 @@ test |>
                color = "gray80", linewidth = .3, linetype = "longdash") +
   geom_line() +
   geom_point(aes(color = task), size = 2) +
+  
+  annotate("text", label = paste0("10 minutes:\n• ",
+                                  test |> filter(time < 10.49) |>
+                                    count(task) |>
+                                    pmap_chr(\(task, n) paste(n, task)) |> 
+                                    paste(collapse = "\n• ")),
+           x = 3.3, y = 0.2, size = 3.4, hjust = "left", color = "gray20") +
+  annotate("text", label = paste0(filter(test, test_r2 == max(test_r2)) |>
+                                    pull(time) |> round(1), " minutes:\n• ",
+                                  test |>
+                                    filter(time <= filter(test, test_r2 == max(test_r2)) |>
+                                             pull(time)) |>
+                                    count(task) |>
+                                    pmap_chr(\(task, n) paste(n, task)) |> 
+                                    paste(collapse = "\n• ")),
+           x = 18.5, y = 0.25, size = 3.4, hjust = "left", color = "gray20") +
+  
+  coord_cartesian(xlim = c(0, 30), ylim = c(0, 0.8), expand = c(0, 1)) +
   guides(x = guide_axis(cap = "both"),
          y = guide_axis(cap = "both")) +
   labs(x = "Time (minutes)", y = "Test R^2") +
   theme_classic()
+
+saveRDS(v5test_plt, here::here("Figures", "Search Algorithms", "v5test_plt.rds"))
+v5test_plt
 ```
 
 So this method still uses a pretty crude way of measuring time. It does not account for (1) the time it takes to read instructions / do practice items, (2) any between-item difference in average time. Could
@@ -254,3 +313,130 @@ So this method still uses a pretty crude way of measuring time. It does not acco
 * Make doing an item from a new task account for its upfront time cost
 
 * Other stuff
+
+
+## Same Order of Items, Randomly Selected
+
+```{r}
+#| eval: false
+test_random <- data.frame(rep = 0,
+                          iter = 0,
+                          task = "INIT",
+                          item = "INIT",
+                          test_r2 = 0,
+                          time = 0,
+                          added_r2 = 0,
+                          added_time = 0,
+                          r2_rate = 0)
+
+walk(1:100, 
+     ~ {test_iter <- data.frame(rep = 0,
+                                iter = 0,
+                                task = "INIT",
+                                item = "INIT",
+                                test_r2 = 0,
+                                time = 0,
+                                added_r2 = 0,
+                                added_time = 0,
+                                r2_rate = 0)
+     
+     test |>
+       arrange(rep) |>
+       select(cur_rep = rep, cur_task = task) |>
+       pwalk(\(cur_rep, cur_task) {
+         
+         random_item <- v5_dat |> 
+           filter(task == cur_task & !(item %in% pull(test_iter, item))) |>
+           pull(item) |>
+           unique() |>
+           sample(1)
+         
+         test_iter <<- rbind(v5_dat |>
+                               filter(item == random_item),
+                             v5_dat |>
+                               filter(item %in% pull(test_iter, item))) |>
+           summarize(.by = c(task, subject_id),
+                     score = mean(score),
+                     sscore = first(sscore),
+                     time = sum(time),
+                     task = first(task)) |>
+           mutate(.by = subject_id,
+                  time = sum(time)) |> 
+           mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+           pivot_wider(names_from = task, values_from = score) |>
+           summarize(iter = .x,
+                     rep = cur_rep,
+                     task = cur_task,
+                     item = random_item,
+                     test_r2 = summary(lm(as.formula(first(formula)),
+                                          data = pick(everything())))$r.squared,
+                     added_r2 = first(test_r2) - test_iter |>
+                       head(1) |>
+                       pull(test_r2),
+                     added_time = first(time) - test_iter |>
+                       head(1) |>
+                       pull(time),
+                     time = first(time),
+                     r2_rate = first(added_r2 / added_time)) |>
+           rbind(test_iter) |>
+           filter(item != "INIT")
+       })
+     
+     test_random <<- rbind(test_random, test_iter) |>
+  filter(item != "INIT")},
+  .progress = T) 
+
+saveRDS(test_random, here::here("Data", "Search Algorithms", "v5test-random_dat.rds"))
+```
+
+```{r}
+test_random <- readRDS(here::here("Data", "Search Algorithms", "v5test-random_dat.rds"))
+```
+
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+v5test_random_plt <- test_random |>
+  ggplot(aes(x = time, y = test_r2)) +
+  geomtextpath::geom_textsegment(
+    data = filter(test_random |> 
+                    summarize(.by = time,
+                              test_r2 = mean(test_r2),
+                              task = first(task)),
+                  test_r2 == max(test_r2)),
+    aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "PEAK"),
+    color = "gray80", linewidth = .3, linetype = "longdash") +
+  geom_segment(
+    data = filter(test_random |> 
+                    summarize(.by = time,
+                              test_r2 = mean(test_r2),
+                              task = first(task)),
+                  test_r2 == max(test_r2)),
+    aes(y = -Inf, yend = test_r2, x = time),
+    color = "gray80", linewidth = .3, linetype = "longdash") +
+  geom_line(aes(group = iter), alpha = .05, linewidth = .5) +
+  geom_line(data = test_random |> summarize(.by = time,
+                                            test_r2 = mean(test_r2)),
+            aes(x = time, y = test_r2)) +
+  geom_point(data = test_random |> summarize(.by = time,
+                                             test_r2 = mean(test_r2),
+                                             task = first(task)),
+             aes(x = time, y = test_r2, color = task),
+             size = 2) +
+  guides(x = guide_axis(cap = "both"),
+         y = guide_axis(cap = "both")) +
+  labs(x = "Time (minutes)", y = "Test R^2") +
+  theme_classic()
+
+saveRDS(v5test_random_plt, here::here("Figures", "Search Algorithms", "v5test_random_plt.rds"))
+v5test_random_plt
+```
+
+
+
+
+
+
+
+

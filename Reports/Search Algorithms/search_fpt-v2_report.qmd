@@ -28,18 +28,24 @@ library(tidyverse)
 
 ```{r}
 #| code-fold: show
-dn_dat_c <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
+dn_dat_c_full <- readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
 
-bu_dat_h <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
+bu_dat_h_full <- readRDS(here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
 
 dn_top_items <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 ```
 
 #### Functions
 
 ```{r}
 #| code-fold: show
-
+get_startup <- function(input_task) {
+  startup_costs |>
+    filter(task == input_task) |>
+    pull(startup)
+}
 ```
 
 #### Cleaning
@@ -48,7 +54,7 @@ dn_top_items <- readRDS(here::here("Data", "Denominator Neglect", "top_items.rds
 #### Denominator Neglect
 
 ```{r}
-dn_dat_c <- dn_dat_c |>
+dn_dat_c <- dn_dat_c_full |>
   left_join(dn_top_items |> 
               pivot_longer(c(conf_item, harm_item),
                            names_to = "choice_type", values_to = "item") |>
@@ -57,34 +63,34 @@ dn_dat_c <- dn_dat_c |>
     mutate(task = "dn.c",
            item = paste0(task, "_", rank),
            # still need time per item
-           time = 3.43 / (length(unique(item)) * 2),
+           # currently (time in paper - startup cost) / number of items
+           time = (3.43 - get_startup(first(task))) /
+             (length(unique(item)) * 2),
            score = correct,
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
-:::
 
 #### Bayesian Update
 
 ```{r}
-bu_dat_h <- bu_dat_h |>
+bu_dat_h <- bu_dat_h_full |>
     mutate(task = "bu.h",
            item = paste0(task, "_", unique_trial),
-           time = 6.56 / length(unique(item)),
+           time = (6.56 - get_startup(first(task))) / length(unique(item)),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
 
-
 #### Combined
-
-Deciding if I want to keep this with the new strategy
 
 ```{r}
 #| code-fold: show
 v2_dat <- rbind(dn_dat_c, 
                 bu_dat_h)
 ```
+:::
+
 :::
 
 
@@ -461,30 +467,42 @@ test <- data.frame(rep = 0,
 
 walk(seq(1, v2_dat |> pull(item) |> unique() |> length()), 
      \(i) {test <<- v2_dat |> 
+       # get just those items not in the test (run through everything left)
        filter(!(item %in% pull(test, item))) |>
        pull(item) |>
        unique() |> 
        map(~ rbind(v2_dat |>
+                     # just the data from the tested item
                      filter(item == .x),
                    v2_dat |>
-                     filter(item %in% pull(test, item))) |> 
+                     # just the data from the existing test
+                     filter(item %in% pull(test, item))) |>
+             # get task-specific scores, sum task time
              summarize(.by = c(task, subject_id),
                        score = mean(score),
                        sscore = first(sscore),
                        time = sum(time),
                        task = first(task)) |>
+             mutate(time = time + map_dbl(task, get_startup)) |>
+             # keeping track of the total time (repeated on all rows)
              mutate(.by = subject_id,
                     time = sum(time)) |> 
+             # building model formula string of just those tasks already included
              mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+             # need task data in separate columns for lm()
              pivot_wider(names_from = task, values_from = score) |>
              summarize(rep = i,
+                       # extract task name from item name
                        task = str_split_i(.x, "_", 1),
                        item = .x,
+                       # extract R^2 (repeated on all rows)
                        test_r2 = summary(lm(as.formula(first(formula)),
                                             data = cur_data()))$r.squared,
+                       # get increase in R^2
                        added_r2 = first(test_r2) - test |>
                          head(1) |>
                          pull(test_r2),
+                       # get increase in time
                        added_time = first(time) - test |>
                          head(1) |>
                          pull(time),
@@ -497,12 +515,12 @@ walk(seq(1, v2_dat |> pull(item) |> unique() |> length()),
      .progress = T)
 test
 
-saveRDS(test, here::here("Data", "Search Algorithm", "v2test_dat.rds"))
+saveRDS(test, here::here("Data", "Search Algorithms", "v2test_dat.rds"))
 ```
 
 
 ```{r}
-test <- readRDS(here::here("Data", "Search Algorithm", "v2test_dat.rds"))
+test <- readRDS(here::here("Data", "Search Algorithms", "v2test_dat.rds"))
 ```
 
 
