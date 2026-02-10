@@ -308,14 +308,12 @@ saveRDS(v5test_plt, here::here("Figures", "Search Algorithms", "v5test_plt.rds")
 v5test_plt
 ```
 
-So this method still uses a pretty crude way of measuring time. It does not account for (1) the time it takes to read instructions / do practice items, (2) any between-item difference in average time. Could
-
-* Make doing an item from a new task account for its upfront time cost
-
-* Other stuff
+As info, this still any within-task difference in item time. Currently (total time from paper - startup time) / number of items.
 
 
 ## Same Order of Items, Randomly Selected
+
+(This has not been rerun since adding startup cost!)
 
 ```{r}
 #| eval: false
