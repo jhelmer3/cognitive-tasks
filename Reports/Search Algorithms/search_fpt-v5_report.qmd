@@ -104,7 +104,7 @@ bu_dat_h <- bu_dat_h |>
     mutate(task = "bu.h",
            item = paste0(task, "_", unique_trial),
            time = (6.56 - get_startup(first(task))) /
-             (length(unique(item)) * 2),
+             (length(unique(item))),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 
@@ -112,7 +112,7 @@ bu_dat_e <- bu_dat_e |>
     mutate(task = "bu.e",
            item = paste0(task, "_", unique_trial),
            time = (7.26 - get_startup(first(task))) /
-             (length(unique(item)) * 2),
+             (length(unique(item))),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -124,7 +124,7 @@ admc.dr_dat <- admc.dr_dat |>
     mutate(task = "admc.dr",
            item = paste0(task, "_", admc_id),
            time = (5.87 - get_startup(first(task))) /
-             (length(unique(item)) * 2),
+             (length(unique(item))),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -136,19 +136,19 @@ ns_dat <- ns_dat |>
     mutate(task = "ns",
            item = paste0(task, "_", ns_id),
            time = (3.70 - get_startup(first(task))) /
-             (length(unique(item)) * 2),
+             (length(unique(item))),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
 
-#### Number Series
+#### Time Series
 
 ```{r}
 ts_dat <- ts_dat |>
     mutate(task = "ts",
            item = paste0(task, "_", ts_id),
            time = (5.83 - get_startup(first(task))) /
-             (length(unique(item)) * 2),
+             (length(unique(item))),
            .keep = "unused") |>
     select(subject_id, sscore, task, item, score, time)
 ```
@@ -282,12 +282,15 @@ v5test_plt <- test |>
   geom_line() +
   geom_point(aes(color = task), size = 2) +
   
-  annotate("text", label = paste0("10 minutes:\n• ",
+  annotate("text", label = paste0(test |> 
+                                    filter(time < 10.49) |> filter(test_r2 == max(test_r2)) |> 
+                                    pull(time) |> round(1),
+                                  " minutes:\n• ",
                                   test |> filter(time < 10.49) |>
                                     count(task) |>
                                     pmap_chr(\(task, n) paste(n, task)) |> 
                                     paste(collapse = "\n• ")),
-           x = 3.3, y = 0.2, size = 3.4, hjust = "left", color = "gray20") +
+           x = 8.2, y = 0.2, size = 3.4, hjust = "left", color = "gray20") +
   annotate("text", label = paste0(filter(test, test_r2 == max(test_r2)) |>
                                     pull(time) |> round(1), " minutes:\n• ",
                                   test |>
@@ -296,9 +299,9 @@ v5test_plt <- test |>
                                     count(task) |>
                                     pmap_chr(\(task, n) paste(n, task)) |> 
                                     paste(collapse = "\n• ")),
-           x = 18.5, y = 0.25, size = 3.4, hjust = "left", color = "gray20") +
+           x = 26.6, y = 0.25, size = 3.4, hjust = "left", color = "gray20") +
   
-  coord_cartesian(xlim = c(0, 30), ylim = c(0, 0.8), expand = c(0, 1)) +
+  coord_cartesian(xlim = c(0, 45), ylim = c(0, 0.8), expand = c(0, 1)) +
   guides(x = guide_axis(cap = "both"),
          y = guide_axis(cap = "both")) +
   labs(x = "Time (minutes)", y = "Test R^2") +
@@ -308,12 +311,10 @@ saveRDS(v5test_plt, here::here("Figures", "Search Algorithms", "v5test_plt.rds")
 v5test_plt
 ```
 
-As info, this still any within-task difference in item time. Currently (total time from paper - startup time) / number of items.
+As info, this still does not have any within-task difference in item time. Currently (total time from paper - startup time) / number of items.
 
 
 ## Same Order of Items, Randomly Selected
-
-(This has not been rerun since adding startup cost!)
 
 ```{r}
 #| eval: false
@@ -358,6 +359,7 @@ walk(1:100,
                      sscore = first(sscore),
                      time = sum(time),
                      task = first(task)) |>
+           mutate(time = time + map_dbl(task, get_startup)) |>
            mutate(.by = subject_id,
                   time = sum(time)) |> 
            mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
@@ -425,6 +427,7 @@ v5test_random_plt <- test_random |>
   guides(x = guide_axis(cap = "both"),
          y = guide_axis(cap = "both")) +
   labs(x = "Time (minutes)", y = "Test R^2") +
+  coord_cartesian(ylim = c(0, 0.6), xlim = c(0, 45)) +
   theme_classic()
 
 saveRDS(v5test_random_plt, here::here("Figures", "Search Algorithms", "v5test_random_plt.rds"))

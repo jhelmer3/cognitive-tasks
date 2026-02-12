@@ -99,8 +99,9 @@ dat <- ts_dat |>
 dat |>
   select(alg_rank, noise_condition, datapoints, func, direction) |>
   unique() |>
-  ggplot(aes(y = alg_rank, x = datapoints, color = direction)) +
-  geom_point(position = position_dodge(.5)) +
+  ggplot(aes(y = as.numeric(alg_rank), x = datapoints, color = direction, label = as.numeric(alg_rank))) +
+  geom_point(position = position_dodge(.5), alpha = 0.3, shape = 16, size = 3) +
+  geom_text(position = position_dodge(.5)) +
   facet_grid(noise_condition ~ func, axes = "all") +
   theme_classic() 
 
