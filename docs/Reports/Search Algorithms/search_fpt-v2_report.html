@@ -185,6 +185,10 @@ window.Quarto = {
  <span class="dropdown-text">Number Series</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../../Reports/time-series_report.html">
+ <span class="dropdown-text">Time Series</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../Reports/coherence-forecasting-scale_report.html">
  <span class="dropdown-text">Coherence Forecasting Scale</span></a>
   </li>  
@@ -227,7 +231,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-    <a href="https://jhelmer3.github.io/cognitive-tasks/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://github.com/jhelmer3/cognitive-tasks" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -3312,18 +3316,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.57842 -0.30224 -0.00699  0.31407  1.27696 
+-0.96483 -0.29618 -0.00357  0.31702  1.05151 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.10321    0.04988   2.069   0.0412 *  
-x            0.19877    0.01007  19.735   &lt;2e-16 ***
+(Intercept) 0.008981   0.044052   0.204    0.839    
+x           0.211391   0.010197  20.731   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4988 on 98 degrees of freedom
-Multiple R-squared:  0.799, Adjusted R-squared:  0.7969 
-F-statistic: 389.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4404 on 98 degrees of freedom
+Multiple R-squared:  0.8143,    Adjusted R-squared:  0.8124 
+F-statistic: 429.8 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -3344,19 +3348,19 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
         rnorm(100), x4 = y + rnorm(100), x = x1 + x2 + x3 + x4))
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--1.7585 -0.6506 -0.0906  0.5444  3.1861 
+     Min       1Q   Median       3Q      Max 
+-2.33947 -0.62865  0.01518  0.63959  1.80810 
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.05688    0.09485  -0.600 0.550070    
-x            0.02672    0.00787   3.395 0.000992 ***
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.215490   0.092264  -2.336   0.0216 *  
+x            0.041348   0.008228   5.025 2.27e-06 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.9483 on 98 degrees of freedom
-Multiple R-squared:  0.1052,    Adjusted R-squared:  0.09612 
-F-statistic: 11.53 on 1 and 98 DF,  p-value: 0.0009915</code></pre>
+Residual standard error: 0.9133 on 98 degrees of freedom
+Multiple R-squared:  0.2049,    Adjusted R-squared:  0.1968 
+F-statistic: 25.25 on 1 and 98 DF,  p-value: 2.265e-06</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>

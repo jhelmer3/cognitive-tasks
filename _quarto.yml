@@ -30,7 +30,7 @@ website:
           - Reports/Methods/2PL.qmd
     tools:
       - icon: github
-        href: https://jhelmer3.github.io/cognitive-tasks/
+        href: https://github.com/jhelmer3/cognitive-tasks
   page-footer:
     right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
 
