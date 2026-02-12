@@ -12,3 +12,22 @@
   align-items: center;
   height: 90%;
 }
+
+h1, h2, h3 { border-bottom: 1px solid #E3DFCF; }
+
+.panel-tabset .tab-content {
+  border-color: #E3DFCF !important;
+}
+
+.panel-tabset .nav-tabs {
+  border-bottom-color: #E3DFCF !important;
+}
+
+.panel-tabset .nav-link.active {
+  border-color: #E3DFCF !important;
+  color: #233247;
+}
+
+.panel-tabset .nav-link {
+  border-color: #E3DFCF !important;
+}

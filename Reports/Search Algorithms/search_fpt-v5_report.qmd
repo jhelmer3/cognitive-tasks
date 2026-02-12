@@ -15,7 +15,7 @@ knitr:
       dev: png
       dev.args:
         bg: transparent
-dpi: 600
+cache: true
 ---
 
 ::: panel-tabset

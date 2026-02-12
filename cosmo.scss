@@ -59,6 +59,9 @@ $body-bg: $theme-tan;
 $body-color:    $theme-darkbrown !default;
 $body-emphasis-color:    $theme-darkbrown !default;
 
+$border-color:  $theme-darkbrown !default;
+$border-color-translucent:    rgba($theme-darkbrown, .175) !default;
+
 // Fonts
 
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
@@ -92,6 +95,8 @@ $alert-border-width:            0 !default;
 
 $progress-height:               .5rem !default;
 
+// Code blocks
+$code-block-bg: #E3DFCF;
 
 
 /*-- scss:rules --*/
