@@ -250,6 +250,7 @@ window.Quarto = {
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
   </ul></li>
   <li><a href="#same-order-of-items-randomly-selected" id="toc-same-order-of-items-randomly-selected" class="nav-link" data-scroll-target="#same-order-of-items-randomly-selected">Same Order of Items, Randomly Selected</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul>
 </nav>
     </div>
@@ -740,6 +741,71 @@ window.Quarto = {
 </figure>
 </div>
 </div>
+</div>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<p>Idea: what if as a robustness check we rerun the search alg making its first item be from a specific task. Nowhere close to all possible combinations, but might be something.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">first_task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(task) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(\(first_task) {</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(first_task)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>         \(i) {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>((i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> task <span class="sc">==</span> first_task) <span class="sc">|</span> i <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>           <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>           <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>                       v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>                           <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>                           <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>                           <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>                        <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">summarize</span>(<span class="at">first_task =</span> first_task,</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">rep =</span> i,</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> .x,</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>                           <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">pull</span>(test_r2),</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>                           <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">pull</span>(time),</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>                           <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>                           <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>           <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">.progress =</span> T)</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="fu">paste0</span>(<span class="st">"v5test_first-"</span>, first_task, <span class="st">"_dat.rds"</span>)))</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 
 
