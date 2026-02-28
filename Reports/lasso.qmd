@@ -1,0 +1,125 @@
+---
+title: "LASSO Regression"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+get_startup <- function(input_task) {
+  startup_costs |>
+    filter(task == input_task) |>
+    pull(startup)
+}
+```
+
+#### Cleaning
+
+```{r}
+v5_dat_wide <- v5_dat |>
+  # condensing denominator neglect scores down to one score per item pair
+  mutate(.by = c(subject_id, item),
+         score = ifelse(task == "dn.c" | task == "dn.s",
+                        mean(score),
+                        score)) |>
+  unique() |>
+  select(-c(time, task)) |>
+  pivot_wider(names_from = "item", values_from = "score",
+              id_cols = c(subject_id, sscore)) |>
+  # alert alert !!
+  drop_na()
+```
+:::
+
+
+### LASSO
+
+```{r}
+library(tidymodels)
+
+v5_dat_split <- initial_split(v5_dat_wide)
+
+v5_dat_train <- training(v5_dat_split)
+v5_dat_test <- testing(v5_dat_split)
+
+v5_dat_recipe <- recipe(sscore ~ ., data = v5_dat_train) |>
+  update_role(subject_id, new_role = "ID") |>
+  step_normalize(all_numeric(), -all_outcomes())
+
+lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
+  set_engine("glmnet")
+
+wf <- workflow() %>%
+  add_recipe(v5_dat_recipe)
+
+lasso_fit <- wf %>%
+  add_model(lasso_spec) %>%
+  fit(data = v5_dat_train)
+
+lasso_estimates <- lasso_fit %>%
+  extract_fit_parsnip() %>%
+  tidy()
+
+lasso_estimates |> filter(estimate != 0) |> mutate(task = str_split_i(term, "_", 1)) |> pull(task) |> unique()
+
+lasso_estimates |> filter(estimate != 0 & term != "(Intercept)")
+```
+
+```{r}
+lasso_estimates |>
+  filter(estimate != 0 & term != "(Intercept)") |>
+  mutate(task = str_split_i(term, "_", 1)) |>
+  ggplot(aes(y = fct_reorder(term, abs(estimate)), x = abs(estimate),
+             color = task)) +
+  geom_point() +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  theme_classic() +
+  theme(aspect.ratio = 3)
+```
+
+Time of LASSO test
+
+```{r}
+lasso_estimates |> filter(estimate != 0 & term != "(Intercept)") |>
+  mutate(task = str_split_i(term, "_", 1)) |>
+  inner_join(v5_dat |> select(item, time) |> unique(),
+            join_by("term" == "item")) |>
+  summarize(.by = task,
+            time = sum(time) + get_startup(first(task))) |>
+  summarize(time = sum(time))
+```
+

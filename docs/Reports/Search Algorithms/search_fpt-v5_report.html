@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-02-12">
+<meta name="dcterms.date" content="2026-02-20">
 
 <title>FPT Version Five – Cognitive Task Modeling</title>
 <style>
@@ -251,11 +251,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#same-order-of-items-randomly-selected" id="toc-same-order-of-items-randomly-selected" class="nav-link" data-scroll-target="#same-order-of-items-randomly-selected">Same Order of Items, Randomly Selected</a></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -277,7 +278,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 12, 2026</p>
+      <p class="date">February 20, 2026</p>
     </div>
   </div>
   
@@ -405,7 +406,7 @@ window.Quarto = {
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>admc.dr_dat <span class="ot">&lt;-</span> admc.dr_dat <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"admc.dr"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, admc_id),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, <span class="fu">parse_number</span>(admc_id)),</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> (<span class="fl">5.87</span> <span class="sc">-</span> <span class="fu">get_startup</span>(<span class="fu">first</span>(task))) <span class="sc">/</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>             (<span class="fu">length</span>(<span class="fu">unique</span>(item))),</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
@@ -419,7 +420,7 @@ window.Quarto = {
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ns_dat <span class="ot">&lt;-</span> ns_dat <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">task =</span> <span class="st">"ns"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, ns_id),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">item =</span> <span class="fu">paste0</span>(task, <span class="st">"_"</span>, <span class="fu">parse_number</span>(ns_id)),</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">time =</span> (<span class="fl">3.70</span> <span class="sc">-</span> <span class="fu">get_startup</span>(<span class="fu">first</span>(task))) <span class="sc">/</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>             (<span class="fu">length</span>(<span class="fu">unique</span>(item))),</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">.keep =</span> <span class="st">"unused"</span>) <span class="sc">|&gt;</span></span>
@@ -451,10 +452,754 @@ window.Quarto = {
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                ns_dat,</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                dn_dat_s,</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                bu_dat_e,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                ts_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                ts_dat)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(score)) <span class="sc">|&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, task), </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              subject_id task  n
+1   Ac5ZMy5LVkFjQHr2ucen dn.c  1
+2   xerEAhCM3QCii740dMOT dn.c  1
+3   nmy4BvIJvHgW6RKgnx5i dn.c  1
+4   e8cXE9s9upZtFqszDShQ dn.c  2
+5   SstzyshA6P3MsHarAJOC dn.c  1
+6   R0BAq19ThveXTuFrNFWR dn.c  1
+7   v8OOr4HHwaTU8MdlBiNe dn.c 48
+8   fkOJ1NbnRk71F9aGqXWl dn.c 48
+9   J97ljhO3gdtigy2V3olp dn.c 48
+10  gAL0DiMvJc0jSvoR8Baq dn.c 48
+11  LSSNI9CJdMEB7kIIdv1j dn.c  1
+12  Opi65eyMrbyYjB5bwRMP dn.c  1
+13  PPoF7VmcJfI5PN9okf0T dn.c  1
+14  YV20vaAnaPndIGbTNCyi dn.c 48
+15  FqMdeNMqacNOMwDGxovJ dn.c  1
+16  L431K0ZDgV4wqUR7XTeo dn.c  1
+17  A8SHBz2S8Ui095L35Wjh dn.c 48
+18  1h05DmzN29B6FZZR67pP dn.c  1
+19  BpXGyUgvqzapjyMB15Zy dn.c 48
+20  CNX9AP2rnXxONuGYEalT dn.c 12
+21  6jOSL0IZbcNJOVzNEMr7 dn.c  1
+22  Xf5wK1xsRt5nKLDYQwop dn.c  1
+23  xSvzfB9wIjnw2QuEb9Ba dn.c  2
+24  4rY5i0hQ8qKc3mBAnAwT dn.c  9
+25  E3hK4Etw5ylsn1SsXH8S dn.c 48
+26  0WgPYP5L2MNMyFtsWEaG dn.c  1
+27  QLyEuiyGskZKXWMVQm4M dn.c  1
+28  DRrgI3jzHMjID8Q48PjB dn.c 48
+29  Y2lFlepXHqWUFbEKCNwq dn.c  1
+30  xDJ0JpfeWhke1GvUwHem dn.c 48
+31  j49ae9H3AT6mRC6ygqv8 dn.c 48
+32  YxsciWh4LBDtAl6lLunN dn.c 48
+33  ifcG7cR8IYUd48e11ERX dn.c  6
+34  hf6J6yzRivfwR2Elyo9N dn.c  2
+35  0REiwYHX47zX4qbePYjN dn.c  1
+36  SNsBrz8Txh3QpNgGXGtE dn.c  1
+37  1E9KZrTTpuJ3KjJa8cDV dn.c  6
+38  fRYcCiEcUwRJIA0mQ2o7 dn.c 48
+39  tRvesqPE5A0iKVY6G8g8 dn.c 48
+40  VwvZLU4OilnAvOArxYc7 dn.c  1
+41  DXeOGqQEgoEt16VOuaOn bu.h  2
+42  Ac5ZMy5LVkFjQHr2ucen bu.h  4
+43  HqfnXYULelL4tEtMA05t bu.h  2
+44  CPwdHnAnqZuJJEvQdgWC bu.h  1
+45  G06vCKjuln4m6u6CPQEn bu.h  1
+46  ZP9yL6PFVQSvSIC7bUee bu.h  1
+47  R6U0YqqdHfgqkWkuCagF bu.h  1
+48  2t8eqhwiUfiSDnWfoHBW bu.h  1
+49  fkOJ1NbnRk71F9aGqXWl bu.h  2
+50  V2ME98SReEaOQ3fhFVst bu.h  1
+51  950AzNMugIUFBNRmlDCF bu.h  3
+52  kiTl14IWGtRXdVVJmZgD bu.h  1
+53  ADb2b1AvtBmftDmWdKWN bu.h  2
+54  vbGZVDJU7u0ApalOtBTF bu.h  1
+55  EECGDwmWAmWfpKKnYI7O bu.h  1
+56  XjY03SGFqyp7HmUABJbW bu.h  1
+57  vw9RHgQ3UaaTe1nfjJc0 bu.h  2
+58  IeElhKAlZlvb0pPCNyJQ bu.h  1
+59  HngYolsZ7LnwhMepx4yf bu.h  1
+60  383KleAMN0hXjU1qXdYJ bu.h  1
+61  CKbheN9Pot7GaZpfPYe5 bu.h  1
+62  BpXGyUgvqzapjyMB15Zy bu.h  1
+63  DoFCE00qFvG0xBr3UWpI bu.h  1
+64  zANbOJqdtyEpAq00umSb bu.h  5
+65  IJumhtN8oKoYEDbFfUMf bu.h  1
+66  j5bxfVlajJwn5pZNQQsa bu.h  1
+67  TqSddjjditUnblQcWfB3 bu.h  2
+68  Hy5g7Y3sJf9BcHPqEZ8p bu.h  1
+69  2QJZGGcIQF8A5FhBmyuz bu.h  1
+70  OJ5jre57VnjtURyBCSjz bu.h  1
+71  mXMCaULEkFF6s1prItB8 bu.h  1
+72  771cxdbg1Rw25ZLqI3Ge bu.h  2
+73  49bWZY1TC7zcMYq4FzkX bu.h  1
+74  4rY5i0hQ8qKc3mBAnAwT bu.h  2
+75  ItLyRC07hxMbcaguQBkl bu.h  1
+76  A7wLmahMacmd6RniSE0h bu.h  1
+77  cU37HwPJT7ClWoOdeIB0 bu.h  1
+78  0WgPYP5L2MNMyFtsWEaG bu.h  1
+79  Cxv3OL9bAloZXz0mUogg bu.h  1
+80  5FK6Vbwq2sUGNtVEgaFU bu.h  1
+81  fCMnEWhTh7kuGhOSMhTC bu.h  2
+82  kEsM4qtWu3c24cxLGja3 bu.h  1
+83  mgLxjjWNdkpi3rxUB07l bu.h  2
+84  17LEM8wPQyshaga81mOO bu.h  1
+85  QQA4FUKgerUT0TLEFFgK bu.h  1
+86  Ps3jaWnRHhoNNeL3PDa4 bu.h  1
+87  TJQ9j6A05f8ld8OK8Mzc bu.h  2
+88  jtvtTOMSmoqa3cP4vWFw bu.h  1
+89  3lGsczpaOxmDeZmuT7yz bu.h  1
+90  oXDopHMLUvv9ZYWc4WY0 bu.h  1
+91  kovEJOLHZyADSgwnqPga bu.h  3
+92  MJzHLwX8uDBLf5PVpvm3 bu.h  1
+93  gMVww8j5DaVLpC3Yj8nr bu.h  1
+94  oy61qtPF4pg4R3ABVbJj bu.h  2
+95  LxtXIECwYcSxnNetzXg7 bu.h  1
+96  0REiwYHX47zX4qbePYjN bu.h  1
+97  jnddVA5OnRXjgyBHLhkr bu.h  1
+98  jZF8v6PoTY6RXiFVy6gY bu.h  1
+99  n76EcPNePczVQ85qQtbB bu.h  1
+100 z8N4Pa7qb9TeTYKUwAeQ bu.h  6
+101 IB0qJtGPs6xL8JRpYuBt bu.h  2
+102 bjusHaMvMJEVS8XmZ80t bu.h  6
+103 RFOrWXAQX1PO0HFZwlLL bu.h  1
+104 xoO6skepz0KramQLSPL9 bu.h  1
+105 Ac5ZMy5LVkFjQHr2ucen dn.s  1
+106 xerEAhCM3QCii740dMOT dn.s  1
+107 nmy4BvIJvHgW6RKgnx5i dn.s  1
+108 e8cXE9s9upZtFqszDShQ dn.s  2
+109 SstzyshA6P3MsHarAJOC dn.s  1
+110 R0BAq19ThveXTuFrNFWR dn.s  1
+111 v8OOr4HHwaTU8MdlBiNe dn.s 48
+112 fkOJ1NbnRk71F9aGqXWl dn.s 48
+113 J97ljhO3gdtigy2V3olp dn.s 48
+114 gAL0DiMvJc0jSvoR8Baq dn.s 48
+115 LSSNI9CJdMEB7kIIdv1j dn.s  1
+116 Opi65eyMrbyYjB5bwRMP dn.s  1
+117 PPoF7VmcJfI5PN9okf0T dn.s  1
+118 YV20vaAnaPndIGbTNCyi dn.s 48
+119 FqMdeNMqacNOMwDGxovJ dn.s  1
+120 L431K0ZDgV4wqUR7XTeo dn.s  1
+121 A8SHBz2S8Ui095L35Wjh dn.s 48
+122 1h05DmzN29B6FZZR67pP dn.s  1
+123 BpXGyUgvqzapjyMB15Zy dn.s 48
+124 CNX9AP2rnXxONuGYEalT dn.s 12
+125 6jOSL0IZbcNJOVzNEMr7 dn.s  1
+126 Xf5wK1xsRt5nKLDYQwop dn.s  1
+127 xSvzfB9wIjnw2QuEb9Ba dn.s  2
+128 4rY5i0hQ8qKc3mBAnAwT dn.s  9
+129 E3hK4Etw5ylsn1SsXH8S dn.s 48
+130 0WgPYP5L2MNMyFtsWEaG dn.s  1
+131 QLyEuiyGskZKXWMVQm4M dn.s  1
+132 DRrgI3jzHMjID8Q48PjB dn.s 48
+133 Y2lFlepXHqWUFbEKCNwq dn.s  1
+134 xDJ0JpfeWhke1GvUwHem dn.s 48
+135 j49ae9H3AT6mRC6ygqv8 dn.s 48
+136 YxsciWh4LBDtAl6lLunN dn.s 48
+137 ifcG7cR8IYUd48e11ERX dn.s  6
+138 hf6J6yzRivfwR2Elyo9N dn.s  2
+139 0REiwYHX47zX4qbePYjN dn.s  1
+140 SNsBrz8Txh3QpNgGXGtE dn.s  1
+141 1E9KZrTTpuJ3KjJa8cDV dn.s  6
+142 fRYcCiEcUwRJIA0mQ2o7 dn.s 48
+143 tRvesqPE5A0iKVY6G8g8 dn.s 48
+144 VwvZLU4OilnAvOArxYc7 dn.s  1
+145 Q6i1DNEvpyBBDntIgDg4 bu.e  1
+146 49bWZY1TC7zcMYq4FzkX bu.e  2
+147 jnddVA5OnRXjgyBHLhkr bu.e  1
+148 4FSjZtJEUXGQaNQXwR2P bu.e  1
+149 TKO2Alhu9oJQR8IzF5eI bu.e  1
+150 8FYM23YbIrj3Ofx7LMoo bu.e  1
+151 hI7JpYtbCLvNfC1JPRxp bu.e  3
+152 Je7hQucSMLQWqrCCwqTD bu.e  1
+153 NEzK3RrTXr3H711C5ner bu.e  1
+154 zbI7AUMspFhHJsUyyaY2 bu.e  1
+155 fGcn13Dce53Ic5t7KUSy bu.e  1
+156 yWx2uJPTKZJGfAOeaat6 bu.e  1
+157 izXbHR0eYoPO82zpM9ci bu.e  1
+158 p9lkjNp3qQogD4OUaedm bu.e  1
+159 iJuHugYdAhBzELotbBWp bu.e  2
+160 BxdFCeWLf8nCNjrDcwKt bu.e  2
+161 bRtADGpq7hsZ7dqIDhah bu.e  1
+162 Ac5ZMy5LVkFjQHr2ucen bu.e  3
+163 dDr1YyBAyPfLjg9qDv1Y bu.e  1
+164 Mdmz1IMWbMN65ldqchyZ bu.e  1
+165 7oqtXRTtqemWKjkCzH7m bu.e  2
+166 HEX7q9dj3YP6yeKjY1io bu.e  1
+167 j5bxfVlajJwn5pZNQQsa bu.e  3
+168 pg3CssQWWIcR6REE3TFo bu.e  2
+169 z8N4Pa7qb9TeTYKUwAeQ bu.e  2
+170 HFmXofKOwruJkX7ka6yA bu.e  2
+171 DRrgI3jzHMjID8Q48PjB bu.e  1
+172 D3ShceKj3iyKrXmCrB7j bu.e  1
+173 tGZegyyiWppuB0tUkXWz bu.e  1
+174 omfSFxzu7MrjjSSafj2q bu.e  1
+175 a5F2j7cvabLVMfvG55nK bu.e  2
+176 R6U0YqqdHfgqkWkuCagF bu.e  1
+177 950AzNMugIUFBNRmlDCF bu.e  3
+178 O88gcs0iBczTV5V6mLTh bu.e  1
+179 fkOJ1NbnRk71F9aGqXWl bu.e  1
+180 E3hK4Etw5ylsn1SsXH8S bu.e  1
+181 AhirSY1w8dBzmuo2t48W bu.e  1
+182 Ayo5YHWlCQsHNV7XrQc7 bu.e  1
+183 d7pCGcyjbWTZyaOtM2w1 bu.e  1
+184 oEQ7OxQXOW1OrOwhfEPF bu.e  5
+185 XGaVXviFC59TLyx7AKLq bu.e  1
+186 fRN2BqpepgaxT82ExHgD bu.e  1
+187 OcE6oQcbHzuzftyyrdB6 bu.e  3
+188 h1VVrAsMOlTSjgsxu07s bu.e  1
+189 0REiwYHX47zX4qbePYjN bu.e  2
+190 OmDvk4v7NxuhAnLBrkbW bu.e  1
+191 Ewp3WFDEQVhQx6UMUAiN bu.e  2
+192 9eUKJ1MDRhFJ0kdt2ikq bu.e  1
+193 s0XXgsxyI4HqXAssoIP2 bu.e  1
+194 6UwmqiWhZgQPMStTzRH0 bu.e  1
+195 5rHhraHsUTAqh6sjU2d1 bu.e  1
+196 Yfk4ShUhELUtl9XwpgCa bu.e  1
+197 TqSddjjditUnblQcWfB3 bu.e  3
+198 54siyd3BYjsh1mVk7R0Z bu.e  1
+199 zPdJNnMEELaOlKvgj0xS bu.e  1
+200 LmdItKKcaTPAwe0Ym4Od bu.e  1
+201 IOGwmjH1oX4unT6cb6gy bu.e  1
+202 RsRxUuQovzhFUap8a01P bu.e  1
+203 9fNzCWLAlFIBwlLJ0oFz bu.e  1
+204 Bipzf7LJ6qdGqAscZzBg bu.e  5
+205 5PP2t16GSzChbtte5vVw bu.e  1
+206 7g48cSLs8jYPIKalXiUZ   ts  1
+207 KyeFByJ933id8W7P6j77   ts  1
+208 hSH8uwdznJPF9W8CTA2w   ts  1
+209 THM75FY0853siUB2wF5J   ts  1
+210 Mtt1LXmZWBninK3ggSK5   ts  1
+211 khYao3bQxAh4FNPIXDxa   ts  1
+212 w8EG0W8jl0IbL9HsENCg   ts  1
+213 4ErLxgNrw5giUuWzjjsm   ts  1
+214 tRvesqPE5A0iKVY6G8g8   ts  1
+215 iCXyy2xK8DDsgTtrf8kW   ts  2
+216 boffKPQBu09LdqOpXQOe   ts  1
+217 REcum50sJgQSYvBMQXwc   ts  1
+218 49bWZY1TC7zcMYq4FzkX   ts  1
+219 TKkwOc2pHd9PObQzxHDj   ts  1
+220 jyeyCfCN3CfT45Vmut9E   ts  1
+221 BgX9DZHT7atuF2UAoakM   ts  2
+222 rwXh4OtqsjeCqJsJDrVf   ts  2
+223 EtulJVHuPSc3ZLVKBPtb   ts  1
+224 CFx2CdZ1bSxA6JPb6SA6   ts  1
+225 4FSjZtJEUXGQaNQXwR2P   ts  3
+226 TKO2Alhu9oJQR8IzF5eI   ts  1
+227 G6LvMujrQyj0EAuVo6Uq   ts  1
+228 4zCxjdZQSFAMBokcJ98T   ts  1
+229 Je7hQucSMLQWqrCCwqTD   ts  1
+230 QkP1503G1oAEIoPcmYmF   ts  1
+231 NxDOJ5WGiu7vMzc0jfg5   ts  3
+232 fAPx69vDlA8qSfqNFaag   ts  1
+233 FQCQhjkNqqJrCXXHGWyM   ts  1
+234 KdXV17I3V0fPvMAidxdb   ts  1
+235 5KVDGaVVAHsiHJMjLWGH   ts  1
+236 RIcuhrLt8BIs1le0DQl9   ts  1
+237 3JAbXWzVHjOfIJvN5nIY   ts  1
+238 EjoIAEzk6UUhC7y9F0Ry   ts  1
+239 TJns5NZcCMEwMuva3lvg   ts  1
+240 nNv1U7RDvAlO10CNVduv   ts  1
+241 j3wPPP2j4S3VgnpmBFvH   ts  1
+242 OnWF9xAaNJRvOuX00KEc   ts  2
+243 wUFqN9bUAEkgPgUV5sqO   ts  1
+244 3HNTHcsl7dZ2TGlwR4g6   ts  1
+245 Ayo5YHWlCQsHNV7XrQc7   ts  2
+246 etnyKJ3NA8vLJWQgHIDJ   ts  1
+247 d7pCGcyjbWTZyaOtM2w1   ts  1
+248 piTJXDJA6kamnbAqQVSc   ts  1
+249 YhKp6PmpkSO7X4aGjYB9   ts  1
+250 3RVHWOebZPPvYZwkVRaC   ts  1
+251 umV9t8yhNwHqLYO7llmI   ts  2
+252 LBg0xU9XZnPijXtSAo67   ts  2
+253 ekGBkEpWxMdbx2WL17xl   ts  1
+254 Q5v7vEQrx6bW7SNYTjUD   ts  1
+255 3WOzLROmRBgFy8GAfJZx   ts  5
+256 9IlG6nRRZkN1ZsoqsxCM   ts  1
+257 BdgTQ1C8QkSCuLiWUM6G   ts  1
+258 2fYxvQc1czvRDcT8JM7B   ts  2
+259 McZsAbJxyBZkxN6R06tL   ts  1
+260 g3iCPU6zUjzgEz6cwB61   ts  1
+261 Gm5YDXVt591FIqCgxMtr   ts 16
+262 Fvv0ALwZPTKLL7OVVBmn   ts  1
+263 2pScWifucpmQZvXoZCw3   ts  1
+264 tKTrELf8YVSKMU6GH0tn   ts  1
+265 ZDYUvh7i71S87XwXaHCP   ts  1
+266 s7mJzZjHp4ae1qDeD85E   ts  1
+267 03spmysv917pRTSkTcj6   ts  1
+268 iJuHugYdAhBzELotbBWp   ts  1
+269 6fGC9DJqZxA4MXTQX8Sd   ts  2
+270 vbGZVDJU7u0ApalOtBTF   ts  2
+271 O0NYuwahmBnGRb5IPZGa   ts  1
+272 kovEJOLHZyADSgwnqPga   ts  1
+273 0REiwYHX47zX4qbePYjN   ts  3
+274 R81zDdBsjgGbqyqUWMQT   ts  3
+275 eBDrjMp7gbOV17PYLZad   ts  1
+276 nRnUY9CTiB7LVJe7haxE   ts  1
+277 R6M8a2s8Oin7lhCtFEhQ   ts  1
+278 eO2fxGLcdC5k0aGuROZx   ts  1
+279 o24iqAR0WC7cR2ZkNHie   ts  1
+280 I9oLuP4O3GOIbYravzP8   ts  1
+281 g7rIRsOq2kkH8pYaz7fR   ts  1
+282 Mdmz1IMWbMN65ldqchyZ   ts  1
+283 64RVc86LLeI6qccFOAs0   ts  1
+284 CRGZ4TavntGH5E9LSBCX   ts  1
+285 DH0T6zFub589qUF0B702   ts  1
+286 0i0wZSbTdy53z6Cni0Dl   ts  1
+287 SJdYRJAFtFnPuPXeDtZ9   ts  1
+288 rhddayHF97oSYI7UrdRt   ts  1
+289 nabsPHGZpvr6SgYzV2am   ts  1
+290 5EPXWl4PDme2kqXHiOBB   ts  1
+291 qDI6xFzx1uEgAvcPXYms   ts  2
+292 ZyEbe7eQxt4YlalJLb89   ts  2
+293 JhW3ezpIB8sBZJ76QQ2b   ts  1
+294 4CLdS8XZEmJVDlHImT7u   ts  1
+295 3TUTJUD20hg4uydW0nPU   ts  1
+296 tLdDkwsFunR4YoLKVhDr   ts  1
+297 PYH1CXUkU4mAxBsW5UHi   ts  1
+298 G2WGBZc9GyTIFNdsysZC   ts  1
+299 yL2xNKGqpeaOzg95CDUB   ts  1
+300 s0XXgsxyI4HqXAssoIP2   ts  1
+301 zKG5mSoyPstUeC99enq5   ts  1
+302 AsoaxzIykTyxqAoV4YQr   ts  1
+303 9eUKJ1MDRhFJ0kdt2ikq   ts  2
+304 DoFCE00qFvG0xBr3UWpI   ts  1
+305 bW7vftpeg6L47YzZjzWX   ts  1
+306 cRpM8Z159NED2UYcb3jT   ts  1
+307 nvEdRy29lvIepo6irKSa   ts  1
+308 jOtySWDeJ7rf9lxtAQzX   ts  1
+309 roz2c3opqAFnyNPbzR3h   ts  1
+310 qpQ1vSLveBFouxZzN2iu   ts  1
+311 076BrNISK0IP8PsESVQX   ts  1
+312 6rPerw3fPtggey7LPj6X   ts  1
+313 zdKF1SXibeBH26CpiufK   ts  1
+314 i8uVNjD6U5P2koFh3qw1   ts  1
+315 HQtaLSwh8MGTTpLVllOE   ts  2
+316 qexjC6y4MMUWHAt5bqvh   ts  1
+317 5rHhraHsUTAqh6sjU2d1   ts  1
+318 j5bxfVlajJwn5pZNQQsa   ts  3
+319 gYlhCVSj5pa1VFbFdicj   ts  2
+320 jZF8v6PoTY6RXiFVy6gY   ts  3
+321 hmUKEUxhdCzEzo2q7PpI   ts  1
+322 ArWJ1aLAwP2t66pdDGqy   ts  1
+323 6jOSL0IZbcNJOVzNEMr7   ts  2
+324 771cxdbg1Rw25ZLqI3Ge   ts  1
+325 O0yVeeQVT2OJE6mbt5wl   ts  1
+326 tMR3y87RWvjTV5kdfi2h   ts  1
+327 dFi2sGOS1gEWWg2KDXcs   ts  1
+328 CVmfiQuobm1ux4zBp3l4   ts  1
+329 kSZ3wZkDtJRrYLpi4ojs   ts  1
+330 LT2PWfa1d0t3mjn0w4KZ   ts  1
+331 j1lSAtVBMhimMpC1Ha2o   ts  1
+332 4MXqlRYjANDHSM003I2c   ts  1
+333 9NyaXPkKlfyjubys7IoE   ts  1
+334 g00rVq4jB6nBvbdFo9xb   ts  1
+335 BiyqZv07wmeZOboeTfnw   ts  1
+336 sUE4VAmCISZvzsFH49BK   ts  1
+337 imxFcTXtwyNUY9uOjkct   ts  1
+338 Yfk4ShUhELUtl9XwpgCa   ts  6
+339 vNUhkysUUHxRDi1a5BQ7   ts  1
+340 9YaeRGOTkxRml6BYldlV   ts  1
+341 CtPuhMjKdihqEsXucpww   ts  1
+342 54TEF4eZN23KZglG8kHT   ts  2
+343 kgAJm1lblz7JIf8qQqZd   ts  1
+344 wQtadQgeGBUtR1EtHfet   ts  2
+345 TqSddjjditUnblQcWfB3   ts  2
+346 azeC5Kk3x946Oj4L6HnU   ts  1
+347 uKYfZr65pq4KTBvCj3dE   ts  1
+348 hOdVHTzPBsd26UMRFL3Q   ts  1
+349 VLLHim4Q2j7wFMmMQbHq   ts  1
+350 jdJRtSyyTamNP0WYAaei   ts  1
+351 5akYQwXPqMXUdUwTlseA   ts  1
+352 3b8X79WU0YWVcsmFGeEH   ts  4
+353 4rY5i0hQ8qKc3mBAnAwT   ts  1
+354 eNXtdvWDFDTA7Xrc5UTI   ts  1
+355 kEsM4qtWu3c24cxLGja3   ts  2
+356 a5F2j7cvabLVMfvG55nK   ts  2
+357 xSvzfB9wIjnw2QuEb9Ba   ts  1
+358 IIeCbY9dM0C04giDl66U   ts  1
+359 RFOrWXAQX1PO0HFZwlLL   ts  2
+360 Rw1m2pue8CmVp1Gbe9Aj   ts  1
+361 SqhyFLTUrs6u8geASTKe   ts  2
+362 p7jxXch3zyEvD9B92JRQ   ts  1
+363 mCN7iUcxW0yZqmQaO7U8   ts  2
+364 ct6awrymUS8RgzTgYjKx   ts  2
+365 GPD6F9DZ5KZ649zqEkmE   ts  2
+366 JYNcLggG6xeng7vhONOS   ts  1
+367 QygIO2O30zG9kOeA6yaW   ts  1
+368 E89vWsrHcs2BX0H9x10k   ts  1
+369 TJQ9j6A05f8ld8OK8Mzc   ts  1
+370 BvKCMACzXtxloOwf0FNW   ts  1
+371 fkOJ1NbnRk71F9aGqXWl   ts  1
+372 aEalfO2zYVQmNGz6LclE   ts  1
+373 WTslF06a8nHFUAWr3vIT   ts  1
+374 GoEd9Sf53GRx8ffiYeJA   ts  1
+375 3G6evfXk2aaHFUO4NsWt   ts  3
+376 J97ljhO3gdtigy2V3olp   ts  1
+377 XZ6kYLrylUTUVmi9Moii   ts  1
+378 GexzYjhJP1cjPlyIYmBj   ts  1
+379 YgxWHqtXkNX2ukZ9kiCy   ts  1
+380 T8uRDr68JjJ4BQT3iIty   ts  1
+381 qXLy4pIlDDDoNenqCw3e   ts  1
+382 UIFwra15oVwoFsQMfzB2   ts  1
+383 I6mfBMKbR5exUiCNwo3s   ts  1
+384 iqav0EdhDGMWKHeygaoS   ts  1
+385 9f0qLvOeqUpquuahieMQ   ts  1
+386 1EicOlsQbZR2weQYUSE4   ts  1
+387 HtYDZw69CrxG7YXipN2I   ts  4
+388 klZuuzk47ZvpyRkPJaZf   ts  1
+389 yMeSz76Rr9eoJcLNUcyC   ts  2
+390 KDppLvc9sRPP1RRTXUbx   ts  1
+391 NH3PiPNoQ05mlw2FESiA   ts  1
+392 XcEGK0YT24vUTt758M2g   ts  1
+393 9nohyzDvZOZcWfHHxyyl   ts  1
+394 jtLHDBCHTQmFdAKk960m   ts  1
+395 3v8cpIfuZbk4rsihgtbl   ts  1
+396 qcx2RIuXihoDjqT84xfl   ts  1
+397 Dww6f9XWMbmfz4VOw6gr   ts  2
+398 SC2x1sOCmOGfCQ69ipBT   ts  3
+399 AMdGiZCShW6RizBlKSmC   ts  1</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(score)) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              subject_id   n
+1   Ac5ZMy5LVkFjQHr2ucen   9
+2   xerEAhCM3QCii740dMOT   2
+3   nmy4BvIJvHgW6RKgnx5i   2
+4   e8cXE9s9upZtFqszDShQ   4
+5   SstzyshA6P3MsHarAJOC   2
+6   R0BAq19ThveXTuFrNFWR   2
+7   v8OOr4HHwaTU8MdlBiNe  96
+8   fkOJ1NbnRk71F9aGqXWl 100
+9   J97ljhO3gdtigy2V3olp  97
+10  gAL0DiMvJc0jSvoR8Baq  96
+11  LSSNI9CJdMEB7kIIdv1j   2
+12  Opi65eyMrbyYjB5bwRMP   2
+13  PPoF7VmcJfI5PN9okf0T   2
+14  YV20vaAnaPndIGbTNCyi  96
+15  FqMdeNMqacNOMwDGxovJ   2
+16  L431K0ZDgV4wqUR7XTeo   2
+17  A8SHBz2S8Ui095L35Wjh  96
+18  1h05DmzN29B6FZZR67pP   2
+19  BpXGyUgvqzapjyMB15Zy  97
+20  CNX9AP2rnXxONuGYEalT  24
+21  6jOSL0IZbcNJOVzNEMr7   4
+22  Xf5wK1xsRt5nKLDYQwop   2
+23  xSvzfB9wIjnw2QuEb9Ba   5
+24  4rY5i0hQ8qKc3mBAnAwT  21
+25  E3hK4Etw5ylsn1SsXH8S  97
+26  0WgPYP5L2MNMyFtsWEaG   3
+27  QLyEuiyGskZKXWMVQm4M   2
+28  DRrgI3jzHMjID8Q48PjB  97
+29  Y2lFlepXHqWUFbEKCNwq   2
+30  xDJ0JpfeWhke1GvUwHem  96
+31  j49ae9H3AT6mRC6ygqv8  96
+32  YxsciWh4LBDtAl6lLunN  96
+33  ifcG7cR8IYUd48e11ERX  12
+34  hf6J6yzRivfwR2Elyo9N   4
+35  0REiwYHX47zX4qbePYjN   8
+36  SNsBrz8Txh3QpNgGXGtE   2
+37  1E9KZrTTpuJ3KjJa8cDV  12
+38  fRYcCiEcUwRJIA0mQ2o7  96
+39  tRvesqPE5A0iKVY6G8g8  97
+40  VwvZLU4OilnAvOArxYc7   2
+41  DXeOGqQEgoEt16VOuaOn   2
+42  HqfnXYULelL4tEtMA05t   2
+43  CPwdHnAnqZuJJEvQdgWC   1
+44  G06vCKjuln4m6u6CPQEn   1
+45  ZP9yL6PFVQSvSIC7bUee   1
+46  R6U0YqqdHfgqkWkuCagF   2
+47  2t8eqhwiUfiSDnWfoHBW   1
+48  V2ME98SReEaOQ3fhFVst   1
+49  950AzNMugIUFBNRmlDCF   6
+50  kiTl14IWGtRXdVVJmZgD   1
+51  ADb2b1AvtBmftDmWdKWN   2
+52  vbGZVDJU7u0ApalOtBTF   3
+53  EECGDwmWAmWfpKKnYI7O   1
+54  XjY03SGFqyp7HmUABJbW   1
+55  vw9RHgQ3UaaTe1nfjJc0   2
+56  IeElhKAlZlvb0pPCNyJQ   1
+57  HngYolsZ7LnwhMepx4yf   1
+58  383KleAMN0hXjU1qXdYJ   1
+59  CKbheN9Pot7GaZpfPYe5   1
+60  DoFCE00qFvG0xBr3UWpI   2
+61  zANbOJqdtyEpAq00umSb   5
+62  IJumhtN8oKoYEDbFfUMf   1
+63  j5bxfVlajJwn5pZNQQsa   7
+64  TqSddjjditUnblQcWfB3   7
+65  Hy5g7Y3sJf9BcHPqEZ8p   1
+66  2QJZGGcIQF8A5FhBmyuz   1
+67  OJ5jre57VnjtURyBCSjz   1
+68  mXMCaULEkFF6s1prItB8   1
+69  771cxdbg1Rw25ZLqI3Ge   3
+70  49bWZY1TC7zcMYq4FzkX   4
+71  ItLyRC07hxMbcaguQBkl   1
+72  A7wLmahMacmd6RniSE0h   1
+73  cU37HwPJT7ClWoOdeIB0   1
+74  Cxv3OL9bAloZXz0mUogg   1
+75  5FK6Vbwq2sUGNtVEgaFU   1
+76  fCMnEWhTh7kuGhOSMhTC   2
+77  kEsM4qtWu3c24cxLGja3   3
+78  mgLxjjWNdkpi3rxUB07l   2
+79  17LEM8wPQyshaga81mOO   1
+80  QQA4FUKgerUT0TLEFFgK   1
+81  Ps3jaWnRHhoNNeL3PDa4   1
+82  TJQ9j6A05f8ld8OK8Mzc   3
+83  jtvtTOMSmoqa3cP4vWFw   1
+84  3lGsczpaOxmDeZmuT7yz   1
+85  oXDopHMLUvv9ZYWc4WY0   1
+86  kovEJOLHZyADSgwnqPga   4
+87  MJzHLwX8uDBLf5PVpvm3   1
+88  gMVww8j5DaVLpC3Yj8nr   1
+89  oy61qtPF4pg4R3ABVbJj   2
+90  LxtXIECwYcSxnNetzXg7   1
+91  jnddVA5OnRXjgyBHLhkr   2
+92  jZF8v6PoTY6RXiFVy6gY   4
+93  n76EcPNePczVQ85qQtbB   1
+94  z8N4Pa7qb9TeTYKUwAeQ   8
+95  IB0qJtGPs6xL8JRpYuBt   2
+96  bjusHaMvMJEVS8XmZ80t   6
+97  RFOrWXAQX1PO0HFZwlLL   3
+98  xoO6skepz0KramQLSPL9   1
+99  Q6i1DNEvpyBBDntIgDg4   1
+100 4FSjZtJEUXGQaNQXwR2P   4
+101 TKO2Alhu9oJQR8IzF5eI   2
+102 8FYM23YbIrj3Ofx7LMoo   1
+103 hI7JpYtbCLvNfC1JPRxp   3
+104 Je7hQucSMLQWqrCCwqTD   2
+105 NEzK3RrTXr3H711C5ner   1
+106 zbI7AUMspFhHJsUyyaY2   1
+107 fGcn13Dce53Ic5t7KUSy   1
+108 yWx2uJPTKZJGfAOeaat6   1
+109 izXbHR0eYoPO82zpM9ci   1
+110 p9lkjNp3qQogD4OUaedm   1
+111 iJuHugYdAhBzELotbBWp   3
+112 BxdFCeWLf8nCNjrDcwKt   2
+113 bRtADGpq7hsZ7dqIDhah   1
+114 dDr1YyBAyPfLjg9qDv1Y   1
+115 Mdmz1IMWbMN65ldqchyZ   2
+116 7oqtXRTtqemWKjkCzH7m   2
+117 HEX7q9dj3YP6yeKjY1io   1
+118 pg3CssQWWIcR6REE3TFo   2
+119 HFmXofKOwruJkX7ka6yA   2
+120 D3ShceKj3iyKrXmCrB7j   1
+121 tGZegyyiWppuB0tUkXWz   1
+122 omfSFxzu7MrjjSSafj2q   1
+123 a5F2j7cvabLVMfvG55nK   4
+124 O88gcs0iBczTV5V6mLTh   1
+125 AhirSY1w8dBzmuo2t48W   1
+126 Ayo5YHWlCQsHNV7XrQc7   3
+127 d7pCGcyjbWTZyaOtM2w1   2
+128 oEQ7OxQXOW1OrOwhfEPF   5
+129 XGaVXviFC59TLyx7AKLq   1
+130 fRN2BqpepgaxT82ExHgD   1
+131 OcE6oQcbHzuzftyyrdB6   3
+132 h1VVrAsMOlTSjgsxu07s   1
+133 OmDvk4v7NxuhAnLBrkbW   1
+134 Ewp3WFDEQVhQx6UMUAiN   2
+135 9eUKJ1MDRhFJ0kdt2ikq   3
+136 s0XXgsxyI4HqXAssoIP2   2
+137 6UwmqiWhZgQPMStTzRH0   1
+138 5rHhraHsUTAqh6sjU2d1   2
+139 Yfk4ShUhELUtl9XwpgCa   7
+140 54siyd3BYjsh1mVk7R0Z   1
+141 zPdJNnMEELaOlKvgj0xS   1
+142 LmdItKKcaTPAwe0Ym4Od   1
+143 IOGwmjH1oX4unT6cb6gy   1
+144 RsRxUuQovzhFUap8a01P   1
+145 9fNzCWLAlFIBwlLJ0oFz   1
+146 Bipzf7LJ6qdGqAscZzBg   5
+147 5PP2t16GSzChbtte5vVw   1
+148 7g48cSLs8jYPIKalXiUZ   1
+149 KyeFByJ933id8W7P6j77   1
+150 hSH8uwdznJPF9W8CTA2w   1
+151 THM75FY0853siUB2wF5J   1
+152 Mtt1LXmZWBninK3ggSK5   1
+153 khYao3bQxAh4FNPIXDxa   1
+154 w8EG0W8jl0IbL9HsENCg   1
+155 4ErLxgNrw5giUuWzjjsm   1
+156 iCXyy2xK8DDsgTtrf8kW   2
+157 boffKPQBu09LdqOpXQOe   1
+158 REcum50sJgQSYvBMQXwc   1
+159 TKkwOc2pHd9PObQzxHDj   1
+160 jyeyCfCN3CfT45Vmut9E   1
+161 BgX9DZHT7atuF2UAoakM   2
+162 rwXh4OtqsjeCqJsJDrVf   2
+163 EtulJVHuPSc3ZLVKBPtb   1
+164 CFx2CdZ1bSxA6JPb6SA6   1
+165 G6LvMujrQyj0EAuVo6Uq   1
+166 4zCxjdZQSFAMBokcJ98T   1
+167 QkP1503G1oAEIoPcmYmF   1
+168 NxDOJ5WGiu7vMzc0jfg5   3
+169 fAPx69vDlA8qSfqNFaag   1
+170 FQCQhjkNqqJrCXXHGWyM   1
+171 KdXV17I3V0fPvMAidxdb   1
+172 5KVDGaVVAHsiHJMjLWGH   1
+173 RIcuhrLt8BIs1le0DQl9   1
+174 3JAbXWzVHjOfIJvN5nIY   1
+175 EjoIAEzk6UUhC7y9F0Ry   1
+176 TJns5NZcCMEwMuva3lvg   1
+177 nNv1U7RDvAlO10CNVduv   1
+178 j3wPPP2j4S3VgnpmBFvH   1
+179 OnWF9xAaNJRvOuX00KEc   2
+180 wUFqN9bUAEkgPgUV5sqO   1
+181 3HNTHcsl7dZ2TGlwR4g6   1
+182 etnyKJ3NA8vLJWQgHIDJ   1
+183 piTJXDJA6kamnbAqQVSc   1
+184 YhKp6PmpkSO7X4aGjYB9   1
+185 3RVHWOebZPPvYZwkVRaC   1
+186 umV9t8yhNwHqLYO7llmI   2
+187 LBg0xU9XZnPijXtSAo67   2
+188 ekGBkEpWxMdbx2WL17xl   1
+189 Q5v7vEQrx6bW7SNYTjUD   1
+190 3WOzLROmRBgFy8GAfJZx   5
+191 9IlG6nRRZkN1ZsoqsxCM   1
+192 BdgTQ1C8QkSCuLiWUM6G   1
+193 2fYxvQc1czvRDcT8JM7B   2
+194 McZsAbJxyBZkxN6R06tL   1
+195 g3iCPU6zUjzgEz6cwB61   1
+196 Gm5YDXVt591FIqCgxMtr  16
+197 Fvv0ALwZPTKLL7OVVBmn   1
+198 2pScWifucpmQZvXoZCw3   1
+199 tKTrELf8YVSKMU6GH0tn   1
+200 ZDYUvh7i71S87XwXaHCP   1
+201 s7mJzZjHp4ae1qDeD85E   1
+202 03spmysv917pRTSkTcj6   1
+203 6fGC9DJqZxA4MXTQX8Sd   2
+204 O0NYuwahmBnGRb5IPZGa   1
+205 R81zDdBsjgGbqyqUWMQT   3
+206 eBDrjMp7gbOV17PYLZad   1
+207 nRnUY9CTiB7LVJe7haxE   1
+208 R6M8a2s8Oin7lhCtFEhQ   1
+209 eO2fxGLcdC5k0aGuROZx   1
+210 o24iqAR0WC7cR2ZkNHie   1
+211 I9oLuP4O3GOIbYravzP8   1
+212 g7rIRsOq2kkH8pYaz7fR   1
+213 64RVc86LLeI6qccFOAs0   1
+214 CRGZ4TavntGH5E9LSBCX   1
+215 DH0T6zFub589qUF0B702   1
+216 0i0wZSbTdy53z6Cni0Dl   1
+217 SJdYRJAFtFnPuPXeDtZ9   1
+218 rhddayHF97oSYI7UrdRt   1
+219 nabsPHGZpvr6SgYzV2am   1
+220 5EPXWl4PDme2kqXHiOBB   1
+221 qDI6xFzx1uEgAvcPXYms   2
+222 ZyEbe7eQxt4YlalJLb89   2
+223 JhW3ezpIB8sBZJ76QQ2b   1
+224 4CLdS8XZEmJVDlHImT7u   1
+225 3TUTJUD20hg4uydW0nPU   1
+226 tLdDkwsFunR4YoLKVhDr   1
+227 PYH1CXUkU4mAxBsW5UHi   1
+228 G2WGBZc9GyTIFNdsysZC   1
+229 yL2xNKGqpeaOzg95CDUB   1
+230 zKG5mSoyPstUeC99enq5   1
+231 AsoaxzIykTyxqAoV4YQr   1
+232 bW7vftpeg6L47YzZjzWX   1
+233 cRpM8Z159NED2UYcb3jT   1
+234 nvEdRy29lvIepo6irKSa   1
+235 jOtySWDeJ7rf9lxtAQzX   1
+236 roz2c3opqAFnyNPbzR3h   1
+237 qpQ1vSLveBFouxZzN2iu   1
+238 076BrNISK0IP8PsESVQX   1
+239 6rPerw3fPtggey7LPj6X   1
+240 zdKF1SXibeBH26CpiufK   1
+241 i8uVNjD6U5P2koFh3qw1   1
+242 HQtaLSwh8MGTTpLVllOE   2
+243 qexjC6y4MMUWHAt5bqvh   1
+244 gYlhCVSj5pa1VFbFdicj   2
+245 hmUKEUxhdCzEzo2q7PpI   1
+246 ArWJ1aLAwP2t66pdDGqy   1
+247 O0yVeeQVT2OJE6mbt5wl   1
+248 tMR3y87RWvjTV5kdfi2h   1
+249 dFi2sGOS1gEWWg2KDXcs   1
+250 CVmfiQuobm1ux4zBp3l4   1
+251 kSZ3wZkDtJRrYLpi4ojs   1
+252 LT2PWfa1d0t3mjn0w4KZ   1
+253 j1lSAtVBMhimMpC1Ha2o   1
+254 4MXqlRYjANDHSM003I2c   1
+255 9NyaXPkKlfyjubys7IoE   1
+256 g00rVq4jB6nBvbdFo9xb   1
+257 BiyqZv07wmeZOboeTfnw   1
+258 sUE4VAmCISZvzsFH49BK   1
+259 imxFcTXtwyNUY9uOjkct   1
+260 vNUhkysUUHxRDi1a5BQ7   1
+261 9YaeRGOTkxRml6BYldlV   1
+262 CtPuhMjKdihqEsXucpww   1
+263 54TEF4eZN23KZglG8kHT   2
+264 kgAJm1lblz7JIf8qQqZd   1
+265 wQtadQgeGBUtR1EtHfet   2
+266 azeC5Kk3x946Oj4L6HnU   1
+267 uKYfZr65pq4KTBvCj3dE   1
+268 hOdVHTzPBsd26UMRFL3Q   1
+269 VLLHim4Q2j7wFMmMQbHq   1
+270 jdJRtSyyTamNP0WYAaei   1
+271 5akYQwXPqMXUdUwTlseA   1
+272 3b8X79WU0YWVcsmFGeEH   4
+273 eNXtdvWDFDTA7Xrc5UTI   1
+274 IIeCbY9dM0C04giDl66U   1
+275 Rw1m2pue8CmVp1Gbe9Aj   1
+276 SqhyFLTUrs6u8geASTKe   2
+277 p7jxXch3zyEvD9B92JRQ   1
+278 mCN7iUcxW0yZqmQaO7U8   2
+279 ct6awrymUS8RgzTgYjKx   2
+280 GPD6F9DZ5KZ649zqEkmE   2
+281 JYNcLggG6xeng7vhONOS   1
+282 QygIO2O30zG9kOeA6yaW   1
+283 E89vWsrHcs2BX0H9x10k   1
+284 BvKCMACzXtxloOwf0FNW   1
+285 aEalfO2zYVQmNGz6LclE   1
+286 WTslF06a8nHFUAWr3vIT   1
+287 GoEd9Sf53GRx8ffiYeJA   1
+288 3G6evfXk2aaHFUO4NsWt   3
+289 XZ6kYLrylUTUVmi9Moii   1
+290 GexzYjhJP1cjPlyIYmBj   1
+291 YgxWHqtXkNX2ukZ9kiCy   1
+292 T8uRDr68JjJ4BQT3iIty   1
+293 qXLy4pIlDDDoNenqCw3e   1
+294 UIFwra15oVwoFsQMfzB2   1
+295 I6mfBMKbR5exUiCNwo3s   1
+296 iqav0EdhDGMWKHeygaoS   1
+297 9f0qLvOeqUpquuahieMQ   1
+298 1EicOlsQbZR2weQYUSE4   1
+299 HtYDZw69CrxG7YXipN2I   4
+300 klZuuzk47ZvpyRkPJaZf   1
+301 yMeSz76Rr9eoJcLNUcyC   2
+302 KDppLvc9sRPP1RRTXUbx   1
+303 NH3PiPNoQ05mlw2FESiA   1
+304 XcEGK0YT24vUTt758M2g   1
+305 9nohyzDvZOZcWfHHxyyl   1
+306 jtLHDBCHTQmFdAKk960m   1
+307 3v8cpIfuZbk4rsihgtbl   1
+308 qcx2RIuXihoDjqT84xfl   1
+309 Dww6f9XWMbmfz4VOw6gr   2
+310 SC2x1sOCmOGfCQ69ipBT   3
+311 AMdGiZCShW6RizBlKSmC   1</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if you missed more than 10 items, you're getting tossed (for now)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>missing_cog_items <span class="ot">&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(score)) <span class="sc">|&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(subject_id)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="ot">&lt;-</span> v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(subject_id <span class="sc">%in%</span> missing_cog_items)) <span class="sc">|&gt;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">score =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(score), <span class="dv">0</span>, score))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(v5_dat, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"v5_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Note that all time information is based on the median time (from FPT preprint) for the entire task divided by number of items.</p>
 </div>
 </div>
 </div>
@@ -483,117 +1228,117 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                   v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">rep =</span> i,</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(test_r2),</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(time),</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>test</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                   v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">rep =</span> i,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(test_r2),</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(time),</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>test</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>v5test_plt <span class="ot">&lt;-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"10 MIN"</span>),</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(test <span class="sc">|&gt;</span> </span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>),</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                                  test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">8.2</span>, <span class="at">y =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>), <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>                                  test <span class="sc">|&gt;</span></span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;=</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>                                             <span class="fu">pull</span>(time)) <span class="sc">|&gt;</span></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">26.6</span>, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>, <span class="at">color =</span> <span class="st">"Task"</span>) <span class="sc">+</span></span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme</span>(</span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(v5test_plt, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_plt.rds"</span>))</span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>v5test_plt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>v5test_plt <span class="ot">&lt;-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"10 MIN"</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(test <span class="sc">|&gt;</span> </span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>                                  test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">8.2</span>, <span class="at">y =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>), <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>                                  test <span class="sc">|&gt;</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;=</span> <span class="fu">filter</span>(test, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>                                             <span class="fu">pull</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">26.6</span>, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>, <span class="at">color =</span> <span class="st">"Task"</span>) <span class="sc">+</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme</span>(</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(v5test_plt, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_plt.rds"</span>))</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>v5test_plt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -611,128 +1356,128 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test_random <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">iter =</span> <span class="dv">0</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">time =</span> <span class="dv">0</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">added_time =</span> <span class="dv">0</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>     <span class="sc">~</span> {test_iter <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                                <span class="at">iter =</span> <span class="dv">0</span>,</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                                <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>                                <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>                                <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                                <span class="at">time =</span> <span class="dv">0</span>,</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                                <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">added_time =</span> <span class="dv">0</span>,</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                                <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>     test <span class="sc">|&gt;</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrange</span>(rep) <span class="sc">|&gt;</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>       <span class="fu">select</span>(<span class="at">cur_rep =</span> rep, <span class="at">cur_task =</span> task) <span class="sc">|&gt;</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pwalk</span>(\(cur_rep, cur_task) {</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>         </span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>         random_item <span class="ot">&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(task <span class="sc">==</span> cur_task <span class="sc">&amp;</span> <span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test_iter, item))) <span class="sc">|&gt;</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>           <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>           <span class="fu">sample</span>(<span class="dv">1</span>)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>         </span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>         test_iter <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">filter</span>(item <span class="sc">==</span> random_item),</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>                             v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test_iter, item))) <span class="sc">|&gt;</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>                     <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">iter =</span> .x,</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>                     <span class="at">rep =</span> cur_rep,</span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task =</span> cur_task,</span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>                     <span class="at">item =</span> random_item,</span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test_iter <span class="sc">|&gt;</span></span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">pull</span>(test_r2),</span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>                     <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test_iter <span class="sc">|&gt;</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">pull</span>(time),</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>                     <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time)) <span class="sc">|&gt;</span></span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rbind</span>(test_iter) <span class="sc">|&gt;</span></span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)</span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>       })</span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>     test_random <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(test_random, test_iter) <span class="sc">|&gt;</span></span>
-<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)},</span>
-<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">.progress =</span> T) </span>
-<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test_random, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-random_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>test_random <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">iter =</span> <span class="dv">0</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>     <span class="sc">~</span> {test_iter <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                                <span class="at">iter =</span> <span class="dv">0</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                                <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                                <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>                                <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>                                <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>                                <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>                                <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>     test <span class="sc">|&gt;</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrange</span>(rep) <span class="sc">|&gt;</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>       <span class="fu">select</span>(<span class="at">cur_rep =</span> rep, <span class="at">cur_task =</span> task) <span class="sc">|&gt;</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pwalk</span>(\(cur_rep, cur_task) {</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>         random_item <span class="ot">&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(task <span class="sc">==</span> cur_task <span class="sc">&amp;</span> <span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test_iter, item))) <span class="sc">|&gt;</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>           <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>           <span class="fu">sample</span>(<span class="dv">1</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>         test_iter <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">filter</span>(item <span class="sc">==</span> random_item),</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>                             v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test_iter, item))) <span class="sc">|&gt;</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>                     <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>           <span class="fu">summarize</span>(<span class="at">iter =</span> .x,</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>                     <span class="at">rep =</span> cur_rep,</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>                     <span class="at">task =</span> cur_task,</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>                     <span class="at">item =</span> random_item,</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test_iter <span class="sc">|&gt;</span></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">pull</span>(test_r2),</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>                     <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test_iter <span class="sc">|&gt;</span></span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">pull</span>(time),</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>                     <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>                     <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time)) <span class="sc">|&gt;</span></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rbind</span>(test_iter) <span class="sc">|&gt;</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>       })</span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>     test_random <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(test_random, test_iter) <span class="sc">|&gt;</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)},</span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">.progress =</span> T) </span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test_random, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-random_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>test_random <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-random_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>test_random <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-random_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>v5test_random_plt <span class="ot">&lt;-</span> test_random <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(test_random <span class="sc">|&gt;</span> </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                  test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(test_random <span class="sc">|&gt;</span> </span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                              <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                              <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                  test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> iter), <span class="at">alpha =</span> .<span class="dv">14</span>, <span class="at">linewidth =</span> .<span class="dv">4</span>, </span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> test_random <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2)),</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2), <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> test_random <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2, <span class="at">color =</span> task),</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>) <span class="sc">+</span></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.6</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>)) <span class="sc">+</span></span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(v5test_random_plt, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_random_plt.rds"</span>))</span>
-<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>v5test_random_plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>v5test_random_plt <span class="ot">&lt;-</span> test_random <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(test_random <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                  test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(test_random <span class="sc">|&gt;</span> </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>                              <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>                              <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>                  test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> iter), <span class="at">alpha =</span> .<span class="dv">14</span>, <span class="at">linewidth =</span> .<span class="dv">4</span>, </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> test_random <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2)),</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2), <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> test_random <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">.by =</span> time,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">test_r2 =</span> <span class="fu">mean</span>(test_r2),</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">task =</span> <span class="fu">first</span>(task)),</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2, <span class="at">color =</span> task),</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>) <span class="sc">+</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.6</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>)) <span class="sc">+</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(v5test_random_plt, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test_random_plt.rds"</span>))</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>v5test_random_plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -743,69 +1488,266 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="section" class="level2">
+<section id="section" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="section"></h2>
 <p>Idea: what if as a robustness check we rerun the search alg making its first item be from a specific task. Nowhere close to all possible combinations, but might be something.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">first_task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rep =</span> <span class="dv">0</span>,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(task) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(\(first_task) {</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(first_task)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>         \(i) {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>((i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> task <span class="sc">==</span> first_task) <span class="sc">|</span> i <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>           <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>           <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>           <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>                       v5_dat <span class="sc">|&gt;</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>                           <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>                           <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>                           <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>                        <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">summarize</span>(<span class="at">first_task =</span> first_task,</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">rep =</span> i,</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>                           <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>                           <span class="at">item =</span> .x,</span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                           <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>                           <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">pull</span>(test_r2),</span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>                           <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">pull</span>(time),</span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>                           <span class="at">time =</span> <span class="fu">first</span>(time),</span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>                           <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>           <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">.progress =</span> T)</span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="fu">paste0</span>(<span class="st">"v5test_first-"</span>, first_task, <span class="st">"_dat.rds"</span>)))</span>
-<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(task) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(\(first_task) {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    test <span class="ot">&lt;&lt;-</span> <span class="fu">data.frame</span>(<span class="at">first_task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(first_task)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>         \(i) {</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>           <span class="cf">if</span> (test <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(time) <span class="sc">&gt;</span> <span class="dv">10</span>) {<span class="fu">Sys.sleep</span>(<span class="dv">0</span>)}</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>           <span class="cf">else</span> {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>((i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> task <span class="sc">==</span> first_task) <span class="sc">|</span> i <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>             <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>                         v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                             <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>                          <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">summarize</span>(<span class="at">first_task =</span> first_task,</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rep =</span> i,</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>                             <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>                             <span class="at">item =</span> .x,</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>                             <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">pull</span>(test_r2),</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>                             <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">pull</span>(time),</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>             <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(r2_rate <span class="sc">==</span> <span class="fu">max</span>(r2_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>             <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>         }, </span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>         <span class="at">.progress =</span> T)</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="fu">paste0</span>(<span class="st">"v5test_first-"</span>, first_task, <span class="st">"_dat.rds"</span>)))</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(task) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(\(task) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    test_firsttask <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">paste0</span>(<span class="st">"v5test_first-"</span>, task, <span class="st">"_dat.rds"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">readRDS</span>()</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    (test_firsttask <span class="sc">|&gt;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test_firsttask, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                                     <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test_firsttask, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">filter</span>(test_firsttask, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>), <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>                                      test_firsttask <span class="sc">|&gt;</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">filter</span>(time <span class="sc">&lt;=</span> <span class="fu">filter</span>(test_firsttask, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                                                 <span class="fu">pull</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">x =</span> <span class="fl">26.6</span>, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>, <span class="at">color =</span> <span class="st">"Task"</span>,</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Starting Task: "</span>, task)) <span class="sc">+</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">aspect.ratio =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>()</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell column-page quarto-layout-panel" data-layout-ncol="4">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-3.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-5.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-6.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-17-7.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1"></h2>
+<p>Mark’s idea: run with just maximizin <span class="math inline">\(R^2\)</span> (no time in denominator)</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rep =</span> <span class="dv">0</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">item =</span> <span class="st">"INIT"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">test_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time =</span> <span class="dv">0</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_r2 =</span> <span class="dv">0</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">added_time =</span> <span class="dv">0</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r2_rate =</span> <span class="dv">0</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq</span>(<span class="dv">1</span>, v5_dat <span class="sc">|&gt;</span> <span class="fu">pull</span>(item) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()), </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>     \(i) {test <span class="ot">&lt;&lt;-</span> v5_dat <span class="sc">|&gt;</span> </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(<span class="sc">!</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>       <span class="fu">pull</span>(item) <span class="sc">|&gt;</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">rbind</span>(v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">==</span> .x),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>                   v5_dat <span class="sc">|&gt;</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(item <span class="sc">%in%</span> <span class="fu">pull</span>(test, item))) <span class="sc">|&gt;</span> </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(task, subject_id),</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">sum</span>(time),</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">first</span>(task)) <span class="sc">|&gt;</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">time =</span> time <span class="sc">+</span> <span class="fu">map_dbl</span>(task, get_startup)) <span class="sc">|&gt;</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">.by =</span> subject_id,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">formula =</span> <span class="fu">paste</span>(<span class="st">"sscore ~"</span>, task <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"+"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> task, <span class="at">values_from =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>             <span class="fu">summarize</span>(<span class="at">rep =</span> i,</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>                       <span class="at">task =</span> <span class="fu">str_split_i</span>(.x, <span class="st">"_"</span>, <span class="dv">1</span>),</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>                       <span class="at">item =</span> .x,</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">test_r2 =</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">first</span>(formula)),</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">data =</span> <span class="fu">pick</span>(<span class="fu">everything</span>())))<span class="sc">$</span>r.squared,</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_r2 =</span> <span class="fu">first</span>(test_r2) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(test_r2),</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>                       <span class="at">added_time =</span> <span class="fu">first</span>(time) <span class="sc">-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pull</span>(time),</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>                       <span class="at">time =</span> <span class="fu">first</span>(time),</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>                       <span class="at">r2_rate =</span> <span class="fu">first</span>(added_r2 <span class="sc">/</span> added_time))) <span class="sc">|&gt;</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>       <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>       <span class="co"># only difference is here.</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(added_r2 <span class="sc">==</span> <span class="fu">max</span>(added_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rbind</span>(test) <span class="sc">|&gt;</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>       <span class="fu">filter</span>(item <span class="sc">!=</span> <span class="st">"INIT"</span>)}, </span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>     <span class="at">.progress =</span> T)</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>test</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(test, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-max-r2_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>test_maxr2 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Search Algorithms"</span>, <span class="st">"v5test-max-r2_dat.rds"</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>test_maxr2 <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> test_r2)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> test_maxr2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"10 MIN"</span>),</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> test_maxr2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="fu">max</span>(time)),</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  geomtextpath<span class="sc">::</span><span class="fu">geom_textsegment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test_maxr2, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> time, <span class="at">y =</span> test_r2, <span class="at">yend =</span> test_r2, <span class="at">label =</span> <span class="st">"PEAK"</span>),</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(test_maxr2, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> test_r2, <span class="at">x =</span> time),</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> scales<span class="sc">::</span><span class="fu">col_lighter</span>(<span class="st">"#202020"</span>, <span class="at">amount =</span> <span class="dv">35</span>), <span class="at">linewidth =</span> .<span class="dv">3</span>, <span class="at">linetype =</span> <span class="st">"longdash"</span>) <span class="sc">+</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> task), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(test_maxr2 <span class="sc">|&gt;</span> </span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span> <span class="fu">filter</span>(test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>                                  test_maxr2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="fl">10.49</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">8.2</span>, <span class="at">y =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">filter</span>(test_maxr2, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pull</span>(time) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">1</span>), <span class="st">" minutes:</span><span class="sc">\n</span><span class="st">• "</span>,</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>                                  test_maxr2 <span class="sc">|&gt;</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">filter</span>(time <span class="sc">&lt;=</span> <span class="fu">filter</span>(test_maxr2, test_r2 <span class="sc">==</span> <span class="fu">max</span>(test_r2)) <span class="sc">|&gt;</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>                                             <span class="fu">pull</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">count</span>(task) <span class="sc">|&gt;</span></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">pmap_chr</span>(\(task, n) <span class="fu">paste</span>(n, task)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">• "</span>)),</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fl">26.6</span>, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">3.4</span>, <span class="at">hjust =</span> <span class="st">"left"</span>, <span class="at">color =</span> <span class="st">"#202020"</span>) <span class="sc">+</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>),</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">guide_axis</span>(<span class="at">cap =</span> <span class="st">"both"</span>)) <span class="sc">+</span></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (minutes)"</span>, <span class="at">y =</span> <span class="st">"Test R^2"</span>, <span class="at">color =</span> <span class="st">"Task"</span>) <span class="sc">+</span></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()  <span class="sc">+</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>       <span class="fu">theme</span>(</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>),</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>         <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">'transparent'</span>, <span class="at">color=</span><span class="cn">NA</span>),</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>         <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="search_fpt-v5_report_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
 </div>
 
 

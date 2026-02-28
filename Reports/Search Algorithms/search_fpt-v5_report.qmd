@@ -15,7 +15,6 @@ knitr:
       dev: png
       dev.args:
         bg: transparent
-cache: true
 ---
 
 ::: panel-tabset
@@ -125,7 +124,7 @@ bu_dat_e <- bu_dat_e |>
 ```{r}
 admc.dr_dat <- admc.dr_dat |>
     mutate(task = "admc.dr",
-           item = paste0(task, "_", admc_id),
+           item = paste0(task, "_", parse_number(admc_id)),
            time = (5.87 - get_startup(first(task))) /
              (length(unique(item))),
            .keep = "unused") |>
@@ -137,7 +136,7 @@ admc.dr_dat <- admc.dr_dat |>
 ```{r}
 ns_dat <- ns_dat |>
     mutate(task = "ns",
-           item = paste0(task, "_", ns_id),
+           item = paste0(task, "_", parse_number(ns_id)),
            time = (3.70 - get_startup(first(task))) /
              (length(unique(item))),
            .keep = "unused") |>
@@ -167,9 +166,33 @@ v5_dat <- rbind(dn_dat_c,
                 dn_dat_s,
                 bu_dat_e,
                 ts_dat)
+
+v5_dat |> 
+  filter(is.na(score)) |>
+  summarize(.by = c(subject_id, task), 
+            n = n())
+
+v5_dat |> 
+  filter(is.na(score)) |>
+  summarize(.by = subject_id, 
+            n = n())
+
+# if you missed more than 10 items, you're getting tossed (for now)
+
+missing_cog_items <- v5_dat |> 
+  filter(is.na(score)) |>
+  summarize(.by = subject_id, 
+            n = n()) |>
+  filter(n > 10) |>
+  pull(subject_id)
+
+v5_dat <- v5_dat |>
+  filter(!(subject_id %in% missing_cog_items)) |>
+  mutate(score = ifelse(is.na(score), 0, score))
+
+saveRDS(v5_dat, here::here("Data", "v5_dat.rds"))
 ```
 
-Note that all time information is based on the median time (from FPT preprint) for the entire task divided by number of items.
 :::
 
 :::
@@ -456,7 +479,9 @@ Idea: what if as a robustness check we rerun the search alg making its first ite
 
 ```{r}
 #| eval: false
-test <- data.frame(first_task = "INIT",
+v5_dat |> pull(task) |> unique() |>
+  walk(\(first_task) {
+    test <<- data.frame(first_task = "INIT",
                    rep = 0,
                    task = "INIT",
                    item = "INIT",
@@ -465,49 +490,50 @@ test <- data.frame(first_task = "INIT",
                    added_r2 = 0,
                    added_time = 0,
                    r2_rate = 0)
-
-v5_dat |> pull(task) |> unique() |>
-  walk(\(first_task) {
+    
     print(first_task)
     
     walk(seq(1, v5_dat |> pull(item) |> unique() |> length()), 
-         \(i) {test <<- v5_dat |> 
-           filter(!(item %in% pull(test, item))) |>
-           filter((i == 1 & task == first_task) | i > 1) |>
-           pull(item) |>
-           unique() |> 
-           map(~ rbind(v5_dat |>
-                         filter(item == .x),
-                       v5_dat |>
-                         filter(item %in% pull(test, item))) |> 
-                 summarize(.by = c(task, subject_id),
-                           score = mean(score),
-                           sscore = first(sscore),
-                           time = sum(time),
-                           task = first(task)) |>
-                 mutate(time = time + map_dbl(task, get_startup)) |>
-                 mutate(.by = subject_id,
-                        time = sum(time)) |> 
-                 mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
-                 pivot_wider(names_from = task, values_from = score) |>
-                 summarize(first_task = first_task,
-                           rep = i,
-                           task = str_split_i(.x, "_", 1),
-                           item = .x,
-                           test_r2 = summary(lm(as.formula(first(formula)),
-                                                data = pick(everything())))$r.squared,
-                           added_r2 = first(test_r2) - test |>
-                             head(1) |>
-                             pull(test_r2),
-                           added_time = first(time) - test |>
-                             head(1) |>
-                             pull(time),
-                           time = first(time),
-                           r2_rate = first(added_r2 / added_time))) |>
-           list_rbind() |>
-           filter(r2_rate == max(r2_rate)) |>
-           rbind(test) |>
-           filter(item != "INIT")}, 
+         \(i) {
+           if (test |> filter(time == max(time)) |> pull(time) > 10) {Sys.sleep(0)}
+           else {test <<- v5_dat |> 
+             filter(!(item %in% pull(test, item))) |>
+             filter((i == 1 & task == first_task) | i > 1) |>
+             pull(item) |>
+             unique() |> 
+             map(~ rbind(v5_dat |>
+                           filter(item == .x),
+                         v5_dat |>
+                           filter(item %in% pull(test, item))) |> 
+                   summarize(.by = c(task, subject_id),
+                             score = mean(score),
+                             sscore = first(sscore),
+                             time = sum(time),
+                             task = first(task)) |>
+                   mutate(time = time + map_dbl(task, get_startup)) |>
+                   mutate(.by = subject_id,
+                          time = sum(time)) |> 
+                   mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+                   pivot_wider(names_from = task, values_from = score) |>
+                   summarize(first_task = first_task,
+                             rep = i,
+                             task = str_split_i(.x, "_", 1),
+                             item = .x,
+                             test_r2 = summary(lm(as.formula(first(formula)),
+                                                  data = pick(everything())))$r.squared,
+                             added_r2 = first(test_r2) - test |>
+                               head(1) |>
+                               pull(test_r2),
+                             added_time = first(time) - test |>
+                               head(1) |>
+                               pull(time),
+                             time = first(time),
+                             r2_rate = first(added_r2 / added_time))) |>
+             list_rbind() |>
+             filter(r2_rate == max(r2_rate)) |>
+             rbind(test) |>
+             filter(item != "INIT")}
+         }, 
          .progress = T)
     
     saveRDS(test, here::here("Data", "Search Algorithms", paste0("v5test_first-", first_task, "_dat.rds")))
@@ -515,8 +541,175 @@ v5_dat |> pull(task) |> unique() |>
 
 ```
 
+```{r}
+#| layout-ncol: 4
+#| column: page
+#| out-width: 100%
+#| fig-height: 3
+#| fig-width: 3
+v5_dat |> pull(task) |> unique() |>
+  walk(\(task) {
+    test_firsttask <- here::here("Data", "Search Algorithms",
+                       paste0("v5test_first-", task, "_dat.rds")) |>
+      readRDS()
+    
+    (test_firsttask |>
+      ggplot(aes(x = time, y = test_r2)) +
+
+      geomtextpath::geom_textsegment(data = filter(test_firsttask, test_r2 == max(test_r2)),
+                                     aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "PEAK"),
+                                     color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+      geom_segment(data = filter(test_firsttask, test_r2 == max(test_r2)),
+                   aes(y = -Inf, yend = test_r2, x = time),
+                   color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+      geom_line() +
+      geom_point(aes(color = task), size = 2) +
+      
+      annotate("text", label = paste0(filter(test_firsttask, test_r2 == max(test_r2)) |>
+                                        pull(time) |> round(1), " minutes:\n• ",
+                                      test_firsttask |>
+                                        filter(time <= filter(test_firsttask, test_r2 == max(test_r2)) |>
+                                                 pull(time)) |>
+                                        count(task) |>
+                                        pmap_chr(\(task, n) paste(n, task)) |> 
+                                        paste(collapse = "\n• ")),
+               x = 26.6, y = 0.25, size = 3.4, hjust = "left", color = "#202020") +
+      
+      coord_cartesian(xlim = c(0, 20), ylim = c(0, 0.8), expand = c(0, 1)) +
+      guides(x = guide_axis(cap = "both"),
+             y = guide_axis(cap = "both")) +
+      labs(x = "Time (minutes)", y = "Test R^2", color = "Task",
+           title = paste("Starting Task: ", task)) +
+      theme_classic()  +
+      theme(
+        panel.background = element_rect(fill='transparent'),
+        plot.background = element_rect(fill='transparent', color=NA),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.background = element_blank(),
+        aspect.ratio = 1)) |>
+      print()
+  })
+```
 
 
+##
+
+Mark's idea: run with just maximizin $R^2$ (no time in denominator)
+
+
+```{r}
+#| eval: false
+test <- data.frame(rep = 0,
+                   task = "INIT",
+                   item = "INIT",
+                   test_r2 = 0,
+                   time = 0,
+                   added_r2 = 0,
+                   added_time = 0,
+                   r2_rate = 0)
+
+walk(seq(1, v5_dat |> pull(item) |> unique() |> length()), 
+     \(i) {test <<- v5_dat |> 
+       filter(!(item %in% pull(test, item))) |>
+       pull(item) |>
+       unique() |> 
+       map(~ rbind(v5_dat |>
+                     filter(item == .x),
+                   v5_dat |>
+                     filter(item %in% pull(test, item))) |> 
+             summarize(.by = c(task, subject_id),
+                       score = mean(score),
+                       sscore = first(sscore),
+                       time = sum(time),
+                       task = first(task)) |>
+             mutate(time = time + map_dbl(task, get_startup)) |>
+             mutate(.by = subject_id,
+                    time = sum(time)) |> 
+             mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+             pivot_wider(names_from = task, values_from = score) |>
+             summarize(rep = i,
+                       task = str_split_i(.x, "_", 1),
+                       item = .x,
+                       test_r2 = summary(lm(as.formula(first(formula)),
+                                            data = pick(everything())))$r.squared,
+                       added_r2 = first(test_r2) - test |>
+                         head(1) |>
+                         pull(test_r2),
+                       added_time = first(time) - test |>
+                         head(1) |>
+                         pull(time),
+                       time = first(time),
+                       r2_rate = first(added_r2 / added_time))) |>
+       list_rbind() |>
+       # only difference is here.
+       filter(added_r2 == max(added_r2)) |>
+       rbind(test) |>
+       filter(item != "INIT")}, 
+     .progress = T)
+test
+
+saveRDS(test, here::here("Data", "Search Algorithms", "v5test-max-r2_dat.rds"))
+```
+
+```{r}
+```
+
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+test_maxr2 <- readRDS(here::here("Data", "Search Algorithms", "v5test-max-r2_dat.rds"))
+
+test_maxr2 |>
+  ggplot(aes(x = time, y = test_r2)) +
+  geomtextpath::geom_textsegment(data = test_maxr2 |> filter(time < 10.49) |> filter(time == max(time)),
+               aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "10 MIN"),
+               color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+  geom_segment(data = test_maxr2 |> filter(time < 10.49) |> filter(time == max(time)),
+               aes(y = -Inf, yend = test_r2, x = time),
+               color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+  
+  geomtextpath::geom_textsegment(data = filter(test_maxr2, test_r2 == max(test_r2)),
+               aes(x = -Inf, xend = time, y = test_r2, yend = test_r2, label = "PEAK"),
+               color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+  geom_segment(data = filter(test_maxr2, test_r2 == max(test_r2)),
+               aes(y = -Inf, yend = test_r2, x = time),
+               color = scales::col_lighter("#202020", amount = 35), linewidth = .3, linetype = "longdash") +
+  geom_line() +
+  geom_point(aes(color = task), size = 2) +
+  
+  annotate("text", label = paste0(test_maxr2 |> 
+                                    filter(time < 10.49) |> filter(test_r2 == max(test_r2)) |> 
+                                    pull(time) |> round(1),
+                                  " minutes:\n• ",
+                                  test_maxr2 |> filter(time < 10.49) |>
+                                    count(task) |>
+                                    pmap_chr(\(task, n) paste(n, task)) |> 
+                                    paste(collapse = "\n• ")),
+           x = 8.2, y = 0.2, size = 3.4, hjust = "left", color = "#202020") +
+  annotate("text", label = paste0(filter(test_maxr2, test_r2 == max(test_r2)) |>
+                                    pull(time) |> round(1), " minutes:\n• ",
+                                  test_maxr2 |>
+                                    filter(time <= filter(test_maxr2, test_r2 == max(test_r2)) |>
+                                             pull(time)) |>
+                                    count(task) |>
+                                    pmap_chr(\(task, n) paste(n, task)) |> 
+                                    paste(collapse = "\n• ")),
+           x = 26.6, y = 0.25, size = 3.4, hjust = "left", color = "#202020") +
+  
+  coord_cartesian(xlim = c(0, 45), ylim = c(0, 0.8), expand = c(0, 1)) +
+  guides(x = guide_axis(cap = "both"),
+         y = guide_axis(cap = "both")) +
+  labs(x = "Time (minutes)", y = "Test R^2", color = "Task") +
+  theme_classic()  +
+       theme(
+         panel.background = element_rect(fill='transparent'),
+         plot.background = element_rect(fill='transparent', color=NA),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         legend.background = element_blank())
+```
 
 
 

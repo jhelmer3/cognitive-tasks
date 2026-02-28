@@ -66,11 +66,13 @@ ns_dat <- ns_full |>
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  mutate(ns_id = tolower(ns_id)) |>
+  mutate(ns_id = tolower(ns_id),
+         # if no response, incorrect
+         correct = ifelse(is.na(correct), 0, 1)) |>
   select(subject_id, ns_id, score = correct, sscore)
 
-#dir.create(here::here("Data", "Number Series"))
-#saveRDS(ns_dat, here::here("Data", "Number Series", "ns_dat.rds"))
+if (!file.exists(here::here("Data", "Number Series"))) dir.create(here::here("Data", "Number Series"))
+saveRDS(ns_dat, here::here("Data", "Number Series", "ns_dat.rds"))
 ```
 
 #### Number Series Labels

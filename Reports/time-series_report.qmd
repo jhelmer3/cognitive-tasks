@@ -64,6 +64,7 @@ ts_cl <- ts |>
 ts_dat <- ts |>
   left_join(session,
             by = "session_id") |>
+  filter(session_id %in% anchor_ids_anchor) |>
   mutate(.by = c(noise_condition, datapoints, func, direction),
          ts_id = cur_group_id()) |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
@@ -75,7 +76,7 @@ ts_dat <- ts |>
             by = "subject_id") |>
   select(subject_id, ts_id, score = mse, sscore, noise_condition, datapoints, func, direction)
 
-dir.create(here::here("Data", "Time Series"))
+if (!file.exists(here::here("Data", "Time Series"))) dir.create(here::here("Data", "Time Series"))
 saveRDS(ts_dat, here::here("Data", "Time Series", "ts_dat.rds"))
 ```
 

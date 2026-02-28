@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-02-12">
+<meta name="dcterms.date" content="2026-02-16">
 
 <title>Number Series – Cognitive Task Modeling</title>
 <style>
@@ -274,7 +274,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 12, 2026</p>
+      <p class="date">February 16, 2026</p>
     </div>
   </div>
   
@@ -333,11 +333,13 @@ window.Quarto = {
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ns_id =</span> <span class="fu">tolower</span>(ns_id)) <span class="sc">|&gt;</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, ns_id, <span class="at">score =</span> correct, sscore)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#dir.create(here::here("Data", "Number Series"))</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#saveRDS(ns_dat, here::here("Data", "Number Series", "ns_dat.rds"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ns_id =</span> <span class="fu">tolower</span>(ns_id),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>         <span class="co"># if no response, incorrect</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">correct =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(correct), <span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, ns_id, <span class="at">score =</span> correct, sscore)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Number Series"</span>))) <span class="fu">dir.create</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Number Series"</span>))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ns_dat, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Number Series"</span>, <span class="st">"ns_dat.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -395,23 +397,23 @@ window.Quarto = {
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="rrrafbpvli" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rrrafbpvli table {
+<div id="kzcgdstwqu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kzcgdstwqu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rrrafbpvli thead, #rrrafbpvli tbody, #rrrafbpvli tfoot, #rrrafbpvli tr, #rrrafbpvli td, #rrrafbpvli th {
+#kzcgdstwqu thead, #kzcgdstwqu tbody, #kzcgdstwqu tfoot, #kzcgdstwqu tr, #kzcgdstwqu td, #kzcgdstwqu th {
   border-style: none;
 }
 
-#rrrafbpvli p {
+#kzcgdstwqu p {
   margin: 0;
   padding: 0;
 }
 
-#rrrafbpvli .gt_table {
+#kzcgdstwqu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -437,12 +439,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_caption {
+#kzcgdstwqu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rrrafbpvli .gt_title {
+#kzcgdstwqu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -454,7 +456,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#rrrafbpvli .gt_subtitle {
+#kzcgdstwqu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -466,7 +468,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#rrrafbpvli .gt_heading {
+#kzcgdstwqu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -478,13 +480,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_bottom_border {
+#kzcgdstwqu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_col_headings {
+#kzcgdstwqu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #CCCAAF;
@@ -499,7 +501,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_col_heading {
+#kzcgdstwqu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -519,7 +521,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#rrrafbpvli .gt_column_spanner_outer {
+#kzcgdstwqu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -531,15 +533,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#rrrafbpvli .gt_column_spanner_outer:first-child {
+#kzcgdstwqu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rrrafbpvli .gt_column_spanner_outer:last-child {
+#kzcgdstwqu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rrrafbpvli .gt_column_spanner {
+#kzcgdstwqu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #CCCAAF;
@@ -551,11 +553,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#rrrafbpvli .gt_spanner_row {
+#kzcgdstwqu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rrrafbpvli .gt_group_heading {
+#kzcgdstwqu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -581,7 +583,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#rrrafbpvli .gt_empty_group_heading {
+#kzcgdstwqu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -596,15 +598,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#rrrafbpvli .gt_from_md > :first-child {
+#kzcgdstwqu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rrrafbpvli .gt_from_md > :last-child {
+#kzcgdstwqu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rrrafbpvli .gt_row {
+#kzcgdstwqu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -623,7 +625,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#rrrafbpvli .gt_stub {
+#kzcgdstwqu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -636,7 +638,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#rrrafbpvli .gt_stub_row_group {
+#kzcgdstwqu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -650,15 +652,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#rrrafbpvli .gt_row_group_first td {
+#kzcgdstwqu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rrrafbpvli .gt_row_group_first th {
+#kzcgdstwqu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rrrafbpvli .gt_summary_row {
+#kzcgdstwqu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -668,16 +670,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#rrrafbpvli .gt_first_summary_row {
+#kzcgdstwqu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_first_summary_row.thick {
+#kzcgdstwqu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rrrafbpvli .gt_last_summary_row {
+#kzcgdstwqu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -687,7 +689,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_grand_summary_row {
+#kzcgdstwqu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -697,7 +699,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#rrrafbpvli .gt_first_grand_summary_row {
+#kzcgdstwqu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -707,7 +709,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_last_grand_summary_row_top {
+#kzcgdstwqu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -717,11 +719,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_striped {
+#kzcgdstwqu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rrrafbpvli .gt_table_body {
+#kzcgdstwqu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #CCCAAF;
@@ -730,7 +732,7 @@ window.Quarto = {
   border-bottom-color: #CCCAAF;
 }
 
-#rrrafbpvli .gt_footnotes {
+#kzcgdstwqu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -744,7 +746,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_footnote {
+#kzcgdstwqu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -753,7 +755,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#rrrafbpvli .gt_sourcenotes {
+#kzcgdstwqu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -767,7 +769,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#rrrafbpvli .gt_sourcenote {
+#kzcgdstwqu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -775,72 +777,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#rrrafbpvli .gt_left {
+#kzcgdstwqu .gt_left {
   text-align: left;
 }
 
-#rrrafbpvli .gt_center {
+#kzcgdstwqu .gt_center {
   text-align: center;
 }
 
-#rrrafbpvli .gt_right {
+#kzcgdstwqu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rrrafbpvli .gt_font_normal {
+#kzcgdstwqu .gt_font_normal {
   font-weight: normal;
 }
 
-#rrrafbpvli .gt_font_bold {
+#kzcgdstwqu .gt_font_bold {
   font-weight: bold;
 }
 
-#rrrafbpvli .gt_font_italic {
+#kzcgdstwqu .gt_font_italic {
   font-style: italic;
 }
 
-#rrrafbpvli .gt_super {
+#kzcgdstwqu .gt_super {
   font-size: 65%;
 }
 
-#rrrafbpvli .gt_footnote_marks {
+#kzcgdstwqu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rrrafbpvli .gt_asterisk {
+#kzcgdstwqu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rrrafbpvli .gt_indent_1 {
+#kzcgdstwqu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rrrafbpvli .gt_indent_2 {
+#kzcgdstwqu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rrrafbpvli .gt_indent_3 {
+#kzcgdstwqu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rrrafbpvli .gt_indent_4 {
+#kzcgdstwqu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rrrafbpvli .gt_indent_5 {
+#kzcgdstwqu .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rrrafbpvli .katex-display {
+#kzcgdstwqu .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rrrafbpvli div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kzcgdstwqu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -863,15 +865,15 @@ window.Quarto = {
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="ns_1" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">4.71%</td>
-<td headers="ns_2" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">2.94%</td>
-<td headers="ns_3" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">12.28%</td>
-<td headers="ns_4" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">10.01%</td>
-<td headers="ns_5" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">28.09%</td>
-<td headers="ns_6" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">26.24%</td>
-<td headers="ns_7" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">31.37%</td>
-<td headers="ns_8" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">7.15%</td>
-<td headers="ns_9" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">11.94%</td></tr>
+    <tr><td headers="ns_1" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_2" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_3" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_4" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_5" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_6" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_7" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_8" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td>
+<td headers="ns_9" class="gt_row gt_right" style="background-color: #EAE9DE; border-left-width: 1px; border-left-style: solid; border-left-color: #CCCAAF; border-right-width: 1px; border-right-style: solid; border-right-color: #CCCAAF; border-top-width: 1px; border-top-style: solid; border-top-color: #CCCAAF; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCAAF;">0.00%</td></tr>
   </tbody>
   
 </table>
