@@ -120,3 +120,12 @@ list("noise_condition", "datapoints", "func", "direction") |>
   patchwork::wrap_plots(nrow = 1)
 
 ```
+
+
+
+```{r}
+ts_dat |>
+  ggplot(aes(x = score)) +
+  geom_density(na.rm = T)
+```
+
