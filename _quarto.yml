@@ -25,6 +25,8 @@ website:
           - Reports/Search Algorithms/search_fpt-v3_report.qmd
           - Reports/Search Algorithms/search_fpt-v4_report.qmd
           - Reports/Search Algorithms/search_fpt-v5_report.qmd
+      - text: "LASSO"
+        href: Reports/lasso.qmd
       - text: "Methods"
         menu:
           - Reports/Methods/2PL.qmd

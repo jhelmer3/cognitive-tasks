@@ -217,6 +217,10 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../Reports/lasso.html"> 
+<span class="menu-text">LASSO</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-methods" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Methods</span>
@@ -3316,18 +3320,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.40609 -0.30384  0.01546  0.39529  0.97451 
+-1.56996 -0.26864 -0.03416  0.30718  0.96021 
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 0.005403   0.050075   0.108    0.914    
-x           0.200038   0.010301  19.420   &lt;2e-16 ***
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.027978   0.043069   -0.65    0.517    
+x            0.193665   0.009387   20.63   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4973 on 98 degrees of freedom
-Multiple R-squared:  0.7937,    Adjusted R-squared:  0.7916 
-F-statistic: 377.1 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4302 on 98 degrees of freedom
+Multiple R-squared:  0.8129,    Adjusted R-squared:  0.811 
+F-statistic: 425.7 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -3349,18 +3353,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--2.10100 -0.69363 -0.01595  0.66229  2.71661 
+-2.68685 -0.67734  0.00969  0.60172  2.40478 
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 0.086282   0.091785   0.940     0.35    
-x           0.035191   0.007973   4.414 2.62e-05 ***
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.081669   0.085986  -0.950 0.344550    
+x            0.032474   0.008713   3.727 0.000324 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.9161 on 98 degrees of freedom
-Multiple R-squared:  0.1658,    Adjusted R-squared:  0.1573 
-F-statistic: 19.48 on 1 and 98 DF,  p-value: 2.616e-05</code></pre>
+Residual standard error: 0.8588 on 98 degrees of freedom
+Multiple R-squared:  0.1242,    Adjusted R-squared:  0.1152 
+F-statistic: 13.89 on 1 and 98 DF,  p-value: 0.0003241</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
