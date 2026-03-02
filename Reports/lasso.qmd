@@ -123,3 +123,98 @@ lasso_estimates |> filter(estimate != 0 & term != "(Intercept)") |>
   summarize(time = sum(time))
 ```
 
+Trying some tuning
+
+```{r}
+tune_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
+  set_engine("glmnet")
+```
+
+
+```{r}
+#| eval: false
+set.seed(1234)
+v5_dat_boot <- bootstraps(v5_dat_train)
+
+lambda_grid <- grid_regular(penalty(), levels = 50)
+
+doParallel::registerDoParallel()
+
+set.seed(2020)
+lasso_grid <- tune_grid(
+  wf %>% add_model(tune_spec),
+  resamples = v5_dat_boot,
+  grid = lambda_grid
+)
+
+saveRDS(lasso_grid, here::here("Data", "lasso-estimates_tuning.rds"))
+```
+
+
+```{r}
+lasso_grid <- readRDS(here::here("Data", "lasso-estimates_tuning.rds"))
+
+lasso_grid %>%
+  collect_metrics() %>%
+  ggplot(aes(penalty, mean, color = .metric)) +
+  geom_errorbar(aes(
+    ymin = mean - std_err,
+    ymax = mean + std_err
+  ),
+  alpha = 0.5
+  ) +
+  geom_line(linewidth = 1.5) +
+  facet_wrap(~.metric, scales = "free", nrow = 2) +
+  scale_x_log10() +
+  theme(legend.position = "none")
+```
+
+```{r}
+lowest_rmse <- lasso_grid %>%
+  select_best(metric = "rmse")
+
+final_lasso <- finalize_workflow(
+  wf %>% add_model(tune_spec),
+  lowest_rmse
+)
+```
+
+```{r}
+library(vip)
+
+final_lasso %>%
+  fit(v5_dat_train) %>%
+  extract_fit_parsnip() %>%
+  vi(lambda = lowest_rmse$penalty) %>%
+  filter(Importance != 0) |>
+  mutate(task = str_split_i(Variable, "_", 1)) |>
+  mutate(
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance)
+  ) %>%
+  ggplot(aes(x = Importance, y = Variable, color = task)) +
+  geom_point() +
+  labs(y = NULL) +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  theme_classic() +
+  theme(aspect.ratio = 3)
+```
+
+Time of tuned LASSO
+
+```{r}
+final_lasso %>%
+  fit(v5_dat_train) %>%
+  extract_fit_parsnip() |> 
+  tidy() |>
+  filter(estimate != 0 & term != "(Intercept)") |>
+  mutate(task = str_split_i(term, "_", 1)) |>
+  inner_join(v5_dat |> select(item, time) |> unique(),
+            join_by("term" == "item")) |>
+  summarize(.by = task,
+            time = sum(time) + get_startup(first(task))) |>
+  summarize(time = sum(time))
+```
+
