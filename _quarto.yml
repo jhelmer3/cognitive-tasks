@@ -10,7 +10,7 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: "Reports"
+      - text: "Tasks"
         menu:
           - Reports/denominator-neglect_report.qmd
           - Reports/raven_report.qmd

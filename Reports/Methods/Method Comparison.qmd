@@ -1,0 +1,100 @@
+---
+title: "Method Comparison"
+subtitle: "Search algorithm, LASSO regression, and {xgboost}"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
+
+v5 <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
+xgb <- readRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
+lasso <- readRDS(here::here("Data", "lasso_regression.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+
+```
+
+#### Cleaning
+```{r}
+v5_ranked <- v5 |> 
+  select(item, v5_rank = rep) |>
+  arrange(v5_rank)
+xgb_ranked <- xgb |>
+  # because higher importance should correspond to lower (better) rank
+  # adding one to match v5
+  mutate(xgb_rank = n() - rank(Importance) + 1) |>
+  select(xgb_rank, item = Variable) |>
+  arrange(xgb_rank)
+lasso_ranked <- lasso |>
+  mutate(lasso_rank = n() - rank(Importance) + 1) |>
+  select(lasso_rank, item = Variable) |>
+  arrange(lasso_rank)
+
+ranks <- v5_ranked |>
+  full_join(xgb_ranked,
+            by = "item") |>
+  full_join(lasso_ranked,
+            by = "item")
+```
+:::
+
+
+## Method Comparison
+
+Spearman Rank?
+
+```{r}
+#| layout-ncol: 3
+ranks |>
+  select(ends_with("rank")) |>
+  cor(method = "spearman")
+
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = v5_rank, y = xgb_rank, label = item, color = task)) +
+  geom_text()
+
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = v5_rank, y = lasso_rank, label = item, color = task)) +
+  geom_text()
+
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = lasso_rank, y = xgb_rank, label = item, color = task)) +
+  geom_text()
+```
+
+
+
+

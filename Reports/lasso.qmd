@@ -23,6 +23,8 @@ knitr:
 #| message: false
 #| code-fold: show
 library(tidyverse)
+library(tidymodels)
+library(vip)
 ```
 
 #### Reading
@@ -67,8 +69,6 @@ v5_dat_wide <- v5_dat |>
 ### LASSO
 
 ```{r}
-library(tidymodels)
-
 v5_dat_split <- initial_split(v5_dat_wide)
 
 v5_dat_train <- training(v5_dat_split)
@@ -180,7 +180,11 @@ final_lasso <- finalize_workflow(
 ```
 
 ```{r}
-library(vip)
+final_lasso %>%
+  fit(v5_dat_train) %>%
+  extract_fit_parsnip() %>%
+  vi() |>
+  saveRDS(here::here("Data", "lasso_regression.rds"))
 
 final_lasso %>%
   fit(v5_dat_train) %>%

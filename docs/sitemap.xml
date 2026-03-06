@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/lasso.html</loc>
-    <lastmod>2026-03-02T16:24:32.720Z</lastmod>
+    <lastmod>2026-03-06T15:55:59.307Z</lastmod>
   </url>
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/decision-rules_report.html</loc>
@@ -55,5 +55,13 @@
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Search Algorithms/search_fpt-v5_report.html</loc>
     <lastmod>2026-02-20T21:32:34.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/xgboost.html</loc>
+    <lastmod>2026-03-06T15:55:28.998Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Methods/Method Comparison.html</loc>
+    <lastmod>2026-03-06T16:48:32.935Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,197 @@
+---
+title: "{xgboost}"
+subtitle: "With {xgboost}"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+library(tidymodels)
+library(finetune)
+library(vip)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+get_startup <- function(input_task) {
+  startup_costs |>
+    filter(task == input_task) |>
+    pull(startup)
+}
+```
+
+#### Cleaning
+```{r}
+v5_dat_wide <- v5_dat |>
+  # condensing denominator neglect scores down to one score per item pair
+  mutate(.by = c(subject_id, item),
+         score = ifelse(task == "dn.c" | task == "dn.s",
+                        mean(score),
+                        score)) |>
+  unique() |>
+  select(-c(time, task)) |>
+  pivot_wider(names_from = "item", values_from = "score",
+              id_cols = c(subject_id, sscore)) |>
+  # alert alert !!
+  drop_na()
+```
+
+:::
+
+
+## Trying `{xgboost}`
+
+Splitting data into train and test.
+
+```{r}
+v5_dat_split <- v5_dat_wide |>
+  select(-subject_id) |>
+  initial_split()
+
+v5_dat_train <- training(v5_dat_split)
+v5_dat_test <- testing(v5_dat_split)
+
+v5_dat_folds <- vfold_cv(v5_dat_train, v = 5)
+```
+
+Specifying model (S-score predicted by everything else) and normalizing all predictors.
+
+```{r}
+v5_dat_recipe <- recipe(sscore ~ ., data = v5_dat_train) |>
+  step_normalize(all_numeric(), -all_outcomes())
+```
+
+Specifying hyperparameters and which are going to be tuned.
+
+```{r}
+xgb_spec <- boost_tree(
+    trees = 1000,
+    tree_depth = tune(),
+    min_n = tune(),
+    mtry = tune(),
+    sample_size = tune(),
+    learn_rate = tune()
+  ) %>%
+  set_engine("xgboost") |>
+  set_mode("regression")
+
+xgb_wf <- workflow(v5_dat_recipe, xgb_spec)
+```
+
+### Hyperparameter Tuning
+
+Defining grid of candidate hyperparameter combinations.
+
+```{r}
+xgb_grid <- grid_space_filling(
+    tree_depth(c(5L, 10L)),
+    min_n(c(1L, 40L)),
+    mtry(c(1L, 90L)),
+    sample_prop(c(0.5, 1.0)),
+    learn_rate(c(-3, -1)),
+    size = 100)
+
+xgb_grid
+```
+
+Five-fold cross-validation for tuning.
+
+```{r}
+#| eval: false
+doParallel::registerDoParallel()
+
+set.seed(234)
+xgb_rs <- tune_race_anova(
+    xgb_wf,
+    v5_dat_folds,
+    grid = xgb_grid,
+    control = control_race(verbose_elim = TRUE))
+
+if (!file.exists(here::here("Data", "xgboost"))) dir.create(here::here("Data", "xgboost"))
+saveRDS(xgb_rs, here::here("Data", "xgboost", "xgb_rs.rds"))
+```
+
+```{r}
+#| column: margin
+xgb_rs <- readRDS(here::here("Data", "xgboost", "xgb_rs.rds"))
+
+plot_race(xgb_rs) +
+  theme_classic(base_size = 20)
+```
+Highest-performing hyperparameter combinations
+
+```{r}
+show_best(xgb_rs)
+```
+
+### Fitting Final Model
+
+```{r}
+xgb_last <-
+  xgb_wf %>%
+  finalize_workflow(select_best(xgb_rs, metric = "rmse")) %>%
+  last_fit(v5_dat_split)
+
+xgb_last
+```
+
+Importance of items
+
+```{r}
+#| fig-column: margin
+#| fig-height: 16
+
+extract_workflow(xgb_last) %>%
+  extract_fit_parsnip() |>
+  vi() |>
+  saveRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
+
+
+extract_workflow(xgb_last) %>%
+  extract_fit_parsnip() %>%
+  vip(geom = "point", num_features = 100) +
+  theme_classic(base_size = 16) +
+  theme(aspect.ratio = 4,
+        panel.grid.major.x = element_line(linewidth = 0.2))
+```
+
+
+
+
+
+
+
+
+
+
+
+
