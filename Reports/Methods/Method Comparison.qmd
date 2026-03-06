@@ -74,11 +74,14 @@ ranks <- v5_ranked |>
 Spearman Rank?
 
 ```{r}
-#| layout-ncol: 3
 ranks |>
   select(ends_with("rank")) |>
   cor(method = "spearman")
+```
 
+
+```{r}
+#| layout-ncol: 3
 ranks |>
   mutate(task = str_split_i(item, "_", 1)) |>
   ggplot(aes(x = v5_rank, y = xgb_rank, label = item, color = task)) +

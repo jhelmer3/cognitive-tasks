@@ -188,10 +188,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="../Reports/lasso.html" aria-current="page"> 
-<span class="menu-text">LASSO</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-regressions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Regressions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-regressions">    
+        <li>
+    <a class="dropdown-item" href="../Reports/lasso.html">
+ <span class="dropdown-text">LASSO Regression</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../Reports/xgboost.html">
+ <span class="dropdown-text">{xgboost}</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-methods" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Methods</span>
@@ -200,6 +211,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../Reports/Methods/2PL.html">
  <span class="dropdown-text">2PL</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Reports/Methods/Method Comparison.html">
+ <span class="dropdown-text">Method Comparison</span></a>
   </li>  
     </ul>
   </li>
@@ -367,20 +382,20 @@ Attaching package: 'Matrix'</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lasso_estimates <span class="sc">|&gt;</span> <span class="fu">filter</span>(estimate <span class="sc">!=</span> <span class="dv">0</span> <span class="sc">&amp;</span> term <span class="sc">!=</span> <span class="st">"(Intercept)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32 × 3
-   term        estimate penalty
-   &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
- 1 dn.c_12   -0.0179        0.1
- 2 dn.c_21   -0.00808       0.1
- 3 dn.c_1    -0.0273        0.1
- 4 dn.c_19   -0.0138        0.1
- 5 dn.c_10   -0.00266       0.1
- 6 dn.c_14   -0.0000469     0.1
- 7 bu.h_2     0.00840       0.1
- 8 bu.h_4     0.0000558     0.1
- 9 bu.h_6     0.0603        0.1
-10 admc.dr_1 -0.00943       0.1
-# ℹ 22 more rows</code></pre>
+<pre><code># A tibble: 26 × 3
+   term       estimate penalty
+   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+ 1 dn.c_1    -0.0833       0.1
+ 2 dn.c_19   -0.00459      0.1
+ 3 dn.c_10   -0.0318       0.1
+ 4 dn.c_23   -0.000229     0.1
+ 5 dn.c_24   -0.0132       0.1
+ 6 dn.c_6    -0.0198       0.1
+ 7 dn.c_14   -0.00960      0.1
+ 8 bu.h_4     0.00309      0.1
+ 9 bu.h_6     0.0800       0.1
+10 admc.dr_1 -0.00154      0.1
+# ℹ 16 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -422,7 +437,7 @@ Attaching package: 'Matrix'</code></pre>
 <pre><code># A tibble: 1 × 1
    time
   &lt;dbl&gt;
-1  19.1</code></pre>
+1  16.5</code></pre>
 </div>
 </div>
 <p>Trying some tuning</p>
@@ -552,7 +567,7 @@ Attaching package: 'Matrix'</code></pre>
 <pre><code># A tibble: 1 × 1
    time
   &lt;dbl&gt;
-1  23.2</code></pre>
+1  21.9</code></pre>
 </div>
 </div>
 

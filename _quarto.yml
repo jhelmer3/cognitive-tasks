@@ -25,11 +25,14 @@ website:
           - Reports/Search Algorithms/search_fpt-v3_report.qmd
           - Reports/Search Algorithms/search_fpt-v4_report.qmd
           - Reports/Search Algorithms/search_fpt-v5_report.qmd
-      - text: "LASSO"
-        href: Reports/lasso.qmd
+      - text: "Regressions"
+        menu: 
+          - Reports/lasso.qmd
+          - Reports/xgboost.qmd
       - text: "Methods"
         menu:
           - Reports/Methods/2PL.qmd
+          - Reports/Methods/Method Comparison.qmd
     tools:
       - icon: github
         href: https://github.com/jhelmer3/cognitive-tasks
