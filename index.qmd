@@ -5,13 +5,15 @@ date: last-modified
 author: "Jessica Helmer"
 ---
 
-## Overview
+## Tasks
+
+Individual reports for the cognitive tasks.
 
 :::: {.columns .v-center-container}
 ::: {.column width="70%"}
 ### Denominator Neglect
 
-FPT superstar.
+
 :::
 
 ::: {.column width="5%"}
@@ -27,7 +29,7 @@ FPT superstar.
 ::: {.column width="70%"}
 ### Raven Matrices
 
-Nevermore.
+
 :::
 
 ::: {.column width="5%"}
@@ -43,7 +45,7 @@ Nevermore.
 ::: {.column width="70%"}
 ### Decision Rules
 
-Best Buy Simulator.
+
 :::
 
 ::: {.column width="5%"}

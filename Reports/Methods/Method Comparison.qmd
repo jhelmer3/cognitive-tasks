@@ -24,6 +24,8 @@ knitr:
 #| message: false
 #| code-fold: show
 library(tidyverse)
+
+set_theme(theme_classic(base_size = 16))
 ```
 
 #### Reading
@@ -35,13 +37,15 @@ v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
 v5 <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
 xgb <- readRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
 lasso <- readRDS(here::here("Data", "lasso_regression.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 ```
 
 #### Functions
 
 ```{r}
 #| code-fold: show
-
+source(here::here("Scripts", "get_startup.R"))
 ```
 
 #### Cleaning
@@ -64,24 +68,43 @@ ranks <- v5_ranked |>
   full_join(xgb_ranked,
             by = "item") |>
   full_join(lasso_ranked,
-            by = "item")
+            by = "item") |>
+  inner_join(v5_dat |>
+               select(task, item, time) |>
+               unique(),
+             by = "item")
 ```
 :::
 
 
 ## Method Comparison
 
-Spearman Rank?
+:::: {.columns}
+::: {.column width="50%"}
+Spearman Rank
 
 ```{r}
 ranks |>
   select(ends_with("rank")) |>
   cor(method = "spearman")
 ```
+:::
+
+::: {.column width="50%"}
+Kendall's Tau
+
+```{r}
+ranks |>
+  select(ends_with("rank")) |>
+  cor(method = "kendall")
+```
+:::
+::::
 
 
 ```{r}
 #| layout-ncol: 3
+#| column: page
 ranks |>
   mutate(task = str_split_i(item, "_", 1)) |>
   ggplot(aes(x = v5_rank, y = xgb_rank, label = item, color = task)) +
@@ -96,6 +119,22 @@ ranks |>
   mutate(task = str_split_i(item, "_", 1)) |>
   ggplot(aes(x = lasso_rank, y = xgb_rank, label = item, color = task)) +
   geom_text()
+```
+
+
+
+### Method Timing
+
+```{r}
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  arrange(v5_rank) |>
+  mutate(.by = task,
+         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
+  mutate(cum_time = cumsum(time_w_startup))
+
+
+map(1:99, ~ .x)
 ```
 
 

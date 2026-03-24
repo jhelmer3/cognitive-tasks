@@ -42,11 +42,7 @@ startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 
 ```{r}
 #| code-fold: show
-get_startup <- function(input_task) {
-  startup_costs |>
-    filter(task == input_task) |>
-    pull(startup)
-}
+source(here::here("Scripts", "get_startup.R"))
 ```
 
 #### Cleaning
