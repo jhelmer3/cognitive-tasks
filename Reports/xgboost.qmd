@@ -108,6 +108,7 @@ xgb_wf <- workflow(v5_dat_recipe, xgb_spec)
 Defining grid of candidate hyperparameter combinations.
 
 ```{r}
+#| column: margin
 xgb_grid <- grid_space_filling(
     tree_depth(c(5L, 10L)),
     min_n(c(1L, 40L)),
@@ -146,7 +147,7 @@ plot_race(xgb_rs) +
 Highest-performing hyperparameter combinations
 
 ```{r}
-show_best(xgb_rs)
+show_best(xgb_rs, metric = "rmse")
 ```
 
 ### Fitting Final Model
@@ -156,16 +157,12 @@ xgb_last <-
   xgb_wf %>%
   finalize_workflow(select_best(xgb_rs, metric = "rmse")) %>%
   last_fit(v5_dat_split)
-
-xgb_last
 ```
 
 Importance of items
 
 ```{r}
-#| fig-column: margin
 #| fig-height: 16
-
 extract_workflow(xgb_last) %>%
   extract_fit_parsnip() |>
   vi() |>

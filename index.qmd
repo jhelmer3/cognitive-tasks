@@ -120,3 +120,96 @@ Individual reports for the cognitive tasks.
 :::
 ::::
 
+
+## Search Algorithms
+
+Searching through items of different combinations of FPT tasks, maximizing $\frac{R^2}{time}$.
+
+:::: {.columns}
+::: {.column width="25%"}
+[Version Two](/Reports/Search Algorithms/search_fpt-v2_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+
+::: {.column width="25%"}
+[Version Three](/Reports/Search Algorithms/search_fpt-v3_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+
+::: {.column width="25%"}
+[Version Four](/Reports/Search Algorithms/search_fpt-v4_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+
+::: {.column width="25%"}
+[Version Five](/Reports/Search Algorithms/search_fpt-v5_report.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+## Regressions
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### LASSO
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[LASSO](/Reports/lasso.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### {xgboost}
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[xgboost](/Reports/xgboost.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+## Methods
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### 2PL
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[2PL](/Methods/2PL.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+:::: {.columns .v-center-container}
+::: {.column width="70%"}
+### Method Comparison
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%" .l-center-container}
+[Method Comparison](/Reports/method-comparison.qmd){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+
+
+

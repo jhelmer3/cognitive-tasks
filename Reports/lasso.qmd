@@ -40,11 +40,7 @@ startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 
 ```{r}
 #| code-fold: show
-get_startup <- function(input_task) {
-  startup_costs |>
-    filter(task == input_task) |>
-    pull(startup)
-}
+source(here::here("Scripts", "get_startup.R"))
 ```
 
 #### Cleaning
@@ -69,32 +65,45 @@ v5_dat_wide <- v5_dat |>
 ### LASSO
 
 ```{r}
+#| message: false
+set.seed(1234)
+
+# splitting data
 v5_dat_split <- initial_split(v5_dat_wide)
 
 v5_dat_train <- training(v5_dat_split)
 v5_dat_test <- testing(v5_dat_split)
 
+# building "recipe" of all items regressed on sscore
 v5_dat_recipe <- recipe(sscore ~ ., data = v5_dat_train) |>
+  # not including subject_id
   update_role(subject_id, new_role = "ID") |>
+  # and z-scoring first
   step_normalize(all_numeric(), -all_outcomes())
 
+# linear regression with glmnet, mixture = 1 to do LASSO
 lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
   set_engine("glmnet")
 
 wf <- workflow() %>%
   add_recipe(v5_dat_recipe)
 
+# fitting model with training data
 lasso_fit <- wf %>%
   add_model(lasso_spec) %>%
   fit(data = v5_dat_train)
 
+# extracting estimates
 lasso_estimates <- lasso_fit %>%
   extract_fit_parsnip() %>%
   tidy()
 
-lasso_estimates |> filter(estimate != 0) |> mutate(task = str_split_i(term, "_", 1)) |> pull(task) |> unique()
-
-lasso_estimates |> filter(estimate != 0 & term != "(Intercept)")
+# display estimates
+# lasso_estimates |> 
+#   filter_out(when_any(estimate == 0, 
+#                       term == "(Intercept)")) |>
+#   mutate(task = term |> str_split_i("_", 1)) |>
+#   select(task, item = term, estimate)
 ```
 
 ```{r}
@@ -107,29 +116,35 @@ lasso_estimates |>
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
+  labs(x = "Absolute Estimate", y = NULL, color = "Task",
+       title = "Non-Zero Estimates") +
   theme_classic() +
   theme(aspect.ratio = 3)
 ```
 
-Time of LASSO test
-
 ```{r}
-lasso_estimates |> filter(estimate != 0 & term != "(Intercept)") |>
+lasso_test_time <- lasso_estimates |> filter(estimate != 0 & term != "(Intercept)") |>
   mutate(task = str_split_i(term, "_", 1)) |>
   inner_join(v5_dat |> select(item, time) |> unique(),
             join_by("term" == "item")) |>
   summarize(.by = task,
             time = sum(time) + get_startup(first(task))) |>
-  summarize(time = sum(time))
+  summarize(time = sum(time)) |>
+  pull(time)
 ```
 
-Trying some tuning
+Time of LASSO test: `r lasso_test_time |> round(2)` minutes.
+
+
+### LASSO Tuning
+
+Trying some tuning with the `penalty` argument to see if it makes a difference!
 
 ```{r}
+# tune penalty instead of fixing it
 tune_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
   set_engine("glmnet")
 ```
-
 
 ```{r}
 #| eval: false
@@ -150,8 +165,8 @@ lasso_grid <- tune_grid(
 saveRDS(lasso_grid, here::here("Data", "lasso-estimates_tuning.rds"))
 ```
 
-
 ```{r}
+#| column: margin
 lasso_grid <- readRDS(here::here("Data", "lasso-estimates_tuning.rds"))
 
 lasso_grid %>%
@@ -159,13 +174,12 @@ lasso_grid %>%
   ggplot(aes(penalty, mean, color = .metric)) +
   geom_errorbar(aes(
     ymin = mean - std_err,
-    ymax = mean + std_err
-  ),
-  alpha = 0.5
-  ) +
-  geom_line(linewidth = 1.5) +
+    ymax = mean + std_err),
+  alpha = 0.5) +
+  geom_line(linewidth = 1.5, na.rm = T) +
   facet_wrap(~.metric, scales = "free", nrow = 2) +
   scale_x_log10() +
+  theme_classic() +
   theme(legend.position = "none")
 ```
 
@@ -177,9 +191,7 @@ final_lasso <- finalize_workflow(
   wf %>% add_model(tune_spec),
   lowest_rmse
 )
-```
 
-```{r}
 final_lasso %>%
   fit(v5_dat_train) %>%
   extract_fit_parsnip() %>%
@@ -190,7 +202,7 @@ final_lasso %>%
   fit(v5_dat_train) %>%
   extract_fit_parsnip() %>%
   vi(lambda = lowest_rmse$penalty) %>%
-  filter(Importance != 0) |>
+  filter_out(Importance == 0) |>
   mutate(task = str_split_i(Variable, "_", 1)) |>
   mutate(
     Importance = abs(Importance),
@@ -198,7 +210,7 @@ final_lasso %>%
   ) %>%
   ggplot(aes(x = Importance, y = Variable, color = task)) +
   geom_point() +
-  labs(y = NULL) +
+  labs(y = NULL, color = "Task", title = "Non-Zero Estimates") +
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
@@ -206,10 +218,8 @@ final_lasso %>%
   theme(aspect.ratio = 3)
 ```
 
-Time of tuned LASSO
-
 ```{r}
-final_lasso %>%
+lasso_tuned_test_time <- final_lasso %>%
   fit(v5_dat_train) %>%
   extract_fit_parsnip() |> 
   tidy() |>
@@ -219,6 +229,80 @@ final_lasso %>%
             join_by("term" == "item")) |>
   summarize(.by = task,
             time = sum(time) + get_startup(first(task))) |>
-  summarize(time = sum(time))
+  summarize(time = sum(time)) |>
+  pull(time)
 ```
+
+Time of tuned LASSO test: `r lasso_tuned_test_time |> round(2)` minutes.
+
+
+```{r}
+#| layout-ncol: 2
+lasso_estimates |>
+  filter(estimate != 0 & term != "(Intercept)") |>
+  mutate(task = str_split_i(term, "_", 1)) |>
+  ggplot(aes(y = fct_reorder(term, abs(estimate)), x = abs(estimate),
+             color = task)) +
+  geom_point() +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  labs(x = "Absolute Estimate", y = NULL, color = "Task",
+       title = "No Tuning") +
+  theme_classic() +
+  theme(aspect.ratio = 3)
+
+final_lasso %>%
+  fit(v5_dat_train) %>%
+  extract_fit_parsnip() %>%
+  vi(lambda = lowest_rmse$penalty) %>%
+  filter_out(Importance == 0) |>
+  mutate(task = str_split_i(Variable, "_", 1)) |>
+  mutate(
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance)
+  ) %>%
+  ggplot(aes(x = Importance, y = Variable, color = task)) +
+  geom_point() +
+  labs(y = NULL, color = "Task", title = "Tuning") +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  theme_classic() +
+  theme(aspect.ratio = 3)
+```
+
+```{r}
+cor_including_zeros <- full_join(
+  lasso_fit %>%
+    extract_fit_parsnip() |>
+    vi() %>%
+    select(importance_notuning = Importance, Variable),
+  final_lasso %>%
+    fit(v5_dat_train) %>%
+    extract_fit_parsnip() %>%
+    vi(lambda = lowest_rmse$penalty) %>%
+    select(importance_tuning = Importance, Variable),
+  by = "Variable"
+) |>
+  summarize(cor = cor(importance_notuning, importance_tuning))
+
+cor_not_including_zeros <- full_join(
+  lasso_fit %>%
+    extract_fit_parsnip() |>
+    vi() %>%
+    filter_out(Importance == 0) |>
+    select(importance_notuning = Importance, Variable),
+  final_lasso %>%
+    fit(v5_dat_train) %>%
+    extract_fit_parsnip() %>%
+    vi(lambda = lowest_rmse$penalty) %>%
+    filter_out(Importance == 0) |>
+    select(importance_tuning = Importance, Variable) ,
+  by = "Variable"
+) |>
+  summarize(cor = cor(importance_notuning, importance_tuning, use = "complete"))
+```
+
+Looks like more items included for the tuned model. Relatively similar top items. Correlation between estimates including all the zeros is `r cor_including_zeros` and without all the zeros (dropping those items) is `r cor_not_including_zeros`.
 

@@ -1,0 +1,288 @@
+---
+title: "Method Comparison"
+subtitle: "Search algorithm, LASSO regression, and {xgboost}"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+html-table-processing: none
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+library(gt)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
+
+v5 <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
+xgb <- readRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
+lasso <- readRDS(here::here("Data", "lasso_regression.rds"))
+
+startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
+
+if (!dir.exists(here::here("Data", "Method Comparison"))) dir.create(here::here("Data", "Method Comparison"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+source(here::here("Scripts", "get_startup.R"))
+```
+
+#### Cleaning
+```{r}
+v5_ranked <- v5 |> 
+  select(item, v5_rank = rep) |>
+  arrange(v5_rank)
+xgb_ranked <- xgb |>
+  # because higher importance should correspond to lower (better) rank
+  # adding one to match v5
+  mutate(xgb_rank = n() - rank(Importance) + 1) |>
+  select(xgb_rank, item = Variable) |>
+  arrange(xgb_rank)
+lasso_ranked <- lasso |>
+  mutate(lasso_rank = n() - rank(Importance) + 1) |>
+  select(lasso_rank, item = Variable) |>
+  arrange(lasso_rank)
+
+ranks <- v5_ranked |>
+  full_join(xgb_ranked,
+            by = "item") |>
+  full_join(lasso_ranked,
+            by = "item") |>
+  inner_join(v5_dat |>
+               select(task, item, time) |>
+               unique(),
+             by = "item")
+```
+:::
+
+
+## Method Comparison
+
+Correlations between item ranks from each method.
+
+:::: {.columns}
+::: {.column width="50%"}
+Spearman Rank
+
+```{r}
+ranks |>
+  select(`Search Algorithm` = v5_rank,
+         `xgboost` = xgb_rank,
+         LASSO = lasso_rank) |>
+  cor(method = "spearman") |>
+  as.data.frame() |>
+  rownames_to_column() |>
+  gt::gt() |>
+  gt::fmt_number() |>
+  tab_style(style = list(
+              cell_fill(color = "#eceadf"),
+              cell_borders(sides = c("left", "right", "top", "bottom"), 
+                          color = scales::col_darker("#eceadf", 15))),
+            locations = list(cells_body(), cells_column_labels(), cells_title(), cells_stub(), cells_stubhead()))
+```
+:::
+
+::: {.column width="50%"}
+Kendall's Tau
+
+```{r}
+ranks |>
+  select(`Search Algorithm` = v5_rank,
+         `xgboost` = xgb_rank,
+         LASSO = lasso_rank) |>
+  cor(method = "kendall") |>
+  as.data.frame() |>
+  rownames_to_column() |>
+  gt::gt() |>
+  gt::fmt_number() |>
+  tab_style(style = list(
+              cell_fill(color = "#eceadf"),
+              cell_borders(sides = c("left", "right", "top", "bottom"), 
+                          color = scales::col_darker("#eceadf", 15))),
+            locations = list(cells_body(), cells_column_labels(), cells_title(), cells_stub(), cells_stubhead()))
+```
+:::
+::::
+
+
+```{r}
+#| layout-ncol: 3
+#| column: page
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = v5_rank, y = xgb_rank, label = item, color = task)) +
+  geom_text()
+
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = v5_rank, y = lasso_rank, label = item, color = task)) +
+  geom_text()
+
+ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = lasso_rank, y = xgb_rank, label = item, color = task)) +
+  geom_text()
+```
+
+
+
+### Method Timing
+
+:::: {.columns .column-page}
+::: {.column width="33%"}
+```{r}
+#| eval: false
+v5_ranks_w_timing <- ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  arrange(v5_rank) |>
+  mutate(.by = task,
+         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
+  mutate(cum_time = cumsum(time_w_startup))
+
+v5_r2_w_time <- map(1:99,
+    \(i) {
+      included_items <- v5_ranks_w_timing |>
+        select(item, task, v5_rank, cum_time) |>
+        head(i)
+      
+      inner_join(v5_dat|>
+                   select(subject_id, sscore, item, score),
+                 included_items,
+                 by = "item") |>
+        summarize(.by = c(subject_id, task),
+                  sscore = first(sscore),
+                  score = mean(score)) |>
+        mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+        pivot_wider(names_from = task, values_from = score) |>
+        drop_na() |>
+        summarize(rep = i,
+                  item = included_items |> filter(cum_time == max(cum_time)) |> pull(item),
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = pick(everything())))$r.squared,
+                  cum_time = included_items |> filter(cum_time == max(cum_time)) |> pull(cum_time))}) |>
+  list_rbind()
+
+saveRDS(v5_r2_w_time, here::here("Data", "Method Comparison", "v5_r2_w_time.rds"))
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| eval: false
+xgb_ranks_w_timing <- ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  arrange(xgb_rank) |>
+  mutate(.by = task,
+         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
+  mutate(cum_time = cumsum(time_w_startup))
+
+xgb_r2_w_time <- map(1:99,
+    \(i) {
+      included_items <- xgb_ranks_w_timing |>
+        select(item, task, v5_rank, cum_time) |>
+        head(i)
+      
+      inner_join(v5_dat |>
+                   select(subject_id, sscore, item, score),
+                 included_items,
+                 by = "item") |>
+        summarize(.by = c(subject_id, task),
+                  sscore = first(sscore),
+                  score = mean(score)) |>
+        mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+        pivot_wider(names_from = task, values_from = score) |>
+        drop_na() |>
+        summarize(rep = i,
+                  item = included_items |> filter(cum_time == max(cum_time)) |> pull(item),
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = pick(everything())))$r.squared,
+                  cum_time = included_items |> filter(cum_time == max(cum_time)) |> pull(cum_time))}) |>
+  list_rbind()
+
+saveRDS(xgb_r2_w_time, here::here("Data", "Method Comparison", "xgb_r2_w_time.rds"))
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| eval: false
+lasso_ranks_w_timing <- ranks |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  arrange(lasso_rank) |>
+  mutate(.by = task,
+         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
+  mutate(cum_time = cumsum(time_w_startup))
+
+lasso_r2_w_time <- map(1:99,
+    \(i) {
+      included_items <- lasso_ranks_w_timing |>
+        select(item, task, v5_rank, cum_time) |>
+        head(i)
+      
+      inner_join(v5_dat|>
+                   select(subject_id, sscore, item, score),
+                 included_items,
+                 by = "item") |>
+        summarize(.by = c(subject_id, task),
+                  sscore = first(sscore),
+                  score = mean(score)) |>
+        mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+        pivot_wider(names_from = task, values_from = score) |>
+        drop_na() |>
+        summarize(rep = i,
+                  item = included_items |> filter(cum_time == max(cum_time)) |> pull(item),
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = pick(everything())))$r.squared,
+                  cum_time = included_items |> filter(cum_time == max(cum_time)) |> pull(cum_time))}) |>
+  list_rbind()
+
+saveRDS(lasso_r2_w_time, here::here("Data", "Method Comparison", "lasso_r2_w_time.rds"))
+```
+:::
+::::
+
+```{r}
+#| column: page
+#| layout-ncol: 3
+v5_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "v5_r2_w_time.rds"))
+xgb_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "xgb_r2_w_time.rds"))
+lasso_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "lasso_r2_w_time.rds"))
+
+walk2(list(v5_r2_w_time, xgb_r2_w_time, lasso_r2_w_time),
+      list("Search Algorithm", "xgboost", "LASSO"),
+      \(d, name) (d |>
+                    mutate(task = str_split_i(item, "_", 1)) |>
+                    ggplot(aes(x = cum_time, y = test_r2)) +
+                    geom_line() +
+                    geom_point(aes(color = task)) +
+                    coord_cartesian(ylim = c(.1, .5)) +
+                    labs(title = name, y = "R<sup>2</sup>", x = "Time") +
+                    theme(axis.title.y = ggtext::element_markdown())) |>
+        print())
+```
+

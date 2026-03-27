@@ -32,7 +32,7 @@ website:
       - text: "Methods"
         menu:
           - Reports/Methods/2PL.qmd
-          - Reports/Methods/Method Comparison.qmd
+          - Reports/Methods/method-comparison.qmd
     tools:
       - icon: github
         href: https://github.com/jhelmer3/cognitive-tasks

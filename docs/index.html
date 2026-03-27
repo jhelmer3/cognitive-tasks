@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-03-24">
+<meta name="dcterms.date" content="2026-03-27">
 
 <title>Cognitive Task Modeling</title>
 <style>
@@ -70,6 +70,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -178,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">2PL</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Reports/Methods/Method Comparison.html">
+    <a class="dropdown-item" href="./Reports/Methods/method-comparison.html">
  <span class="dropdown-text">Method Comparison</span></a>
   </li>  
     </ul>
@@ -201,6 +230,9 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#tasks" id="toc-tasks" class="nav-link active" data-scroll-target="#tasks">Tasks</a></li>
+  <li><a href="#search-algorithms" id="toc-search-algorithms" class="nav-link" data-scroll-target="#search-algorithms">Search Algorithms</a></li>
+  <li><a href="#regressions" id="toc-regressions" class="nav-link" data-scroll-target="#regressions">Regressions</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
   </ul>
 </nav>
     </div>
@@ -227,7 +259,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 24, 2026</p>
+      <p class="date">March 27, 2026</p>
     </div>
   </div>
   
@@ -317,6 +349,71 @@ ul.task-list li input[type="checkbox"] {
 
 </div><div class="column l-center-container" style="width:25%;">
 <p><a href="./Reports/time-series_report.html" class="btn btn-outline-primary" role="button">Time Series</a></p>
+</div>
+</div>
+</section>
+<section id="search-algorithms" class="level2">
+<h2 class="anchored" data-anchor-id="search-algorithms">Search Algorithms</h2>
+<p>Searching through items of different combinations of FPT tasks, maximizing <span class="math inline">\(\frac{R^2}{time}\)</span>.</p>
+<div class="columns">
+<div class="column" style="width:25%;">
+<p><a href="./Reports/Search Algorithms/search_fpt-v2_report.html" class="btn btn-outline-primary" role="button">Version Two</a></p>
+</div><div class="column" style="width:25%;">
+<p><a href="./Reports/Search Algorithms/search_fpt-v3_report.html" class="btn btn-outline-primary" role="button">Version Three</a></p>
+</div><div class="column" style="width:25%;">
+<p><a href="./Reports/Search Algorithms/search_fpt-v4_report.html" class="btn btn-outline-primary" role="button">Version Four</a></p>
+</div><div class="column" style="width:25%;">
+<p><a href="./Reports/Search Algorithms/search_fpt-v5_report.html" class="btn btn-outline-primary" role="button">Version Five</a></p>
+</div>
+</div>
+</section>
+<section id="regressions" class="level2">
+<h2 class="anchored" data-anchor-id="regressions">Regressions</h2>
+<div class="columns v-center-container">
+<div class="column" style="width:70%;">
+<section id="lasso" class="level3">
+<h3 class="anchored" data-anchor-id="lasso">LASSO</h3>
+</section>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column l-center-container" style="width:25%;">
+<p><a href="./Reports/lasso.html" class="btn btn-outline-primary" role="button">LASSO</a></p>
+</div>
+</div>
+<div class="columns v-center-container">
+<div class="column" style="width:70%;">
+<section id="xgboost" class="level3">
+<h3 class="anchored" data-anchor-id="xgboost">{xgboost}</h3>
+</section>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column l-center-container" style="width:25%;">
+<p><a href="./Reports/xgboost.html" class="btn btn-outline-primary" role="button">xgboost</a></p>
+</div>
+</div>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<div class="columns v-center-container">
+<div class="column" style="width:70%;">
+<section id="pl" class="level3">
+<h3 class="anchored" data-anchor-id="pl">2PL</h3>
+</section>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column l-center-container" style="width:25%;">
+<p><a href=".\Methods/2PL.qmd" class="btn btn-outline-primary" role="button">2PL</a></p>
+</div>
+</div>
+<div class="columns v-center-container">
+<div class="column" style="width:70%;">
+<section id="method-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="method-comparison">Method Comparison</h3>
+</section>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column l-center-container" style="width:25%;">
+<p><a href=".\Reports/method-comparison.qmd" class="btn btn-outline-primary" role="button">Method Comparison</a></p>
 </div>
 </div>
 
