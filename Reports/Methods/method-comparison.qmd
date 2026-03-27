@@ -16,6 +16,7 @@ knitr:
       dev.args:
         bg: transparent
 html-table-processing: none
+self-contained: true
 ---
 
 ::: panel-tabset
