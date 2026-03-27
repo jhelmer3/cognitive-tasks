@@ -3335,18 +3335,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.21160 -0.25096 -0.01143  0.23083  1.12810 
+-1.00331 -0.30577 -0.05695  0.36880  1.02514 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.005603   0.045656  -0.123    0.903    
-x            0.216947   0.009582  22.642   &lt;2e-16 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.01401    0.04638   0.302    0.763    
+x            0.20669    0.01032  20.031   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4556 on 98 degrees of freedom
-Multiple R-squared:  0.8395,    Adjusted R-squared:  0.8379 
-F-statistic: 512.6 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4615 on 98 degrees of freedom
+Multiple R-squared:  0.8037,    Adjusted R-squared:  0.8017 
+F-statistic: 401.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -3367,19 +3367,19 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
         rnorm(100), x4 = y + rnorm(100), x = x1 + x2 + x3 + x4))
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--2.96579 -0.61381  0.07538  0.68164  2.39484 
+    Min      1Q  Median      3Q     Max 
+-2.4070 -0.5573 -0.1734  0.5222  2.2619 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)  
-(Intercept) -0.042422   0.103924  -0.408   0.6840  
-x            0.024758   0.009636   2.569   0.0117 *
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.155679   0.091636  -1.699 0.092513 .  
+x            0.034623   0.008555   4.047 0.000104 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 1.038 on 98 degrees of freedom
-Multiple R-squared:  0.06312,   Adjusted R-squared:  0.05356 
-F-statistic: 6.602 on 1 and 98 DF,  p-value: 0.01169</code></pre>
+Residual standard error: 0.9106 on 98 degrees of freedom
+Multiple R-squared:  0.1432,    Adjusted R-squared:  0.1345 
+F-statistic: 16.38 on 1 and 98 DF,  p-value: 0.0001036</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
