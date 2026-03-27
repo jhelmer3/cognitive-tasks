@@ -190,7 +190,7 @@ Searching through items of different combinations of FPT tasks, maximizing $\fra
 :::
 
 ::: {.column width="25%" .l-center-container}
-[2PL](/Methods/2PL.qmd){.btn .btn-outline-primary .btn role="button"}
+[2PL](/Reports/Methods/2PL.qmd){.btn .btn-outline-primary .btn role="button"}
 :::
 ::::
 
@@ -205,7 +205,7 @@ Searching through items of different combinations of FPT tasks, maximizing $\fra
 :::
 
 ::: {.column width="25%" .l-center-container}
-[Method Comparison](/Reports/method-comparison.qmd){.btn .btn-outline-primary .btn role="button"}
+[Method Comparison](/Reports/Methods/method-comparison.qmd){.btn .btn-outline-primary .btn role="button"}
 :::
 ::::
 

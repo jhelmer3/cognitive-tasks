@@ -210,7 +210,7 @@ final_lasso %>%
   ) %>%
   ggplot(aes(x = Importance, y = Variable, color = task)) +
   geom_point() +
-  labs(y = NULL, color = "Task", title = "Non-Zero Estimates") +
+  labs(y = NULL, color = "Task", title = "Non-Zero Estimates", x = "Absolute Estimate") +
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
@@ -264,7 +264,7 @@ final_lasso %>%
   ) %>%
   ggplot(aes(x = Importance, y = Variable, color = task)) +
   geom_point() +
-  labs(y = NULL, color = "Task", title = "Tuning") +
+  labs(y = NULL, color = "Task", title = "Tuning", x = "Absolute Estimate") +
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
