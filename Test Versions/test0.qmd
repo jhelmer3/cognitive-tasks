@@ -14,7 +14,7 @@ knitr:
       dev: "ragg_png"
 ---
 
-Practice test for new FPT versions.
+Practice test for new FPT versions. Currently two time series items (preceeded by two practice items) that are linear, negative, 30 datapoints, but either low or high noise. Then, four denominator neglect items (preceeded by four practice items) that are combined (version B), have small lottery gold proportions of .02 and .03, and a proportion difference of .08.
 
 #### Relevant references:
 
