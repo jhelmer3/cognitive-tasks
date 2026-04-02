@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-02-10">
+<meta name="dcterms.date" content="2026-04-02">
 
 <title>Denominator Neglect – Cognitive Task Modeling</title>
 <style>
@@ -247,6 +247,17 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-custom-fpts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Custom FPTs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-custom-fpts">    
+        <li>
+    <a class="dropdown-item" href="../Test Versions/test0.html">
+ <span class="dropdown-text">Test Zero</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -272,7 +283,7 @@ window.Quarto = {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#methods-1" id="toc-methods-1" class="nav-link" data-scroll-target="#methods-1">Methods</a></li>
   </ul></li>
-  <li><a href="#denominator-neglect-combined-1" id="toc-denominator-neglect-combined-1" class="nav-link" data-scroll-target="#denominator-neglect-combined-1">Denominator Neglect: Combined</a>
+  <li><a href="#denominator-neglect-separate" id="toc-denominator-neglect-separate" class="nav-link" data-scroll-target="#denominator-neglect-separate">Denominator Neglect: Separate</a>
   <ul class="collapse">
   <li><a href="#methods-2" id="toc-methods-2" class="nav-link" data-scroll-target="#methods-2">Methods</a></li>
   <li><a href="#modeling-1" id="toc-modeling-1" class="nav-link" data-scroll-target="#modeling-1">Modeling</a></li>
@@ -304,7 +315,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 10, 2026</p>
+      <p class="date">April 2, 2026</p>
     </div>
   </div>
   
@@ -322,7 +333,9 @@ window.Quarto = {
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -416,12 +429,12 @@ window.Quarto = {
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>           task <span class="sc">==</span> <span class="st">"denominator_neglect_version_B"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">task_version =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(task <span class="sc">==</span> <span class="st">"denominator_neglect_version_A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>task) <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AIG_version <span class="sc">==</span> <span class="st">"anchor"</span> <span class="sc">&amp;</span> task_version <span class="sc">==</span> <span class="st">"B"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AIG_version <span class="sc">==</span> <span class="st">"anchor"</span> <span class="sc">&amp;</span> task_version <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(session_id)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>dn_dat_s <span class="ot">&lt;-</span> rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(session_id, trial_id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(session_id <span class="sc">%in%</span> anchor_ids_s <span class="sc">&amp;</span> task_version <span class="sc">==</span> <span class="st">"B"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(session_id <span class="sc">%in%</span> anchor_ids_s <span class="sc">&amp;</span> task_version <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">proportion_difference =</span> <span class="fu">abs</span>(left_lottery_gold_prop <span class="sc">-</span> right_lottery_gold_prop),</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">trial_id =</span> <span class="fu">paste0</span>(<span class="st">"item_"</span>, trial_id)) <span class="sc">|&gt;</span> </span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(session_restart_id, time_elapsed, custom_timer_ended_trial,</span>
@@ -433,11 +446,15 @@ window.Quarto = {
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) <span class="sc">|&gt;</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">str_split_i</span>(trial_id, <span class="st">"_"</span>, <span class="dv">2</span>),</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">.keep =</span> <span class="st">"unused"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dn_dat_s, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_s.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">small_lottery_display_type =</span> <span class="fu">ifelse</span>(left_lottery_type <span class="sc">==</span> <span class="st">"small"</span>, </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                                             left_lottery_display_type, right_lottery_display_type),</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">large_lottery_display_type =</span> <span class="fu">ifelse</span>(left_lottery_type <span class="sc">==</span> <span class="st">"large"</span>,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                                             left_lottery_type, right_lottery_display_type)) <span class="sc">|&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, , small_lottery_display_type, large_lottery_display_type, correct, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">str_split_i</span>(trial_id, <span class="st">"_"</span>, <span class="dv">2</span>),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">.keep =</span> <span class="st">"unused"</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dn_dat_s, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Denominator Neglect"</span>, <span class="st">"dn_dat_s.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -769,9 +786,9 @@ window.Quarto = {
 <!-- Well, not anymore I guess! -->
 </section>
 </section>
-<section id="denominator-neglect-combined-1" class="level2">
-<h2 class="anchored" data-anchor-id="denominator-neglect-combined-1">Denominator Neglect: Combined</h2>
-<p>The following analysis focuses only on the combied version</p>
+<section id="denominator-neglect-separate" class="level2">
+<h2 class="anchored" data-anchor-id="denominator-neglect-separate">Denominator Neglect: Separate</h2>
+<p>The following analysis focuses only on the separate version</p>
 <section id="methods-2" class="level3">
 <h3 class="anchored" data-anchor-id="methods-2">Methods</h3>
 </section>

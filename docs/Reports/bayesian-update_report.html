@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2025-12-17">
+<meta name="dcterms.date" content="2026-03-31">
 
 <title>Bayesian Update – Cognitive Task Modeling</title>
 <style>
@@ -247,6 +247,17 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-custom-fpts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Custom FPTs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-custom-fpts">    
+        <li>
+    <a class="dropdown-item" href="../Test Versions/test0.html">
+ <span class="dropdown-text">Test Zero</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -294,7 +305,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 17, 2025</p>
+      <p class="date">March 31, 2026</p>
     </div>
   </div>
   
@@ -406,7 +417,7 @@ window.Quarto = {
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only anchor version and only easy version</span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(session_id <span class="sc">%in%</span> anchor_ids_e <span class="sc">&amp;</span> version <span class="sc">==</span> <span class="st">"easy"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(session_id, unique_trial, score) <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(session_id, unique_trial, score, ball_split) <span class="sc">|&gt;</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"</span>),</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"session_id"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv"</span>) <span class="sc">|&gt;</span></span>
@@ -416,15 +427,16 @@ window.Quarto = {
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, unique_trial, score, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, unique_trial, ball_split, score, sscore) <span class="sc">|&gt;</span></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mean score per BU item (over the five trials)</span></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># suggestion (maybe): do some trial-level stuff at some point?</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, unique_trial),</span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore))</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bu_dat_e, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_e.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">ball_split =</span> <span class="fu">first</span>(ball_split))</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bu_dat_e, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_e.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -447,7 +459,7 @@ window.Quarto = {
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only anchor version and only easy version</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(session_id <span class="sc">%in%</span> anchor_ids_h <span class="sc">&amp;</span> version <span class="sc">==</span> <span class="st">"hard"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(session_id, unique_trial, score) <span class="sc">|&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(session_id, unique_trial, score, ball_split) <span class="sc">|&gt;</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"</span>),</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"session_id"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv"</span>) <span class="sc">|&gt;</span></span>
@@ -457,15 +469,16 @@ window.Quarto = {
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">.by =</span> subject_id,</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sscore =</span> <span class="fu">mean</span>(sscore_standardized)),</span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"subject_id"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, unique_trial, score, sscore) <span class="sc">|&gt;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(subject_id, unique_trial, ball_split, score, sscore) <span class="sc">|&gt;</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mean score per BU item (over the five trials)</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># suggestion (maybe): do some trial-level stuff at some point?</span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(subject_id, unique_trial),</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">score =</span> <span class="fu">mean</span>(score),</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore))</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bu_dat_h, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_h.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">sscore =</span> <span class="fu">first</span>(sscore),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">ball_split =</span> <span class="fu">first</span>(ball_split))</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bu_dat_h, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"Bayesian Update"</span>, <span class="st">"bu_dat_h.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>

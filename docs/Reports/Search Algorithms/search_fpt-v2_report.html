@@ -247,6 +247,17 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-custom-fpts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Custom FPTs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-custom-fpts">    
+        <li>
+    <a class="dropdown-item" href="../../Test Versions/test0.html">
+ <span class="dropdown-text">Test Zero</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -3335,18 +3346,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.00331 -0.30577 -0.05695  0.36880  1.02514 
+-1.01802 -0.24088  0.02116  0.30949  1.19326 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.01401    0.04638   0.302    0.763    
-x            0.20669    0.01032  20.031   &lt;2e-16 ***
+(Intercept) 0.006116   0.045979   0.133    0.894    
+x           0.191539   0.009455  20.259   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4615 on 98 degrees of freedom
-Multiple R-squared:  0.8037,    Adjusted R-squared:  0.8017 
-F-statistic: 401.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4593 on 98 degrees of freedom
+Multiple R-squared:  0.8072,    Adjusted R-squared:  0.8053 
+F-statistic: 410.4 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -3367,19 +3378,19 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
         rnorm(100), x4 = y + rnorm(100), x = x1 + x2 + x3 + x4))
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--2.4070 -0.5573 -0.1734  0.5222  2.2619 
+     Min       1Q   Median       3Q      Max 
+-3.14424 -0.54137  0.03549  0.43043  2.27754 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.155679   0.091636  -1.699 0.092513 .  
-x            0.034623   0.008555   4.047 0.000104 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.08997    0.09525   0.945    0.347    
+x            0.03623    0.00881   4.112 8.16e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.9106 on 98 degrees of freedom
-Multiple R-squared:  0.1432,    Adjusted R-squared:  0.1345 
-F-statistic: 16.38 on 1 and 98 DF,  p-value: 0.0001036</code></pre>
+Residual standard error: 0.9492 on 98 degrees of freedom
+Multiple R-squared:  0.1472,    Adjusted R-squared:  0.1384 
+F-statistic: 16.91 on 1 and 98 DF,  p-value: 8.161e-05</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>

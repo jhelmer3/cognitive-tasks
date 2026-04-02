@@ -55,15 +55,19 @@ source(here::here("Scripts", "get_startup.R"))
 
 #### Cleaning
 ```{r}
+methods <- list("v5", "lasso", "xgb")
+
 v5_ranked <- v5 |> 
   select(item, v5_rank = rep) |>
   arrange(v5_rank)
+
 xgb_ranked <- xgb |>
   # because higher importance should correspond to lower (better) rank
   # adding one to match v5
   mutate(xgb_rank = n() - rank(Importance) + 1) |>
   select(xgb_rank, item = Variable) |>
   arrange(xgb_rank)
+
 lasso_ranked <- lasso |>
   mutate(lasso_rank = n() - rank(Importance) + 1) |>
   select(lasso_rank, item = Variable) |>
@@ -150,21 +154,23 @@ ranks |>
   geom_text()
 ```
 
-
-
 ### Method Timing
+
+```{r}
+walk(methods, \(x) ranks |>
+      mutate(task = str_split_i(item, "_", 1)) |>
+      arrange(paste0(x, "_rank") |> sym() |> eval()) |>
+      mutate(.by = task,
+             time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
+      mutate(cum_time = cumsum(time_w_startup)) |>
+      assign(x = paste0(x, "_ranks_w_timing"), value = _, env = globalenv()))
+```
+
 
 :::: {.columns .column-page}
 ::: {.column width="33%"}
 ```{r}
 #| eval: false
-v5_ranks_w_timing <- ranks |>
-  mutate(task = str_split_i(item, "_", 1)) |>
-  arrange(v5_rank) |>
-  mutate(.by = task,
-         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
-  mutate(cum_time = cumsum(time_w_startup))
-
 v5_r2_w_time <- map(1:99,
     \(i) {
       included_items <- v5_ranks_w_timing |>
@@ -195,13 +201,6 @@ saveRDS(v5_r2_w_time, here::here("Data", "Method Comparison", "v5_r2_w_time.rds"
 ::: {.column width="33%"}
 ```{r}
 #| eval: false
-xgb_ranks_w_timing <- ranks |>
-  mutate(task = str_split_i(item, "_", 1)) |>
-  arrange(xgb_rank) |>
-  mutate(.by = task,
-         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
-  mutate(cum_time = cumsum(time_w_startup))
-
 xgb_r2_w_time <- map(1:99,
     \(i) {
       included_items <- xgb_ranks_w_timing |>
@@ -232,13 +231,6 @@ saveRDS(xgb_r2_w_time, here::here("Data", "Method Comparison", "xgb_r2_w_time.rd
 ::: {.column width="33%"}
 ```{r}
 #| eval: false
-lasso_ranks_w_timing <- ranks |>
-  mutate(task = str_split_i(item, "_", 1)) |>
-  arrange(lasso_rank) |>
-  mutate(.by = task,
-         time_w_startup = time + ifelse(item == first(item), get_startup(first(task)), 0)) |>
-  mutate(cum_time = cumsum(time_w_startup))
-
 lasso_r2_w_time <- map(1:99,
     \(i) {
       included_items <- lasso_ranks_w_timing |>
@@ -285,5 +277,109 @@ walk2(list(v5_r2_w_time, xgb_r2_w_time, lasso_r2_w_time),
                     labs(title = name, y = "R<sup>2</sup>", x = "Time") +
                     theme(axis.title.y = ggtext::element_markdown())) |>
         print())
+```
+
+```{r}
+#| layout-ncol: 2
+v5_ranks_w_timing |>
+  filter(cum_time <= 15) |>
+  count(task, name = "v5") |>
+  full_join(xgb_ranks_w_timing |>
+              filter(cum_time <= 15) |>
+              count(task, name = "xgb"),
+            by = "task") |>
+  full_join(lasso_ranks_w_timing |>
+              filter(cum_time <= 15) |>
+              count(task, name = "lasso"),
+            by = "task") |>
+  arrange(task) |>
+  gt(rowname_col = "task") |>
+  sub_missing(missing_text = "") |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+
+v5_ranks_w_timing |>
+  filter(cum_time <= 15) |>
+  count(task, name = "v5") |>
+  full_join(xgb_ranks_w_timing |>
+              filter(cum_time <= 15) |>
+              count(task, name = "xgb"),
+            by = "task") |>
+  full_join(lasso_ranks_w_timing |>
+              filter(cum_time <= 15) |>
+              count(task, name = "lasso"),
+            by = "task") |>
+  mutate(task = str_split_i(task, "\\.", 1)) |>
+  summarize(.by = task,
+            across(everything(), ~ sum(.x, na.rm = T))) |>
+  arrange(task) |>
+  gt(rowname_col = "task") |>
+  sub_missing(missing_text = "") |>
+  sub_zero(zero_text = " ") |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+```{r}
+#| column: margin
+walk(methods, \(x) x |>
+      paste0("_ranks_w_timing") |>
+      sym() |>
+      eval() |>
+      filter(cum_time <= 15) |>
+      pull(item) |>
+      assign(x = paste0(x, "_test"),
+             value = _,
+             env = globalenv()))
+
+ranks |>
+  pull(item) |>
+  map(\(item) tibble(item = item,
+                     count = sum(c(item %in% v5_test,
+                                   item %in% xgb_test,
+                                   item %in% lasso_test)))) |>
+  bind_rows() |>
+  filter_out(count == 0) |>
+  arrange(desc(count)) |>
+  mutate(task = str_split_i(item, "_", 1),
+         .before = item)  |>
+  gt(rowname_col = c("task", "item")) |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels())
+```
+
+```{r}
+v5_test
+
+readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds")) |>
+  left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items.rds")) |> 
+  select(rank, conf_item, harm_item) |>
+  pivot_longer(c(conf_item, harm_item),
+               names_to = "choice_type", values_to = "item") |>
+    select(-choice_type),
+  by = "item") |>
+  mutate(item == rank)
+
+readRDS(here::here("Data", "Denominator Neglect", "dn_dat_s.rds")) |>
+  left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds")) |> 
+  select(rank, conf_item, harm_item) |>
+  pivot_longer(c(conf_item, harm_item),
+               names_to = "choice_type", values_to = "item") |>
+    select(-choice_type),
+  by = "item") |>
+  mutate(item = rank) |>
+  select(item, choice_type, proportion_difference, small_lottery_gold_prop,
+         small_lottery_display_type, large_lottery_display_type) |>
+  unique()
+
+readRDS((here::here("Data", "Bayesian Update", "bu_dat_e.rds"))) |>
+  select(unique_trial, ball_split) |>
+  unique()
+
+readRDS((here::here("Data", "Bayesian Update", "bu_dat_h.rds"))) |>
+  select(unique_trial, ball_split) |>
+  unique()
+## ummm need to rerun DN stuff. 
+
 ```
 

@@ -108,7 +108,7 @@ bu_dat_e <- bu_full %>%
   
   # only anchor version and only easy version
   filter(session_id %in% anchor_ids_e & version == "easy") |>
-  select(session_id, unique_trial, score) |>
+  select(session_id, unique_trial, score, ball_split) |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
             by = "session_id") |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
@@ -118,13 +118,14 @@ bu_dat_e <- bu_full %>%
             summarize(.by = subject_id,
                       sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, unique_trial, score, sscore) |>
+  select(subject_id, unique_trial, ball_split, score, sscore) |>
   
   # mean score per BU item (over the five trials)
   # suggestion (maybe): do some trial-level stuff at some point?
   summarize(.by = c(subject_id, unique_trial),
             score = mean(score),
-            sscore = first(sscore))
+            sscore = first(sscore),
+            ball_split = first(ball_split))
 
 saveRDS(bu_dat_e, here::here("Data", "Bayesian Update", "bu_dat_e.rds"))
 ```
@@ -147,7 +148,7 @@ bu_dat_h <- bu_full %>%
   
   # only anchor version and only easy version
   filter(session_id %in% anchor_ids_h & version == "hard") |>
-  select(session_id, unique_trial, score) |>
+  select(session_id, unique_trial, score, ball_split) |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/session.csv"),
             by = "session_id") |>
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
@@ -157,13 +158,14 @@ bu_dat_h <- bu_full %>%
             summarize(.by = subject_id,
                       sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, unique_trial, score, sscore) |>
+  select(subject_id, unique_trial, ball_split, score, sscore) |>
   
   # mean score per BU item (over the five trials)
   # suggestion (maybe): do some trial-level stuff at some point?
   summarize(.by = c(subject_id, unique_trial),
             score = mean(score),
-            sscore = first(sscore))
+            sscore = first(sscore),
+            ball_split = first(ball_split))
 
 saveRDS(bu_dat_h, here::here("Data", "Bayesian Update", "bu_dat_h.rds"))
 ```

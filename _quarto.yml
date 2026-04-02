@@ -33,6 +33,9 @@ website:
         menu:
           - Reports/Methods/2PL.qmd
           - Reports/Methods/method-comparison.qmd
+      - text: "Custom FPTs"
+        menu:
+          - Test Versions/test0.qmd
     tools:
       - icon: github
         href: https://github.com/jhelmer3/cognitive-tasks

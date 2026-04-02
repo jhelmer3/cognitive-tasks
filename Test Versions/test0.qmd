@@ -1,0 +1,49 @@
+---
+title: "Test Zero"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: "ragg_png"
+---
+
+Practice test for new FPT versions.
+
+#### Relevant references:
+
+:::: {.columns}
+::: {.column width="33%"}
+[Nik's FPT Battery Github](https://github.com/nikbpetrov/FPT-Battery){.btn .btn-outline-primary .btn role="button"}
+:::
+
+::: {.column width="33%"}
+[jsPsych Docs](https://www.jspsych.org/latest/){.btn .btn-outline-primary .btn role="button"}
+:::
+
+::: {.column width="33%"}
+[Full FPT Demo](https://experiment.quorumapp.com/fpt_demo/){.btn .btn-outline-primary .btn role="button"}
+:::
+::::
+
+
+```{r}
+#| file: fpt-test0.html
+#| eval: false
+#| code-summary: "HTML code"
+
+```
+
+
+```{=html}
+<iframe src="fpt-test0.html" width="840px" height="500px"></iframe>
+```
+
+
+

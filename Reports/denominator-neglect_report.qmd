@@ -20,6 +20,8 @@ knitr:
 #| message: false
 library(tidyverse)
 library(rstan)
+
+options(mc.cores = parallel::detectCores())
 ```
 
 
@@ -103,12 +105,12 @@ anchor_ids_s <- anchoraig_full %>%
            task == "denominator_neglect_version_B") %>%
   mutate(task_version = factor(ifelse(task == "denominator_neglect_version_A", "A", "B"))) %>%
   select(!task) %>%
-  filter(AIG_version == "anchor" & task_version == "B") %>%
+  filter(AIG_version == "anchor" & task_version == "A") %>%
   pull(session_id)
 
 dn_dat_s <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv") %>%
   arrange(session_id, trial_id) %>%
-  filter(session_id %in% anchor_ids_s & task_version == "B") %>%
+  filter(session_id %in% anchor_ids_s & task_version == "A") %>%
   mutate(proportion_difference = abs(left_lottery_gold_prop - right_lottery_gold_prop),
          trial_id = paste0("item_", trial_id)) |> 
   select(-c(session_restart_id, time_elapsed, custom_timer_ended_trial,
@@ -120,7 +122,11 @@ dn_dat_s <- rio::import("https://raw.githubusercontent.com/forecastingresearch/f
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, correct, sscore) |>
+  mutate(small_lottery_display_type = ifelse(left_lottery_type == "small", 
+                                             left_lottery_display_type, right_lottery_display_type),
+         large_lottery_display_type = ifelse(left_lottery_type == "large",
+                                             left_lottery_type, right_lottery_display_type)) |>
+  select(subject_id, trial_id, choice_type, proportion_difference, small_lottery_gold_prop, , small_lottery_display_type, large_lottery_display_type, correct, sscore) |>
   mutate(item = str_split_i(trial_id, "_", 2),
          .keep = "unused")
 
@@ -374,9 +380,9 @@ readRDS(here::here("Data", "Denominator Neglect", "dn_all.rds")) |>
 
 <!-- Well, not anymore I guess! -->
 
-## Denominator Neglect: Combined
+## Denominator Neglect: Separate
 
-The following analysis focuses only on the combied version
+The following analysis focuses only on the separate version
 
 ### Methods
 
