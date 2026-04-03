@@ -320,8 +320,8 @@ v5_ranks_w_timing |>
             locations = cells_column_labels())
 ```
 
+### Item Counts Across Tests
 ```{r}
-#| column: margin
 walk(methods, \(x) x |>
       paste0("_ranks_w_timing") |>
       sym() |>
@@ -348,38 +348,135 @@ ranks |>
             locations = cells_column_labels())
 ```
 
+
+
 ```{r}
-v5_test
-
-readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds")) |>
-  left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items.rds")) |> 
-  select(rank, conf_item, harm_item) |>
-  pivot_longer(c(conf_item, harm_item),
-               names_to = "choice_type", values_to = "item") |>
-    select(-choice_type),
-  by = "item") |>
-  mutate(item == rank)
-
-readRDS(here::here("Data", "Denominator Neglect", "dn_dat_s.rds")) |>
-  left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds")) |> 
-  select(rank, conf_item, harm_item) |>
-  pivot_longer(c(conf_item, harm_item),
-               names_to = "choice_type", values_to = "item") |>
-    select(-choice_type),
-  by = "item") |>
-  mutate(item = rank) |>
-  select(item, choice_type, proportion_difference, small_lottery_gold_prop,
-         small_lottery_display_type, large_lottery_display_type) |>
-  unique()
-
-readRDS((here::here("Data", "Bayesian Update", "bu_dat_e.rds"))) |>
-  select(unique_trial, ball_split) |>
-  unique()
-
-readRDS((here::here("Data", "Bayesian Update", "bu_dat_h.rds"))) |>
-  select(unique_trial, ball_split) |>
-  unique()
-## ummm need to rerun DN stuff. 
+item_properties <- rbind(
+  readRDS(here::here("Data", "Denominator Neglect", "dn_dat_c.rds")) |>
+    select(item, choice_type, proportion_difference, small_lottery_gold_prop) |>
+    unique() |>
+    left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items.rds")) |> 
+                select(rank, conf_item, harm_item) |>
+                pivot_longer(c(conf_item, harm_item),
+                             names_to = "choice_type", values_to = "item") |>
+                select(-choice_type),
+              by = "item") |>
+    mutate(item_ct = paste0("dn.c_", rank, "_", choice_type),
+           item = paste0("dn.c_", rank),
+           .keep = "unused") |>
+    nest(.by = item, properties = !item) ,
+  
+  readRDS(here::here("Data", "Denominator Neglect", "dn_dat_s.rds")) |>
+    select(item, choice_type, proportion_difference, small_lottery_gold_prop) |>
+    unique() |>
+    left_join(readRDS(here::here("Data", "Denominator Neglect", "top_items_s.rds")) |> 
+                select(rank, conf_item, harm_item) |>
+                pivot_longer(c(conf_item, harm_item),
+                             names_to = "choice_type", values_to = "item") |>
+                select(-choice_type),
+              by = "item") |>
+    mutate(item_ct = paste0("dn.s_", rank, "_", choice_type),
+           item = paste0("dn.s_", rank),
+           .keep = "unused") |>
+    nest(.by = item, properties = !item),
+  
+  readRDS((here::here("Data", "Bayesian Update", "bu_dat_e.rds"))) |>
+    mutate(item = paste0("bu.e_", unique_trial)) |>
+    select(item, ball_split) |>
+    unique() |>
+    nest(properties = !c(item)),
+  
+  readRDS((here::here("Data", "Bayesian Update", "bu_dat_h.rds"))) |>
+    mutate(item = paste0("bu.h_", unique_trial)) |>
+    select(item, ball_split) |>
+    unique() |>
+    nest(properties = !c(item)),
+  
+  readRDS(here::here("Data", "ADMC Decision Rules", "admc.dr_dat.rds")) |>
+    mutate(item = paste0("admc.dr_", parse_number(admc_id))) |>
+    select(item, n_correct_options) |>
+    unique() |>
+    nest(properties = !c(item)),
+  
+  readRDS(here::here("Data", "Time Series", "ts_dat.rds")) |>
+    mutate(item = paste0("ts_", ts_id)) |>
+    select(item, noise = noise_condition, datapoints, func, direction) |>
+    unique() |>
+    nest(properties = !c(item)),
+  
+  readRDS(here::here("Data", "Number Series", "ns_dat.rds")) |>
+    mutate(number_series = recode_values(parse_number(ns_id),
+                                         1 ~ "10, 4, ____, -8, -14, -20",
+                                         2 ~ "3, 6, 10, 15, 21, ____",
+                                         3 ~ "121, 100, 81, ____, 49",
+                                         4 ~ "3, 10, 16, 23, ____, 36",
+                                         5 ~ "3/21, ____, 13/11, 18/6, 23/1, 28/-4",
+                                         6 ~ "200, 198, 192, 174, ____",
+                                         7 ~ "3, 2, 10, 4, 19, 6, 30, 8, ____",
+                                         8 ~ "10000, 9000, ____, 8890, 8889",
+                                         9 ~ "3/4, 4/6, 6/8, 8/12, ____")) |>
+    select(item = ns_id, number_series) |>
+    unique() |>
+    nest(properties = !c(item))
+)
 
 ```
 
+
+```{r}
+#| column: page
+#| layout-ncol: 3
+# methods |>
+#   map(\(method) tibble(item = sym(paste0(method, "_test")) |> eval()) |>
+#          left_join(item_properties,
+#                    by = "item") |>
+#          arrange(item) |>
+#          pmap(\(item, properties) tibble(item, properties) |>
+#                 unnest(cols = c()) |>
+#                 mutate(item = ifelse(str_detect(item, "dn"), item_ct, item),
+#                        .keep = "unused") |>
+#                 nest(properties = !item)) |>
+#          list_rbind() |>
+#          gt() |>
+#          tab_header(method)) 
+
+tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
+         left_join(item_properties,
+                   by = "item") |>
+         arrange(item) |>
+         pmap(\(item, properties) tibble(item, properties) |>
+                unnest(cols = c()) |>
+                mutate(item = ifelse(str_detect(item, "dn"), item_ct, item),
+                       .keep = "unused") |>
+                nest(properties = !item)) |>
+         list_rbind() |>
+         gt() |>
+         tab_header("Search Algorithm")
+
+tibble(item = sym(paste0("lasso", "_test")) |> eval()) |>
+         left_join(item_properties,
+                   by = "item") |>
+         arrange(item) |>
+         pmap(\(item, properties) tibble(item, properties) |>
+                unnest(cols = c()) |>
+                mutate(item = ifelse(str_detect(item, "dn"), item_ct, item),
+                       .keep = "unused") |>
+                nest(properties = !item)) |>
+         list_rbind() |>
+         gt() |>
+         tab_header("LASSO")
+
+tibble(item = sym(paste0("xgb", "_test")) |> eval()) |>
+         left_join(item_properties,
+                   by = "item") |>
+         arrange(item) |>
+         pmap(\(item, properties) tibble(item, properties) |>
+                unnest(cols = c()) |>
+                mutate(item = ifelse(str_detect(item, "dn"), item_ct, item),
+                       .keep = "unused") |>
+                nest(properties = !item)) |>
+         list_rbind() |>
+         gt() |>
+         tab_header("xgboost")
+
+```

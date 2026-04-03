@@ -76,7 +76,12 @@ admc.dr_dat <- admc |>
          # manually inputted the full correct score (i.e., 1, 2, or 3)
          score = case_when(admc_id %in% c("dr9", "dr10") ~ ifelse(admc_response == 3, 1, 0),
                              admc_id %in% c("dr8") ~ ifelse(admc_response == 2, 1, 0),
-                             .default = ifelse(admc_response == 1, 1, 0))) |>
+                             .default = ifelse(admc_response == 1, 1, 0)),
+         
+         # adding number of selections needed for a correct response
+         n_correct_options = case_when(admc_id %in% c("dr9", "dr10") ~ 3,
+                             admc_id %in% c("dr8") ~ 2,
+                             .default = 1)) |>
 
   left_join(rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_forecasting/processed_data/scores_quantile.csv") |>
               select(subject_id, sscore_standardized) |>
@@ -85,9 +90,9 @@ admc.dr_dat <- admc |>
               summarize(.by = subject_id,
                         sscore = mean(sscore_standardized)),
             by = "subject_id") |>
-  select(subject_id, admc_id, score, sscore)
+  select(subject_id, admc_id, score, sscore, n_correct_options)
 
-dir.create(here::here("Data", "ADMC Decision Rules"))
+if (!dir.exists(here::here("Data", "ADMC Decision Rules"))) dir.create(here::here("Data", "ADMC Decision Rules"))
 saveRDS(admc.dr_dat, here::here("Data", "ADMC Decision Rules", "admc.dr_dat.rds"))
 ```
 
