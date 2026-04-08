@@ -420,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Time of LASSO test: 16.27 minutes.</p>
+<p>Time of LASSO test: 16.31 minutes.</p>
 </section>
 <section id="lasso-tuning" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="lasso-tuning">LASSO Tuning</h3>
@@ -540,7 +540,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Time of tuned LASSO test: 20.99 minutes.</p>
+<p>Time of tuned LASSO test: 21.66 minutes.</p>
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lasso_estimates <span class="sc">|&gt;</span></span>
@@ -619,7 +619,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">cor =</span> <span class="fu">cor</span>(importance_notuning, importance_tuning, <span class="at">use =</span> <span class="st">"complete"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Looks like more items included for the tuned model. Relatively similar top items. Correlation between estimates including all the zeros is 0.367971 and without all the zeros (dropping those items) is 0.4685225.</p>
+<p>Looks like more items included for the tuned model. Relatively similar top items. Correlation between estimates including all the zeros is 0.5442897 and without all the zeros (dropping those items) is 0.8265207.</p>
 
 
 </section>
