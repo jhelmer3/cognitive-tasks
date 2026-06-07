@@ -11,37 +11,38 @@
             tasks: 
             [
               { 
+			          task_name: 'bayesian_update', 
+			          custom_task_settings: 
+			          {
+				          task_version: 'easy',
+				          ball_splits: [[30, 70]],
+				          unique_test_trials_n: 2,
+				          test_trials_n: 10,
+				          test_trials_per_block: 10,
+				          test_blocks: 1,
+				          pt_trials_n: 5,
+				          pt_trials_per_block: 5,
+				          pt_blocks: 1,
+			           } 
+		          },
+		            
+			        { 
                 task_name: 'time_series',
                 custom_task_settings: 
                 {
 				          FUNCTIONS: ['linear'],
 				          DIRECTIONS: ['negative'],
 				          datapoints: ['datapoints_30'],
+				          NOISE: { low: 1.9, high: 6.2 },
 				          test_trials_n: 2,
 				          test_trials_per_block: 2,
 				          test_blocks: 1,
 				          pt_trials_n: 2,
 				          pt_trials_per_block: 2,
 				          pt_blocks: 1,
-				          }
-              },
-              
-              { 
-			          task_name: 'denominator_neglect', 
-			          custom_task_settings: 
-			          {
-				          task_version: 'B',
-				          small_lottery_gold_coin_props: [0.2, 0.3],
-				          large_lottery_gold_coin_prop_range_diff: [0.08],
-				          pt_trials_n: 4,
-				          pt_trials_per_block: 4,
-				          pt_blocks: 1,
-				          test_trials_n: 4,
-				          test_trials_per_block: 4,
-				          test_blocks: 1,
-				          }
-			          }
-              ]
+				        }
+              }
+            ]
         };
         const fpt_battery = initFPTBattery(config);
         fpt_battery.run();

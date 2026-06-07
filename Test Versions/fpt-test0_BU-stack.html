@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Experiment</title>
+        <script src="https://unpkg.com/fpt-battery@latest"></script>
+        <link rel="stylesheet" href="https://unpkg.com/fpt-battery@latest/dist/fpt-battery.css" />
+    </head>
+    <body></body>
+    <script>
+        import initFPTBattery from '../src/index.js';
+        import { BayesianUpdate, task_registry } from '../src/tasks/index.js';
+        
+        class TrimmedBayesianUpdate extends BayesianUpdate {
+        	constructor(name, media_basepath, jsPsych, custom_task_settings) {
+        		super(name, media_basepath, jsPsych, custom_task_settings);
+        		const dropSpecs = custom_task_settings.drop_unique_trials_with_ball_splits || [];
+        		if (dropSpecs.length > 0) {
+        			this._drop_unique_trials(dropSpecs);
+        		}
+        		this._log_ball_split_distribution();
+        	}
+        
+        	_log_ball_split_distribution() {
+        		const seenUnique = new Set();
+        		const countsBySplit = {};
+        		for (const blockKey of Object.keys(this.task_data.test_trials)) {
+        			for (const trialKey of Object.keys(this.task_data.test_trials[blockKey])) {
+        				const t = this.task_data.test_trials[blockKey][trialKey];
+        				if (seenUnique.has(t.unique_trial)) continue;
+        				seenUnique.add(t.unique_trial);
+        				const key = `[${t.ball_split[0]}, ${t.ball_split[1]}]`;
+        				countsBySplit[key] = (countsBySplit[key] || 0) + 1;
+        			}
+        		}
+        		console.log(
+        			`%c[BayesianUpdate] final test-trial ball_split distribution (unique trials):`,
+        			'font-weight: bold; color: #0a7; font-size: 13px;',
+        			countsBySplit,
+        			`(total unique = ${seenUnique.size}, total draws = ${this.settings.test_trials_n})`
+        		);
+        	}
+        
+        	_drop_unique_trials(dropSpecs) {
+        		const blockKeys = Object.keys(this.task_data.test_trials).sort();
+        
+        		// Pass 1: pick one unique_trial index per drop spec. get_task_data() has
+        		// already shuffled splits across unique trials, so first-match is random.
+        		const dropUniqueTrialIndices = new Set();
+        		for (const drop of dropSpecs) {
+        			let matched = false;
+        			for (const blockKey of blockKeys) {
+        				for (const trialKey of Object.keys(this.task_data.test_trials[blockKey])) {
+        					const t = this.task_data.test_trials[blockKey][trialKey];
+        					if (dropUniqueTrialIndices.has(t.unique_trial)) continue;
+        					if (t.ball_split[0] === drop[0] && t.ball_split[1] === drop[1]) {
+        						dropUniqueTrialIndices.add(t.unique_trial);
+        						matched = true;
+        						break;
+        					}
+        				}
+        				if (matched) break;
+        			}
+        			if (!matched) {
+        				console.warn(
+        					`[TrimmedBayesianUpdate] No unmatched unique trial with ball_split [${drop}] found to drop.`
+        				);
+        			}
+        		}
+        
+        		// Pass 2: delete every trial belonging to a dropped unique_trial.
+        		for (const blockKey of blockKeys) {
+        			for (const trialKey of Object.keys(this.task_data.test_trials[blockKey])) {
+        				if (dropUniqueTrialIndices.has(this.task_data.test_trials[blockKey][trialKey].unique_trial)) {
+        					delete this.task_data.test_trials[blockKey][trialKey];
+        				}
+        			}
+        		}
+        
+        		// Pass 3: re-index `trial` and `unique_trial` contiguously so the end-of-task
+        		// message check (data.trial === test_trials_n - 1) still fires.
+        		let newTrialInd = 0;
+        		const oldToNewUnique = new Map();
+        		let nextNewUnique = 0;
+        		for (const blockKey of blockKeys) {
+        			for (const trialKey of Object.keys(this.task_data.test_trials[blockKey])) {
+        				const t = this.task_data.test_trials[blockKey][trialKey];
+        				t.trial = newTrialInd++;
+        				if (!oldToNewUnique.has(t.unique_trial)) {
+        					oldToNewUnique.set(t.unique_trial, nextNewUnique++);
+        				}
+        				t.unique_trial = oldToNewUnique.get(t.unique_trial);
+        			}
+        		}
+        		this.settings.test_trials_n = newTrialInd;
+        	}
+        }
+        
+        task_registry.bayesian_update = TrimmedBayesianUpdate;
+        
+        const config = {
+        	tasks: [
+        		{
+        			task_name: 'bayesian_update',
+        			custom_task_settings: {
+        				task_version: 'easy',
+        				ball_splits: [[40, 60], [30, 70]],
+        				unique_test_trials_n: 6,                            // symmetric 3 + 3 produced first
+        				drop_unique_trials_with_ball_splits: [[30, 70]],    // then drop one [30,70] -> 3 + 2
+        				test_trials_n: 30,
+        				test_trials_per_block: 30,
+        				test_blocks: 1,
+        				pt_trials_n: 5,
+        				pt_trials_per_block: 5,
+        				pt_blocks: 1,
+        			}
+        		},
+        	],
+        	disable_progressbar: false,
+        	media_basepath: './assets/',
+        	skip_intro_trials: true,
+        	data_saving: {},
+        };
+        
+        const fpt_battery = initFPTBattery(config);
+        fpt_battery.run();
+    </script>
+</html>

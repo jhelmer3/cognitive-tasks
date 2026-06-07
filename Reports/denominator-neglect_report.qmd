@@ -21,6 +21,9 @@ knitr:
 library(tidyverse)
 library(rstan)
 
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
+
+
 options(mc.cores = parallel::detectCores())
 ```
 

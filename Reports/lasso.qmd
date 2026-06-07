@@ -25,6 +25,8 @@ knitr:
 library(tidyverse)
 library(tidymodels)
 library(vip)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -66,7 +68,7 @@ v5_dat_wide <- v5_dat |>
 
 ```{r}
 #| message: false
-set.seed(1234)
+set.seed(12345)
 
 # splitting data
 v5_dat_split <- initial_split(v5_dat_wide)
@@ -118,7 +120,6 @@ lasso_estimates |>
   coord_cartesian(xlim = c(0, 0.1)) +
   labs(x = "Absolute Estimate", y = NULL, color = "Task",
        title = "Non-Zero Estimates") +
-  theme_classic() +
   theme(aspect.ratio = 3)
 ```
 
@@ -147,19 +148,27 @@ tune_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
 ```
 
 ```{r}
-#| eval: false
+#| eval: true
 set.seed(1234)
+
+# splitting data
+v5_dat_split <- initial_split(v5_dat_wide)
+
+v5_dat_train <- training(v5_dat_split)
+v5_dat_test <- testing(v5_dat_split)
+
+
 v5_dat_boot <- bootstraps(v5_dat_train)
 
 lambda_grid <- grid_regular(penalty(), levels = 50)
 
 doParallel::registerDoParallel()
 
-set.seed(2020)
 lasso_grid <- tune_grid(
   wf %>% add_model(tune_spec),
   resamples = v5_dat_boot,
-  grid = lambda_grid
+  grid = lambda_grid,
+  metrics = metric_set(rmse)
 )
 
 saveRDS(lasso_grid, here::here("Data", "lasso-estimates_tuning.rds"))
@@ -179,7 +188,6 @@ lasso_grid %>%
   geom_line(linewidth = 1.5, na.rm = T) +
   facet_wrap(~.metric, scales = "free", nrow = 2) +
   scale_x_log10() +
-  theme_classic() +
   theme(legend.position = "none")
 ```
 
@@ -192,16 +200,17 @@ final_lasso <- finalize_workflow(
   lowest_rmse
 )
 
-final_lasso %>%
+fit_parsnip <- final_lasso %>%
   fit(v5_dat_train) %>%
-  extract_fit_parsnip() %>%
-  vi() |>
+  extract_fit_parsnip()
+
+vis <- fit_parsnip %>%
+  vi(lambda = lowest_rmse$penalty)
+
+vis |>
   saveRDS(here::here("Data", "lasso_regression.rds"))
 
-final_lasso %>%
-  fit(v5_dat_train) %>%
-  extract_fit_parsnip() %>%
-  vi(lambda = lowest_rmse$penalty) %>%
+vis %>%
   filter_out(Importance == 0) |>
   mutate(task = str_split_i(Variable, "_", 1)) |>
   mutate(
@@ -214,14 +223,11 @@ final_lasso %>%
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
-  theme_classic() +
   theme(aspect.ratio = 3)
 ```
 
 ```{r}
-lasso_tuned_test_time <- final_lasso %>%
-  fit(v5_dat_train) %>%
-  extract_fit_parsnip() |> 
+lasso_tuned_test_time <- fit_parsnip |> 
   tidy() |>
   filter(estimate != 0 & term != "(Intercept)") |>
   mutate(task = str_split_i(term, "_", 1)) |>
@@ -238,6 +244,7 @@ Time of tuned LASSO test: `r lasso_tuned_test_time |> round(2)` minutes.
 
 ```{r}
 #| layout-ncol: 2
+#| fig-height: 6
 lasso_estimates |>
   filter(estimate != 0 & term != "(Intercept)") |>
   mutate(task = str_split_i(term, "_", 1)) |>
@@ -249,13 +256,9 @@ lasso_estimates |>
   coord_cartesian(xlim = c(0, 0.1)) +
   labs(x = "Absolute Estimate", y = NULL, color = "Task",
        title = "No Tuning") +
-  theme_classic() +
   theme(aspect.ratio = 3)
 
-final_lasso %>%
-  fit(v5_dat_train) %>%
-  extract_fit_parsnip() %>%
-  vi(lambda = lowest_rmse$penalty) %>%
+vis %>%
   filter_out(Importance == 0) |>
   mutate(task = str_split_i(Variable, "_", 1)) |>
   mutate(
@@ -268,7 +271,6 @@ final_lasso %>%
   annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
   scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
   coord_cartesian(xlim = c(0, 0.1)) +
-  theme_classic() +
   theme(aspect.ratio = 3)
 ```
 

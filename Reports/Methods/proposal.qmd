@@ -1,0 +1,97 @@
+---
+title: "Proposal"
+format:
+  html:
+    code-fold: true
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+library(gt)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
+```
+
+#### Reading
+```{r}
+#| code-fold: show
+v5_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "v5_r2_w_time.rds"))
+xgb_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "xgb_r2_w_time.rds"))
+lasso_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "lasso_r2_w_time.rds"))
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+source(here::here("Scripts", "get_startup.R"))
+```
+
+#### Cleaning
+```{r}
+
+```
+:::
+
+## Introduction
+
+Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events. Previous forecaster talent-spotting was done through months-long forecasting tournament, including IARPA's Aggregative Contingent Estimation tournament. The development of the recent Forecasting Proficiency Test (FPT) moved the goalpost in forecaster skill measurement, creating a 60 minute test that could capture over 70% of the variation in forecaster accuracy.
+
+The development of the FPT included the administration of a large battery of cognitive tasks to over 1,000 participants. Selection of tasks to be included in the final FPT versions was based on tasks' sum scores, meaning variation of the informativeness of individual items within tasks remains unexplored. This project aims to better understand whether certain cognitive tasks are generally informative about forecasting ability or whether these tasks contain uniquely informative items, with the overall goal of creating a shorter version of the FPT, ideally able to be administered in about 15 minutes, that can still provide a high level of information about forecaster skill. We will create three versions of this shorter test and compare each of their relationships with forecasting skill to each other as well as to the original version of the FPT.
+
+
+## Methods
+
+### Candidate Test Creation
+
+We used three different methods to identify candidate tests for these new FPT versions. We used a search algorithm, LASSO regression, and the xgboost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores.
+
+#### Search Algorithm
+
+The first method we used to rank most informative items was with a search algorithm. This algorithm worked by going through all items and identifying the item that, when added to a "test" of previously-added items, yields the most $\frac{\text{added }R^2}{\text{added time}}$, the numerator being the increase in the $R^2$ of a model of the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy to the $R^2$ of a model of sum scores just of the previously selected test items. The algorithm repeated this until all items had been added to the test. We then examined the $R^2$ of the test as it grew in items with the search algorithm.
+
+```{r}
+#| column: margin
+#| fig-cap: "Results of the search algorithm method"
+v5_r2_w_time |>
+  mutate(task = str_split_i(item, "_", 1)) |>
+  ggplot(aes(x = cum_time, y = test_r2)) +
+  geom_line() +
+  geom_point(aes(color = task)) +
+  coord_cartesian(ylim = c(.1, .5)) +
+  labs(title = "Search Algorithm", y = "R<sup>2</sup>", x = "Time") +
+  theme(axis.title.y = ggtext::element_markdown())
+```
+
+
+
+#### LASSO Regression
+
+#### xgboost
+
+### Testing the Tests
+
+These candidate tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as forecasting accuracy in three arms.
+
+We will collect data participants on Prolific.
+
+
+## Analysis
+
+We will compare the correlations between tests and forecasting scores. 
+
+
+
+
+
+
+
+
+
+
+

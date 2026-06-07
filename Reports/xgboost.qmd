@@ -27,6 +27,8 @@ library(tidyverse)
 library(tidymodels)
 library(finetune)
 library(vip)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -69,6 +71,8 @@ v5_dat_wide <- v5_dat |>
 Splitting data into train and test.
 
 ```{r}
+set.seed(234)
+
 v5_dat_split <- v5_dat_wide |>
   select(-subject_id) |>
   initial_split()
@@ -91,12 +95,13 @@ Specifying hyperparameters and which are going to be tuned.
 ```{r}
 xgb_spec <- boost_tree(
     trees = 1000,
+    stop_iter = 20,
     tree_depth = tune(),
     min_n = tune(),
     mtry = tune(),
     sample_size = tune(),
     learn_rate = tune()
-  ) %>%
+  ) |>
   set_engine("xgboost") |>
   set_mode("regression")
 
@@ -112,7 +117,7 @@ Defining grid of candidate hyperparameter combinations.
 xgb_grid <- grid_space_filling(
     tree_depth(c(5L, 10L)),
     min_n(c(1L, 40L)),
-    mtry(c(1L, 90L)),
+    mtry(c(1L, floor(ncol(v5_dat_train) / 3))),
     sample_prop(c(0.5, 1.0)),
     learn_rate(c(-3, -1)),
     size = 100)
@@ -126,7 +131,6 @@ Five-fold cross-validation for tuning.
 #| eval: false
 doParallel::registerDoParallel()
 
-set.seed(234)
 xgb_rs <- tune_race_anova(
     xgb_wf,
     v5_dat_folds,
@@ -141,9 +145,9 @@ saveRDS(xgb_rs, here::here("Data", "xgboost", "xgb_rs.rds"))
 #| column: margin
 xgb_rs <- readRDS(here::here("Data", "xgboost", "xgb_rs.rds"))
 
-plot_race(xgb_rs) +
-  theme_classic(base_size = 20)
+plot_race(xgb_rs) 
 ```
+
 Highest-performing hyperparameter combinations
 
 ```{r}
@@ -153,9 +157,8 @@ show_best(xgb_rs, metric = "rmse")
 ### Fitting Final Model
 
 ```{r}
-xgb_last <-
-  xgb_wf %>%
-  finalize_workflow(select_best(xgb_rs, metric = "rmse")) %>%
+xgb_last <- xgb_wf |>
+  finalize_workflow(select_best(xgb_rs, metric = "rmse")) |>
   last_fit(v5_dat_split)
 ```
 
@@ -163,18 +166,48 @@ Importance of items
 
 ```{r}
 #| fig-height: 16
-extract_workflow(xgb_last) %>%
-  extract_fit_parsnip() |>
-  vi() |>
+# vis <- extract_workflow(xgb_last) |>
+#   extract_fit_parsnip() |>
+#   vi(method = "shap", train = bake(prep(v5_dat_recipe), v5_dat_train))
+# 
+# vis |>
+#   saveRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
+# 
+# vis |>
+#   slice_max(Importance, n = 100) |>
+#   mutate(Variable = fct_reorder(Variable, Importance)) |>
+#   ggplot(aes(x = Importance, y = Variable)) +
+#   geom_point() +
+#   theme(aspect.ratio = 4,
+#         panel.grid.major.x = element_line(linewidth = 0.2))
+
+
+xgb_fit <- extract_workflow(xgb_last) |> extract_fit_engine()
+X <- bake(prep(v5_dat_recipe), v5_dat_train) |> select(-sscore) |> as.matrix()
+
+shp <- shapviz::shapviz(xgb_fit, X_pred = X)
+#shapviz::sv_importance(shp, kind = "bar")
+
+item_importance <- shp |>
+  shapviz::get_shap_values() |>
+  as_tibble() |>
+  summarize(across(everything(), \(x) mean(abs(x)))) |>
+  pivot_longer(everything(), names_to = "Variable", values_to = "Importance") |>
+  mutate(task = str_split_i(Variable, "_", 1)) |>
+  mutate(Importance = abs(Importance),
+         Variable = fct_reorder(Variable, Importance)) 
+  
+item_importance |>
   saveRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
 
-
-extract_workflow(xgb_last) %>%
-  extract_fit_parsnip() %>%
-  vip(geom = "point", num_features = 100) +
-  theme_classic(base_size = 16) +
-  theme(aspect.ratio = 4,
-        panel.grid.major.x = element_line(linewidth = 0.2))
+item_importance |>
+  ggplot(aes(x = Importance, y = Variable, color = task)) +
+  geom_point() +
+  labs(y = NULL, color = "Task", title = "Tuning", x = "Absolute Estimate") +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  theme(aspect.ratio = 3)
 ```
 
 

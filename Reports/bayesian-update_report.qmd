@@ -21,6 +21,8 @@ knitr:
 #| message: false
 #| code-fold: show
 library(tidyverse)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -189,11 +191,11 @@ anchor_ids_h <- anchoraig_full %>%
   filter(task == "bayesian_update_hard" & AIG_version == "anchor") |>
   pull(session_id)
 
-bu_full %>%
-  filter(session_id %in% anchor_ids_h & version == "hard") |>
-  summarize(.by = trial,
-            ball_split = unique(ball_split),
-            draw = unique(current_draw))
+# bu_full %>%
+#   filter(session_id %in% anchor_ids_h & version == "hard") |>
+#   summarize(.by = trial,
+#             ball_split = unique(ball_split),
+#             draw = unique(current_draw))
 
 ```
 
@@ -225,7 +227,6 @@ bu_dat_e |>
              x = Inf, y = Inf, hjust = 1, vjust = 1) +
   labs(y = "S-Score", x = "Bayesian Update") +
   guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() +
   theme(aspect.ratio = 1)
 ```
 
@@ -254,8 +255,7 @@ bu_cors |>
   scale_y_continuous(breaks = c(.2, .4, .6)) +
   coord_cartesian(ylim = c(.2, .6)) +
   labs(y = "Correlation with S-Score", x = "Number of Items") +
-  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() 
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) 
 ```
 
 ## Correlations Between Bayesian Update and S-Score Residuals
@@ -307,7 +307,6 @@ bu_dat_e |>
              x = Inf, y = Inf, hjust = 1, vjust = 1) +
   labs(y = "S-Score Residuals", x = "Bayesian Update") +
   guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() +
   theme(aspect.ratio = 1)
 ```
 
@@ -339,8 +338,7 @@ bu_cors_postdn |>
   coord_cartesian(ylim = c(.2, .4)) +
   labs(y = "Correlation with S-Score Residuals", x = "Number of Items",
        caption = "Top five Denominator Neglect items\nresidualized out of s-scores") +
-  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() 
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both"))
 ```
 
 ### $R^2$ Post-DN and BN
@@ -374,8 +372,7 @@ bu_r2 |>
   coord_cartesian(ylim = c(.2, .4)) +
   labs(y = "R^2", x = "Number of BU Items",
        caption = "Top five Denominator Neglect items included in model") +
-  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() 
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both"))
 ```
 
 

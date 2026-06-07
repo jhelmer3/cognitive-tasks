@@ -19,6 +19,9 @@ knitr:
 ```{r}
 #| message: false
 library(tidyverse)
+
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
+
 ```
 
 
@@ -53,9 +56,7 @@ readRDS(here::here("Data", "Raven", "rav_1_12_18.rds")) |>
   coord_cartesian(ylim = c(.3, .7)) +
   labs(y = "Correlation with S-Scores", x = "Number of Items") +
   guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic() +
-  theme(strip.background = element_blank(),
-        strip.text = element_text(color = "slategray",
+  theme(strip.text = element_text(color = "slategray",
                                   face = "bold", size = 16))
 ```
 
@@ -80,8 +81,7 @@ Displayed below are the results across all lists of raven matrices. There seems 
               alpha = .1, fill = "slategray") +
   coord_cartesian(ylim = c(.1, .8)) +
   labs(y = "Correlation with S-Scores", x = "Number of Items") +
-  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both")) +
-  theme_classic()) |>
+  guides(x = guide_axis(cap = "both"), y = guide_axis(cap = "both"))) |>
   plotly::ggplotly()
 
 ```

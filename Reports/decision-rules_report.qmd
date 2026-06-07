@@ -24,6 +24,8 @@ options(scipen=999)
 library(tidyverse)
 library(rstan)
 
+set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
+
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = T)
 ```
@@ -154,7 +156,6 @@ irc <- ps %>%
   coord_cartesian(xlim = c(-5, 5), ylim = c(0, 1)) +
   facet_wrap(~ fct_inorder(item), nrow = 2) +
   labs(y = "P(Y = 1 | ϴ)", x = "ϴ") +
-  theme_classic(base_size = 14) +
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())
 
@@ -184,7 +185,6 @@ ic <- ps %>%
   coord_cartesian(xlim = c(-5, 5), ylim = c(0, 1.5)) +
   facet_wrap(~ fct_inorder(item), nrow = 2) +
   labs(y = "Item I(ϴ)", x = "ϴ") +
-  theme_classic(base_size = 14) +
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())
 
@@ -213,7 +213,6 @@ tic <- ps %>%
   scale_x_continuous(breaks = c(-4, 0, 4)) +
   coord_cartesian(xlim = c(-5, 5), ylim = c(0, 6)) +
   labs(y = "Test I(ϴ)", x = "ϴ") +
-  theme_classic(base_size = 14) +
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())
 

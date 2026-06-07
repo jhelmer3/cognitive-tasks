@@ -170,7 +170,7 @@ walk(methods, \(x) ranks |>
 :::: {.columns .column-page}
 ::: {.column width="33%"}
 ```{r}
-#| eval: false
+#| eval: true
 v5_r2_w_time <- map(1:99,
     \(i) {
       included_items <- v5_ranks_w_timing |>
@@ -200,7 +200,7 @@ saveRDS(v5_r2_w_time, here::here("Data", "Method Comparison", "v5_r2_w_time.rds"
 
 ::: {.column width="33%"}
 ```{r}
-#| eval: false
+#| eval: true
 xgb_r2_w_time <- map(1:99,
     \(i) {
       included_items <- xgb_ranks_w_timing |>
@@ -230,7 +230,7 @@ saveRDS(xgb_r2_w_time, here::here("Data", "Method Comparison", "xgb_r2_w_time.rd
 
 ::: {.column width="33%"}
 ```{r}
-#| eval: false
+#| eval: true
 lasso_r2_w_time <- map(1:99,
     \(i) {
       included_items <- lasso_ranks_w_timing |>
