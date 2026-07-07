@@ -1,6 +1,6 @@
 ---
 title: "Proposal"
-format:
+format: 
   html:
     code-fold: true
 ---
@@ -40,16 +40,82 @@ source(here::here("Scripts", "get_startup.R"))
 
 ## Introduction
 
-Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events. Previous forecaster talent-spotting was done through months-long forecasting tournament, including IARPA's Aggregative Contingent Estimation tournament. The development of the recent Forecasting Proficiency Test (FPT) moved the goalpost in forecaster skill measurement, creating a 60 minute test that could capture over 70% of the variation in forecaster accuracy.
+Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events. Previous forecaster talent-spotting took months, collecting data on forecasters accuracy throughout long forecasting tournaments including IARPA's Aggregative Contingent Estimation tournament. 
 
-The development of the FPT included the administration of a large battery of cognitive tasks to over 1,000 participants. Selection of tasks to be included in the final FPT versions was based on tasks' sum scores, meaning variation of the informativeness of individual items within tasks remains unexplored. This project aims to better understand whether certain cognitive tasks are generally informative about forecasting ability or whether these tasks contain uniquely informative items, with the overall goal of creating a shorter version of the FPT, ideally able to be administered in about 15 minutes, that can still provide a high level of information about forecaster skill. We will create three versions of this shorter test and compare each of their relationships with forecasting skill to each other as well as to the original version of the FPT.
+The development of the recent Forecasting Proficiency Test (FPT) moved the goalpost in forecaster skill measurement, creating a 60-minute test that can capture over 70% of the variation in forecaster accuracy. However, while certainly an improvement on the previous effort it took to measure people's forecasting ability, 60-minutes still remains a long time that may prevent otherwise interested parties from using the FPT, so, in this work, we aim to create a shorter, roughly 15-minute version of the FPT that decreases the time burden on examinees with minimal loss to measurement efficacy.
+
+### FPT Background
+
+The FPT is made up of a combination of forecasting items and cognitive tasks. Forecasting items were included because accuracy on previous forecasting items was the most predictive measure of forecasting ability compared to all other included measures. However, a test exclusively made up of forecasting items would not provide information on people's accuracy on those items until those items resolved, which is often weeks or months in the future. Therefore, the FPT also included cognitive measures that showed to be associated with forecasting ability.
+
+To develop the FPT, seven weeks of data was collected from over 1,000 participants on both a set of forecasts elicited on forecasting items across domains and on a large battery of cognitive tasks. Some of the cognitive tasks included had already been shown to be associated with forecasting ability, and some had not been examined in conjuction with a forecasting context before. To select cognitive tasks to include in the final FPT versions, sum scores were calculated for each participant on each task, and then associations between cognitive task scores and forecasting ability were examined. Multiple hour-long final FPT versions were created with different ratios of forecasting items to cognitive measures (balancing the best predictive ability of the forecasting items with the immediate scoreability of the cognitive measures), and the cognitive measures for each version were selected by identifying the set of cognitive tasks with the greatest association with forecasting ability that still fit into the allotted expected testing time for cognitive tasks for that FPT version.
+
+#### Current Benchmarks
+
+The cognitive tasks included in the all-cognitive-task version of the 60-minute FPT accounted for 54% of the variance in forecaster-level accuracy.
+
+#### Cognitive Measures in Question
+
+Overall, we currently only focus on the cognitive tasks that in the original FPT paper, showed strong enough associations to forecasting ability to be included in any of the FPT versions. 
+
+::: panel-tabset
+##### Denominator Neglect
+
+Denominator Neglect was overall the strongest performing tasks in the FPT. It is a binary choice task between lotteries two ratios of gold and silver coins, with the goal of maximizing the chance of picking a gold coin. Each choice had one lottery with a small denominator (10 coins) and one lottery with a large denominator (400 coins), intended to target the denominator negelect bias, the idea that people will discount the numerator size when the denominator size was large. 
+
+The task had multiple conditions within it. The first was whether the choice was in harmony with the denominator neglect bias (i.e., the larger-denominator ratio was also the larger lottery and therefore the correct choice) or in conflict with the denominator neglect bias (i.e., the larger-denominator ratio was in fact the smaller lottery). The task also varied in its presentation of the ratios: in the Separate version, the lotteries were shown in either text form (e.g., 3 gold coins out of 10) or in visual form (an array of three gold coins out of 10 gold coins). In a given choice pair, either lottery could be shown in either text or visual, such that some choices had one lottery text and one lottery visual, some had both text, and some had both visual. In the Combined version, all lotteries were presented in *both* text and array form.
+
+The lotteries also varied in the proportion of gold coins in the small-denominator lottery (1, 2, or 3 gold coins of 10) and in the offset between the proportion of gold coins in the small-denominator lottery and the proportion of gold coins in the large-denominator lottery. This offset ranged from 1% to 8% in increments of 1% where in conflict trials, the large lottery proportion was $$ \text{large denominator lottery prop} = \text{small lottery denominator prop} - \text{offset} $$ and in harmony trials, the large lottery proportion was $$ \text{large denominator lottery prop} = \text{small lottery denominator prop} + \text{offset} $$. This setup meant that the large lottery proportion could be as large as 38% gold coins in harmony trials and as small as 2% gold coins in conflict trials.
+
+##### Bayesian Update
+
+Describe
+
+Hard, Easy versions
+
+##### Adult Decision Making Competency: Decision Rules
+
+Describe
+
+##### Number Series
+
+Describe
+
+##### Coherence Forecasting Scale
+
+We did not include the Coherence Forecasting Scale (CFS) in this attempt to shorten the FPT. The CFS has multiple testlets with grouped scores, and we did not attempt to examine item-level scores from this measure.
+
+##### Matrix Reasoning
+
+We did not include Matrix Reasoning in this attempt to shorten the FPT. The items were grouped into lists, with most lists having different items from all other lists but some lists having 1--2 items cross between lists. Participants each only saw one list. Because of this complexity and the lack of shared items among participants, we did not attempt to examine item-level scores from this measure.
+:::
+
+### Potential Improvement
+
+Because the selection of tasks for the FPT was done by examining task sum scores' association with forecasting ability, variation of the informativeness of individual items within tasks towards forecasting ability remains unexplored. By identifying if some items within tasks are more informative than others, we may be able to reduce the amount of items administered to an examinee while still maintaining good predictive ability of forecasting ability. 
+
+#### Some Differences and Challenges
+
+One interesting difference between this project and most psychometric work is that in most psychometric work, items are administered in a test aimed to capture some latent construct. Here, the cognitive tasks administered are not even necessarily intending to directly measure forecasting ability. So our primary interest is not in the cognitive tasks' ability to measure their intended cognitive construct themselves, but instead in the items' that have strong ability to capture their intended construct and also measure a construct that has a strong relationship with forecasting ability itself. In this work, we already have a measure of our intended construct (forecasting ability), and we want to identify items within tasks that have strong associations with that measured construct. What common models like the 2PL here offer is the information about the items measuring the latent construct, but not (directly) the construct's association with forecasting ability.
+
+Another challenge here is that many of the cognitive measures have different outcome scales. For example, some follow a binary correct-incorrect pattern (e.g., Denominator Neglect, Decision Rules), while others are scored as a continuous distance from the correct response (e.g., Bayesian Update, Time Series).
+
+### Objective
+
+Overall, our goal for this project is to create a shorter version of the FPT, ideally able to be administered in about 15 minutes, that can still provide a high level of information about forecaster skill. To do this, we will create three versions of this shorter test through different methods and compare each of the 15-minute tests' relationships with forecasting skill to each other as well as to the original 60-minute version of the FPT.
 
 
 ## Methods
 
 ### Candidate Test Creation
 
-We used three different methods to identify candidate tests for these new FPT versions. We used a search algorithm, LASSO regression, and the xgboost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores.
+We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all included items in terms of their usefulness in predicting forecasting ability. Then, in order of their ranks, we selected as many items as we could to create a test that would still be expected to take under 15 minutes to complete.
+
+The methods we used are a greedy search algorithm, elastic net regression, and the xgboost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores. 
+
+#### Outcome: Forecasting Ability
+
+As our outcome and target indicator of forecasting accuracy, we used data from the forecasts participants in the FPT development study. This was data on 36 forecasting items elicited in the quantile format on topics across domains. These forecasts were scored against the outcome with the s-score, and participants' mean forecast accuracy was used as our outcome indicator of interest to represent forecasting ability.
 
 #### Search Algorithm
 
@@ -69,16 +135,31 @@ v5_r2_w_time |>
 ```
 
 
+#### Ridge Regression
 
-#### LASSO Regression
+The next method we used to select items was ridge regression. We examined the performance of the ridge, elastic net, and lasso family of methods, where elastic net blends LASSO regression and ridge regression by letting a mixture paramter define the weight given to the penalty terms used by each method (Zou and Hastie, 2005). We compared the performance of elastic net (where elastic net was able to tune its mixture parameter between .05 and .95), LASSO, and ridge regression by tuning each on a training set of the data and examining their fit statistics on the testing set. 
+
+```{r}
+readRDS(here::here("Figures", "regression_comparison_tbl.rds"))
+```
+
+Ridge regression showed the strongest out-of-sample fit on all of Root Mean Squared Error, $R^2$, and Mean Absolute Error, so we proceeded with ridge regression. 
 
 #### xgboost
 
+The third method we used to select items was the xgboost algorithm. xgboost is a high-performing ensemble decision tree algorithm. Decision tree algorithms work by finding a cut point with predictors that maximizes the variance in the outcome on either side of the cut point. xgboost creates many trees, and the proportion of times that a given predictor appears in the trees is an indicator of its relative importance in explaining variance in the outcome. It differs from typcal random forest algorithms in that the trees it builds are not fully independent: they learn and adapt based on already-existing trees.
+
 ### Testing the Tests
 
-These candidate tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as forecasting accuracy in three arms.
+These candidate tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as forecasting accuracy in four arms.
 
-We will collect data participants on Prolific.
+Each arm will contain three components: the cognitive test of interest, six forecasting items, and some cognitive tests not included in the tests of interest to serve as anchor items across participants. 
+
+The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or xgboost, or it will be the (which regular FPT version? the one with six forecasting items?).
+
+The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test. 
+
+We will collect data from participants on Prolific, and participants will be randomized into one of the four arms.
 
 
 ## Analysis

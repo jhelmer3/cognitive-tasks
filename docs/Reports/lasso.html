@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-06-18">
+<meta name="dcterms.date" content="2026-07-07">
 
 <title>LASSO Regression – Cognitive Task Modeling</title>
 <style>
@@ -219,6 +219,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../Reports/Methods/method-comparison.html">
  <span class="dropdown-text">Method Comparison</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../Reports/Methods/proposal.html">
+ <span class="dropdown-text">Proposal</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -256,6 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#elastic-net-tuning-1" id="toc-elastic-net-tuning-1" class="nav-link" data-scroll-target="#elastic-net-tuning-1">Elastic Net Tuning</a></li>
   </ul></li>
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression">Ridge Regression</a></li>
   <li><a href="#test-data-fit-comparison" id="toc-test-data-fit-comparison" class="nav-link" data-scroll-target="#test-data-fit-comparison">Test Data Fit Comparison</a></li>
   </ul>
 </nav>
@@ -282,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 18, 2026</p>
+      <p class="date">July 7, 2026</p>
     </div>
   </div>
   
@@ -589,20 +594,6 @@ No Tuning Models
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(lasso_grid, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"lasso-estimates_tuning.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<!-- ```{r} -->
-<!-- #| column: margin -->
-<!-- # lasso_grid |> -->
-<!-- #   collect_metrics() |> -->
-<!-- #   ggplot(aes(penalty, mean, color = .metric)) + -->
-<!-- #   geom_errorbar(aes( -->
-<!-- #     ymin = mean - std_err, -->
-<!-- #     ymax = mean + std_err), -->
-<!-- #   alpha = 0.5) + -->
-<!-- #   geom_line(linewidth = 1.5, na.rm = T) + -->
-<!-- #   facet_wrap(~.metric, scales = "free", nrow = 2) + -->
-<!-- #   scale_x_log10() + -->
-<!-- #   theme(legend.position = "none") -->
-<!-- ``` -->
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1030,7 +1021,7 @@ No Tuning Models
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># v5_dat_boot &lt;- bootstraps(v5_dat_train)</span></span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>lambda_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">penalty</span>(), <span class="at">levels =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">mixture =</span> <span class="fu">seq</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>))</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">mixture =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="fl">0.15</span>))</span>
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
@@ -1121,69 +1112,182 @@ No Tuning Models
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Time of further-tuned elastic net test: 23.94 minutes.</p>
+<p>Time of further-tuned elastic net test: 29.02 minutes.</p>
 </section>
+</section>
+<section id="ridge-regression" class="level2">
+<h2 class="anchored" data-anchor-id="ridge-regression">Ridge Regression</h2>
+<p>Tuning the <code>penalty</code> argument.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tune penalty instead of fixing it</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mixture = 0 for ridge</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ridge_tune_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>lambda_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">penalty</span>(), <span class="at">levels =</span> <span class="dv">50</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ridge_grid <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  wf <span class="sc">|&gt;</span> <span class="fu">add_model</span>(ridge_tune_spec),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> v5_dat_boot,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> lambda_grid,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">metric_set</span>(rmse)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ridge_grid, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"ridge-estimates_tuning.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ridge_grid <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"ridge-estimates_tuning.rds"</span>))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>lowest_rmse <span class="ot">&lt;-</span> ridge_grid <span class="sc">|&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_best</span>(<span class="at">metric =</span> <span class="st">"rmse"</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>final_ridge <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  wf <span class="sc">|&gt;</span> <span class="fu">add_model</span>(ridge_tune_spec),</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  lowest_rmse</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(final_ridge, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"ridge_final-recipe"</span>))</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>fit_parsnip <span class="ot">&lt;-</span> final_ridge <span class="sc">|&gt;</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(v5_dat_train) <span class="sc">|&gt;</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_parsnip</span>()</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>vis <span class="ot">&lt;-</span> fit_parsnip <span class="sc">|&gt;</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vi</span>(<span class="at">lambda =</span> lowest_rmse<span class="sc">$</span>penalty)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>vis <span class="sc">|&gt;</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, <span class="st">"ridge_regression.rds"</span>))</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>vis <span class="sc">|&gt;</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_out</span>(Importance <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(Variable, <span class="st">"_"</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Importance =</span> <span class="fu">abs</span>(Importance),</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">fct_reorder</span>(Variable, Importance)</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Importance, <span class="at">y =</span> Variable, <span class="at">color =</span> task)) <span class="sc">+</span></span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">color =</span> <span class="st">"Task"</span>, <span class="at">title =</span> <span class="st">"Non-Zero Estimates"</span>, <span class="at">x =</span> <span class="st">"Absolute Estimate"</span>) <span class="sc">+</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"segment"</span>, <span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">yend =</span> <span class="cn">Inf</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="lasso_files/figure-html/unnamed-chunk-32-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="lasso_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ridge_tuned_test_time <span class="ot">&lt;-</span> fit_parsnip <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(estimate <span class="sc">!=</span> <span class="dv">0</span> <span class="sc">&amp;</span> term <span class="sc">!=</span> <span class="st">"(Intercept)"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">task =</span> <span class="fu">str_split_i</span>(term, <span class="st">"_"</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(v5_dat <span class="sc">|&gt;</span> <span class="fu">select</span>(item, time) <span class="sc">|&gt;</span> <span class="fu">unique</span>(),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">join_by</span>(<span class="st">"term"</span> <span class="sc">==</span> <span class="st">"item"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> task,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">time =</span> <span class="fu">sum</span>(time) <span class="sc">+</span> <span class="fu">get_startup</span>(<span class="fu">first</span>(task))) <span class="sc">|&gt;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">time =</span> <span class="fu">sum</span>(time)) <span class="sc">|&gt;</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Time of tuned ridge regression test: 34.46 minutes.</p>
 </section>
 <section id="test-data-fit-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="test-data-fit-comparison">Test Data Fit Comparison</h2>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fit_statistics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lasso_final-recipe"</span>, <span class="st">"elastic-net_final-recipe"</span>, <span class="st">"elastic-net_more-tuning_final-recipe"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(type) here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, type) <span class="sc">|&gt;</span> </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">readRDS</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">last_fit</span>(v5_dat_split, <span class="at">metrics =</span> <span class="fu">metric_set</span>(rmse, rsq, mae)) <span class="sc">|&gt;</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">method =</span> type <span class="sc">|&gt;</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_remove</span>(<span class="st">"_final-recipe"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_replace_all</span>(<span class="st">"_|-"</span>, <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_to_title</span>(),</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">.before =</span> <span class="fu">everything</span>())) <span class="sc">|&gt;</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(method, <span class="at">metric =</span> .metric, <span class="at">estimate =</span> .estimate) <span class="sc">|&gt;</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> metric, <span class="at">values_from =</span> estimate)</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>fit_stat_cols <span class="ot">&lt;-</span> fit_statistics <span class="sc">|&gt;</span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>method) <span class="sc">|&gt;</span> </span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  fit_stat_cols,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  \(col) <span class="fu">list</span>(<span class="at">col =</span> col, <span class="at">idx =</span> <span class="fu">which</span>(fit_statistics[[col]] <span class="sc">==</span> <span class="fu">min</span>(fit_statistics[[col]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keep</span>(\(x) <span class="fu">length</span>(x<span class="sc">$</span>idx) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reduce</span>(</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    \(tbl, x) <span class="fu">tab_style</span>(</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>      tbl,</span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#e2eee2"</span>),</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> <span class="fu">all_of</span>(x<span class="sc">$</span>col), <span class="at">rows =</span> x<span class="sc">$</span>idx)</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">.init =</span> <span class="fu">gt</span>(fit_statistics)</span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>),</span>
-<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">columns =</span> <span class="sc">-</span>method, str_to_upper) <span class="sc">|&gt;</span></span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">columns =</span> method, str_to_title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fit_statistics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lasso_final-recipe"</span>, <span class="st">"ridge_final-recipe"</span>, </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"elastic-net_more-tuning_final-recipe"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(type) here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Data"</span>, type) <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">readRDS</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">last_fit</span>(v5_dat_split, <span class="at">metrics =</span> <span class="fu">metric_set</span>(rmse, rsq, mae)) <span class="sc">|&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">method =</span> type <span class="sc">|&gt;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_remove</span>(<span class="st">"_final-recipe"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_replace_all</span>(<span class="st">"_|-"</span>, <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">str_to_title</span>(),</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">.before =</span> <span class="fu">everything</span>())) <span class="sc">|&gt;</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(method, <span class="at">metric =</span> .metric, <span class="at">estimate =</span> .estimate) <span class="sc">|&gt;</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> metric, <span class="at">values_from =</span> estimate)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>fit_stat_cols <span class="ot">&lt;-</span> fit_statistics <span class="sc">|&gt;</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>method) <span class="sc">|&gt;</span> </span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>comparison_tbl <span class="ot">&lt;-</span> fit_statistics <span class="sc">|&gt;</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#e2eee2"</span>),</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_body</span>(<span class="at">columns =</span> rmse, <span class="at">rows =</span> rmse <span class="sc">==</span> <span class="fu">min</span>(rmse))) <span class="sc">|&gt;</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#e2eee2"</span>),</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_body</span>(<span class="at">columns =</span> rsq, <span class="at">rows =</span> rsq <span class="sc">==</span> <span class="fu">max</span>(rsq))) <span class="sc">|&gt;</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#e2eee2"</span>),</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_body</span>(<span class="at">columns =</span> mae, <span class="at">rows =</span> mae <span class="sc">==</span> <span class="fu">min</span>(mae))) <span class="sc">|&gt;</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>),</span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">columns =</span> <span class="sc">-</span>method, str_to_upper) <span class="sc">|&gt;</span></span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">columns =</span> method, str_to_title)</span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a><span class="co"># map(</span></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a><span class="co">#   fit_stat_cols,</span></span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   \(col) list(col = col, idx = which(fit_statistics[[col]] == min(fit_statistics[[col]], na.rm = TRUE)))</span></span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="co"># ) |&gt;</span></span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   keep(\(x) length(x$idx) &gt; 0) |&gt;</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   reduce(</span></span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a><span class="co">#     \(tbl, x) tab_style(</span></span>
+<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a><span class="co">#       tbl,</span></span>
+<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a><span class="co">#       style = cell_fill(color = "#e2eee2"),</span></span>
+<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a><span class="co">#       locations = cells_body(columns = all_of(x$col), rows = x$idx)</span></span>
+<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a><span class="co">#     ),</span></span>
+<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     .init = gt(fit_statistics)</span></span>
+<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a><span class="co">#   ) |&gt;</span></span>
+<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a><span class="co">#   fmt_number(decimals = 3) |&gt;</span></span>
+<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a><span class="co">#   tab_style(cell_text(weight = "bold"),</span></span>
+<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a><span class="co">#             cells_column_labels()) |&gt;</span></span>
+<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a><span class="co">#   cols_label_with(columns = -method, str_to_upper) |&gt;</span></span>
+<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a><span class="co">#   cols_label_with(columns = method, str_to_title) -&gt; comparison_tbl</span></span>
+<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(comparison_tbl, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"regression_comparison_tbl.rds"</span>))</span>
+<span id="cb34-54"><a href="#cb34-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-55"><a href="#cb34-55" aria-hidden="true" tabindex="-1"></a>comparison_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="mnounjgixh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mnounjgixh table {
+<div id="fzkleyyqzx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fzkleyyqzx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mnounjgixh thead, #mnounjgixh tbody, #mnounjgixh tfoot, #mnounjgixh tr, #mnounjgixh td, #mnounjgixh th {
+#fzkleyyqzx thead, #fzkleyyqzx tbody, #fzkleyyqzx tfoot, #fzkleyyqzx tr, #fzkleyyqzx td, #fzkleyyqzx th {
   border-style: none;
 }
 
-#mnounjgixh p {
+#fzkleyyqzx p {
   margin: 0;
   padding: 0;
 }
 
-#mnounjgixh .gt_table {
+#fzkleyyqzx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1209,12 +1313,12 @@ No Tuning Models
   border-left-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_caption {
+#fzkleyyqzx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mnounjgixh .gt_title {
+#fzkleyyqzx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1226,7 +1330,7 @@ No Tuning Models
   border-bottom-width: 0;
 }
 
-#mnounjgixh .gt_subtitle {
+#fzkleyyqzx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1238,7 +1342,7 @@ No Tuning Models
   border-top-width: 0;
 }
 
-#mnounjgixh .gt_heading {
+#fzkleyyqzx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1250,13 +1354,13 @@ No Tuning Models
   border-right-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_bottom_border {
+#fzkleyyqzx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_col_headings {
+#fzkleyyqzx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1271,7 +1375,7 @@ No Tuning Models
   border-right-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_col_heading {
+#fzkleyyqzx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1291,7 +1395,7 @@ No Tuning Models
   overflow-x: hidden;
 }
 
-#mnounjgixh .gt_column_spanner_outer {
+#fzkleyyqzx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1303,15 +1407,15 @@ No Tuning Models
   padding-right: 4px;
 }
 
-#mnounjgixh .gt_column_spanner_outer:first-child {
+#fzkleyyqzx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mnounjgixh .gt_column_spanner_outer:last-child {
+#fzkleyyqzx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mnounjgixh .gt_column_spanner {
+#fzkleyyqzx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1323,11 +1427,11 @@ No Tuning Models
   width: 100%;
 }
 
-#mnounjgixh .gt_spanner_row {
+#fzkleyyqzx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mnounjgixh .gt_group_heading {
+#fzkleyyqzx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1353,7 +1457,7 @@ No Tuning Models
   text-align: left;
 }
 
-#mnounjgixh .gt_empty_group_heading {
+#fzkleyyqzx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1368,15 +1472,15 @@ No Tuning Models
   vertical-align: middle;
 }
 
-#mnounjgixh .gt_from_md > :first-child {
+#fzkleyyqzx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mnounjgixh .gt_from_md > :last-child {
+#fzkleyyqzx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mnounjgixh .gt_row {
+#fzkleyyqzx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1395,7 +1499,7 @@ No Tuning Models
   overflow-x: hidden;
 }
 
-#mnounjgixh .gt_stub {
+#fzkleyyqzx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1408,7 +1512,7 @@ No Tuning Models
   padding-right: 5px;
 }
 
-#mnounjgixh .gt_stub_row_group {
+#fzkleyyqzx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1422,15 +1526,15 @@ No Tuning Models
   vertical-align: top;
 }
 
-#mnounjgixh .gt_row_group_first td {
+#fzkleyyqzx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mnounjgixh .gt_row_group_first th {
+#fzkleyyqzx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mnounjgixh .gt_summary_row {
+#fzkleyyqzx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1440,16 +1544,16 @@ No Tuning Models
   padding-right: 5px;
 }
 
-#mnounjgixh .gt_first_summary_row {
+#fzkleyyqzx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_first_summary_row.thick {
+#fzkleyyqzx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mnounjgixh .gt_last_summary_row {
+#fzkleyyqzx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1459,7 +1563,7 @@ No Tuning Models
   border-bottom-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_grand_summary_row {
+#fzkleyyqzx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1469,7 +1573,7 @@ No Tuning Models
   padding-right: 5px;
 }
 
-#mnounjgixh .gt_first_grand_summary_row {
+#fzkleyyqzx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1479,7 +1583,7 @@ No Tuning Models
   border-top-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_last_grand_summary_row_top {
+#fzkleyyqzx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1489,11 +1593,11 @@ No Tuning Models
   border-bottom-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_striped {
+#fzkleyyqzx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mnounjgixh .gt_table_body {
+#fzkleyyqzx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1502,7 +1606,7 @@ No Tuning Models
   border-bottom-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_footnotes {
+#fzkleyyqzx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1516,7 +1620,7 @@ No Tuning Models
   border-right-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_footnote {
+#fzkleyyqzx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1525,7 +1629,7 @@ No Tuning Models
   padding-right: 5px;
 }
 
-#mnounjgixh .gt_sourcenotes {
+#fzkleyyqzx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1539,7 +1643,7 @@ No Tuning Models
   border-right-color: #D3D3D3;
 }
 
-#mnounjgixh .gt_sourcenote {
+#fzkleyyqzx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1547,72 +1651,72 @@ No Tuning Models
   padding-right: 5px;
 }
 
-#mnounjgixh .gt_left {
+#fzkleyyqzx .gt_left {
   text-align: left;
 }
 
-#mnounjgixh .gt_center {
+#fzkleyyqzx .gt_center {
   text-align: center;
 }
 
-#mnounjgixh .gt_right {
+#fzkleyyqzx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mnounjgixh .gt_font_normal {
+#fzkleyyqzx .gt_font_normal {
   font-weight: normal;
 }
 
-#mnounjgixh .gt_font_bold {
+#fzkleyyqzx .gt_font_bold {
   font-weight: bold;
 }
 
-#mnounjgixh .gt_font_italic {
+#fzkleyyqzx .gt_font_italic {
   font-style: italic;
 }
 
-#mnounjgixh .gt_super {
+#fzkleyyqzx .gt_super {
   font-size: 65%;
 }
 
-#mnounjgixh .gt_footnote_marks {
+#fzkleyyqzx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mnounjgixh .gt_asterisk {
+#fzkleyyqzx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mnounjgixh .gt_indent_1 {
+#fzkleyyqzx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mnounjgixh .gt_indent_2 {
+#fzkleyyqzx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mnounjgixh .gt_indent_3 {
+#fzkleyyqzx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mnounjgixh .gt_indent_4 {
+#fzkleyyqzx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mnounjgixh .gt_indent_5 {
+#fzkleyyqzx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mnounjgixh .katex-display {
+#fzkleyyqzx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mnounjgixh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#fzkleyyqzx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1630,20 +1734,20 @@ No Tuning Models
 <tr class="odd">
 <td class="gt_row gt_left" headers="method">Lasso</td>
 <td class="gt_row gt_right" headers="rmse">0.632</td>
-<td class="gt_row gt_right" headers="rsq" style="background-color: #E2EEE2">0.371</td>
+<td class="gt_row gt_right" headers="rsq">0.371</td>
 <td class="gt_row gt_right" headers="mae">0.466</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="method">Elastic Net</td>
-<td class="gt_row gt_right" headers="rmse">0.632</td>
-<td class="gt_row gt_right" headers="rsq">0.373</td>
-<td class="gt_row gt_right" headers="mae">0.467</td>
+<td class="gt_row gt_left" headers="method">Ridge</td>
+<td class="gt_row gt_right" headers="rmse" style="background-color: #E2EEE2">0.625</td>
+<td class="gt_row gt_right" headers="rsq" style="background-color: #E2EEE2">0.385</td>
+<td class="gt_row gt_right" headers="mae" style="background-color: #E2EEE2">0.461</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="method">Elastic Net More Tuning</td>
-<td class="gt_row gt_right" headers="rmse" style="background-color: #E2EEE2">0.630</td>
-<td class="gt_row gt_right" headers="rsq">0.376</td>
-<td class="gt_row gt_right" headers="mae" style="background-color: #E2EEE2">0.465</td>
+<td class="gt_row gt_right" headers="rmse">0.627</td>
+<td class="gt_row gt_right" headers="rsq">0.382</td>
+<td class="gt_row gt_right" headers="mae">0.463</td>
 </tr>
 </tbody>
 </table>

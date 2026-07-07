@@ -39,7 +39,7 @@ v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
 
 v5 <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
 xgb <- readRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
-lasso <- readRDS(here::here("Data", "elastic-net_regression_more-tuning.rds"))
+lasso <- readRDS(here::here("Data", "ridge_regression.rds"))
 
 startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 

@@ -275,24 +275,6 @@ saveRDS(lasso_grid, here::here("Data", "lasso-estimates_tuning.rds"))
 ```
 
 
-<!-- ```{r} -->
-<!-- #| column: margin -->
-
-
-<!-- # lasso_grid |> -->
-<!-- #   collect_metrics() |> -->
-<!-- #   ggplot(aes(penalty, mean, color = .metric)) + -->
-<!-- #   geom_errorbar(aes( -->
-<!-- #     ymin = mean - std_err, -->
-<!-- #     ymax = mean + std_err), -->
-<!-- #   alpha = 0.5) + -->
-<!-- #   geom_line(linewidth = 1.5, na.rm = T) + -->
-<!-- #   facet_wrap(~.metric, scales = "free", nrow = 2) + -->
-<!-- #   scale_x_log10() + -->
-<!-- #   theme(legend.position = "none") -->
-<!-- ``` -->
-
-
 ```{r}
 #| fig-height: 8
 lasso_grid <- readRDS(here::here("Data", "lasso-estimates_tuning.rds"))
@@ -677,7 +659,7 @@ elasicnet_more_tune_spec <- linear_reg(penalty = tune(), mixture = tune()) |>
 # v5_dat_boot <- bootstraps(v5_dat_train)
 
 lambda_grid <- grid_regular(penalty(), levels = 50) |>
-  expand_grid(mixture = seq(0.2, 0.8, 0.2))
+  expand_grid(mixture = seq(0.05, 0.95, 0.15))
 
 doParallel::registerDoParallel()
 
@@ -765,10 +747,94 @@ lasso_tuned_test_time <- fit_parsnip |>
 Time of further-tuned elastic net test: `r lasso_tuned_test_time |> round(2)` minutes.
 
 
+## Ridge Regression
+
+Tuning the `penalty` argument.
+
+```{r}
+# tune penalty instead of fixing it
+# mixture = 0 for ridge
+ridge_tune_spec <- linear_reg(penalty = tune(), mixture = 0) |>
+  set_engine("glmnet")
+```
+
+```{r}
+#| eval: true
+lambda_grid <- grid_regular(penalty(), levels = 50)
+
+doParallel::registerDoParallel()
+
+ridge_grid <- tune_grid(
+  wf |> add_model(ridge_tune_spec),
+  resamples = v5_dat_boot,
+  grid = lambda_grid,
+  metrics = metric_set(rmse)
+)
+
+saveRDS(ridge_grid, here::here("Data", "ridge-estimates_tuning.rds"))
+```
+
+```{r}
+#| fig-height: 8
+ridge_grid <- readRDS(here::here("Data", "ridge-estimates_tuning.rds"))
+
+lowest_rmse <- ridge_grid |>
+  select_best(metric = "rmse")
+
+final_ridge <- finalize_workflow(
+  wf |> add_model(ridge_tune_spec),
+  lowest_rmse
+)
+
+saveRDS(final_ridge, here::here("Data", "ridge_final-recipe"))
+
+fit_parsnip <- final_ridge |>
+  fit(v5_dat_train) |>
+  extract_fit_parsnip()
+
+vis <- fit_parsnip |>
+  vi(lambda = lowest_rmse$penalty)
+
+vis |>
+  saveRDS(here::here("Data", "ridge_regression.rds"))
+
+vis |>
+  filter_out(Importance == 0) |>
+  mutate(task = str_split_i(Variable, "_", 1)) |>
+  mutate(
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance)
+  ) |>
+  ggplot(aes(x = Importance, y = Variable, color = task)) +
+  geom_point() +
+  labs(y = NULL, color = "Task", title = "Non-Zero Estimates", x = "Absolute Estimate") +
+  annotate("segment", x = 0.05, y = -Inf, yend = Inf, alpha = 0.2) +
+  scale_x_continuous(breaks = c(0, 0.05, 0.1)) +
+  coord_cartesian(xlim = c(0, 0.1)) +
+  theme(aspect.ratio = 3)
+```
+
+```{r}
+ridge_tuned_test_time <- fit_parsnip |> 
+  tidy() |>
+  filter(estimate != 0 & term != "(Intercept)") |>
+  mutate(task = str_split_i(term, "_", 1)) |>
+  inner_join(v5_dat |> select(item, time) |> unique(),
+            join_by("term" == "item")) |>
+  summarize(.by = task,
+            time = sum(time) + get_startup(first(task))) |>
+  summarize(time = sum(time)) |>
+  pull(time)
+```
+
+Time of tuned ridge regression test: `r ridge_tuned_test_time |> round(2)` minutes.
+
+
 ## Test Data Fit Comparison
 
 ```{r}
-fit_statistics <- c("lasso_final-recipe", "elastic-net_final-recipe", "elastic-net_more-tuning_final-recipe") |>
+fit_statistics <- c("lasso_final-recipe", "ridge_final-recipe", 
+                    "elastic-net_more-tuning_final-recipe") |>
   map(\(type) here::here("Data", type) |> 
         readRDS() |>
         last_fit(v5_dat_split, metrics = metric_set(rmse, rsq, mae)) |>
@@ -786,24 +852,42 @@ fit_stat_cols <- fit_statistics |>
   select(-method) |> 
   names()
 
-map(
-  fit_stat_cols,
-  \(col) list(col = col, idx = which(fit_statistics[[col]] == min(fit_statistics[[col]], na.rm = TRUE)))
-) |>
-  keep(\(x) length(x$idx) > 0) |>
-  reduce(
-    \(tbl, x) tab_style(
-      tbl,
-      style = cell_fill(color = "#e2eee2"),
-      locations = cells_body(columns = all_of(x$col), rows = x$idx)
-    ),
-    .init = gt(fit_statistics)
-  ) |>
+comparison_tbl <- fit_statistics |>
+  gt() |>
   fmt_number(decimals = 3) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = rmse, rows = rmse == min(rmse))) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = rsq, rows = rsq == max(rsq))) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = mae, rows = mae == min(mae))) |>
   tab_style(cell_text(weight = "bold"),
             cells_column_labels()) |>
   cols_label_with(columns = -method, str_to_upper) |>
   cols_label_with(columns = method, str_to_title)
+
+# map(
+#   fit_stat_cols,
+#   \(col) list(col = col, idx = which(fit_statistics[[col]] == min(fit_statistics[[col]], na.rm = TRUE)))
+# ) |>
+#   keep(\(x) length(x$idx) > 0) |>
+#   reduce(
+#     \(tbl, x) tab_style(
+#       tbl,
+#       style = cell_fill(color = "#e2eee2"),
+#       locations = cells_body(columns = all_of(x$col), rows = x$idx)
+#     ),
+#     .init = gt(fit_statistics)
+#   ) |>
+#   fmt_number(decimals = 3) |>
+#   tab_style(cell_text(weight = "bold"),
+#             cells_column_labels()) |>
+#   cols_label_with(columns = -method, str_to_upper) |>
+#   cols_label_with(columns = method, str_to_title) -> comparison_tbl
+
+saveRDS(comparison_tbl, here::here("Figures", "regression_comparison_tbl.rds"))
+
+comparison_tbl
 ```
 
 

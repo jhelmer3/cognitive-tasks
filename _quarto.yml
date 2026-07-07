@@ -33,6 +33,7 @@ website:
         menu:
           - Reports/Methods/2PL.qmd
           - Reports/Methods/method-comparison.qmd
+          - Reports/Methods/proposal.qmd
       - text: "Custom FPTs"
         menu:
           - Test Versions/test0.qmd
