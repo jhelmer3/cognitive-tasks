@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/lasso.html</loc>
+    <lastmod>2026-07-07T18:51:33.232Z</lastmod>
+  </url>
+  <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Test Versions/test0.html</loc>
     <lastmod>2026-04-02T19:59:00.416Z</lastmod>
   </url>
@@ -23,30 +27,6 @@
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Methods/method-comparison.html</loc>
     <lastmod>2026-07-08T19:33:05.638Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/lasso.html</loc>
-    <lastmod>2026-07-07T18:51:33.232Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/decision-rules_report.html</loc>
-    <lastmod>2026-06-07T16:09:52.138Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/bayesian-update_report.html</loc>
-    <lastmod>2026-06-07T16:09:22.775Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/index.html</loc>
-    <lastmod>2026-03-27T17:47:09.958Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/coherence-forecasting-scale_report.html</loc>
-    <lastmod>2025-12-17T22:56:29.460Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/denominator-neglect_report.html</loc>
-    <lastmod>2026-06-07T16:08:31.147Z</lastmod>
   </url>
   <url>
     <loc>https://jhelmer3.github.io/cognitive-tasks/Reports/Methods/2PL.html</loc>
