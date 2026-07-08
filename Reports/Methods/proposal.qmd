@@ -109,9 +109,9 @@ Overall, our goal for this project is to create a shorter version of the FPT, id
 
 ### Candidate Test Creation
 
-We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all included items in terms of their usefulness in predicting forecasting ability. Then, in order of their ranks, we selected as many items as we could to create a test that would still be expected to take under 15 minutes to complete.
+We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all potential items in terms of their usefulness in predicting forecasting ability. Then, in order of their ranks, we selected as many items as we could to create a test that would still be expected to take under 15 minutes to complete. We used the existing data collected in the FPT development study to conduct this analysis.
 
-The methods we used are a greedy search algorithm, elastic net regression, and the xgboost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores. 
+The methods we used to select items were a greedy search algorithm, elastic net regression, and the XGBoost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores. 
 
 #### Outcome: Forecasting Ability
 
@@ -119,7 +119,7 @@ As our outcome and target indicator of forecasting accuracy, we used data from t
 
 #### Search Algorithm
 
-The first method we used to rank most informative items was with a search algorithm. This algorithm worked by going through all items and identifying the item that, when added to a "test" of previously-added items, yields the most $\frac{\text{added }R^2}{\text{added time}}$, the numerator being the increase in the $R^2$ of a model of the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy to the $R^2$ of a model of sum scores just of the previously selected test items. The algorithm repeated this until all items had been added to the test. We then examined the $R^2$ of the test as it grew in items with the search algorithm.
+The first method we used to rank most informative items was with a search algorithm. This algorithm worked by iterating through all items from the set of included cognitive tasks and identifying the item that, when added to a "test" of previously-added items, yields the greatest ratio of increase in predictive ability to increase in testing time, $\frac{\text{added }R^2}{\text{added time}}$. Specifically, the numerator represents the increase in the $R^2$ of a model with the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy compared to the $R^2$ of a model of sum scores just of the previously selected test items. The algorithm repeated this until all items had been added to the test, and the order in which the iterms were added to the tests determined their rank. We then examined the $R^2$ of the test as it grew in items with the search algorithm.
 
 ```{r}
 #| column: margin
@@ -137,30 +137,54 @@ v5_r2_w_time |>
 
 #### Ridge Regression
 
-The next method we used to select items was ridge regression. We examined the performance of the ridge, elastic net, and lasso family of methods, where elastic net blends LASSO regression and ridge regression by letting a mixture paramter define the weight given to the penalty terms used by each method (Zou and Hastie, 2005). We compared the performance of elastic net (where elastic net was able to tune its mixture parameter between .05 and .95), LASSO, and ridge regression by tuning each on a training set of the data and examining their fit statistics on the testing set. 
+The next method we used to select items was ridge regression. Ridge regression is a regression technique that can be helpful when the number of predictors is large. We regressed scores from all items from the selected cognitive tests on forecasting ability. We chose ridge regression out of the family of ridge, elastic net, and LASSO regression, where elastic net blends LASSO regression and ridge regression by letting a mixture paramter define the weight given to the penalty terms used by each method (Zou and Hastie, 2005), by examining their fit statistics after training each model on a subset of the data. The ridge and LASSO regression models both tuned their penalty parameters on the training data, and the elastic net model also was able to tune its mixture parameter with values incrementing between .05 and .95 by .15.
 
 ```{r}
 readRDS(here::here("Figures", "regression_comparison_tbl.rds"))
 ```
 
-Ridge regression showed the strongest out-of-sample fit on all of Root Mean Squared Error, $R^2$, and Mean Absolute Error, so we proceeded with ridge regression. 
+Ridge regression showed the strongest out-of-sample fit on all of Root Mean Squared Error, $R^2$, and Mean Absolute Error, so we proceeded with ridge regression, and we used the slope parameter estimates from the final tuned model to determine the item ranks, with stronger slopes representing higher ranks.
 
-#### xgboost
+#### XGBoost
 
-The third method we used to select items was the xgboost algorithm. xgboost is a high-performing ensemble decision tree algorithm. Decision tree algorithms work by finding a cut point with predictors that maximizes the variance in the outcome on either side of the cut point. xgboost creates many trees, and the proportion of times that a given predictor appears in the trees is an indicator of its relative importance in explaining variance in the outcome. It differs from typcal random forest algorithms in that the trees it builds are not fully independent: they learn and adapt based on already-existing trees.
+The third method we used to select items was the XGBoost algorithm. XGBoost is a high-performing ensemble decision tree algorithm. Decision tree algorithms work by finding a cut point with predictors that maximizes the variance in the outcome on either side of the cut point. XGBoost creates many trees, and the proportion of times that a given predictor appears in the trees is an indicator of its relative importance in explaining variance in the outcome. It differs from typcal random forest algorithms in that the trees it builds are not fully independent: they learn and adapt based on already-existing trees.
+
+Like the ridge regression method, we again regressed scores on every item from the selected tests on forecasting ability. We tuned the XGBoost algorithm on a training subset of the data, allowing all of the tree depth, the minimum number of observations in a node to allow it to be split again, the learning rate, the number of predictors to sample out of all predictors, and the proportion of observations sampled to tune. We then let the SHAP values from the final tuned model to define the item ranks.
 
 ### Testing the Tests
 
-These candidate tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as forecasting accuracy in four arms.
+These methods then yielded three candidate tests. 
+
+```{r}
+#| column: page
+#| layout-ncol: 3
+readRDS(here::here("Data", "Method Comparison", "v5_candidate_test.rds"))
+readRDS(here::here("Data", "Method Comparison", "ridge_candidate_test.rds"))
+readRDS(here::here("Data", "Method Comparison", "xgboost_candidate_test.rds"))
+```
+
+All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy in four arms.
 
 Each arm will contain three components: the cognitive test of interest, six forecasting items, and some cognitive tests not included in the tests of interest to serve as anchor items across participants. 
 
-The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or xgboost, or it will be the (which regular FPT version? the one with six forecasting items?).
+The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).
 
 The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test. 
 
 We will collect data from participants on Prolific, and participants will be randomized into one of the four arms.
 
+```{mermaid}
+flowchart LR
+    A[Prolific] --> B[Search Algorithm Test]
+    A[Prolific] --> C[Ridge Regression Test]
+    A[Prolific] --> D[XGBoost Test]
+    A[Prolific] --> E[Original FPT Test]
+    B --> F[Forecasting Items]
+    C --> F[Forecasting Items]
+    D --> F[Forecasting Items]
+    E --> F[Forecasting Items]
+    F --> G[Berlin Numeracy, \nCognitive Reflection Test]
+```
 
 ## Analysis
 

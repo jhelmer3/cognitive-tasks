@@ -440,7 +440,7 @@ item_properties <- rbind(
 #          gt() |>
 #          tab_header(method)) 
 
-tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
+v5_candidate_test <- tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
          left_join(item_properties,
                    by = "item") |>
          arrange(item) |>
@@ -453,7 +453,7 @@ tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
          gt() |>
          tab_header("Search Algorithm")
 
-tibble(item = sym(paste0("lasso", "_test")) |> eval()) |>
+ridge_candidate_test <- tibble(item = sym(paste0("lasso", "_test")) |> eval()) |>
          left_join(item_properties,
                    by = "item") |>
          arrange(item) |>
@@ -466,7 +466,7 @@ tibble(item = sym(paste0("lasso", "_test")) |> eval()) |>
          gt() |>
          tab_header("LASSO")
 
-tibble(item = sym(paste0("xgb", "_test")) |> eval()) |>
+xgboost_candidate_test <- tibble(item = sym(paste0("xgb", "_test")) |> eval()) |>
          left_join(item_properties,
                    by = "item") |>
          arrange(item) |>
@@ -479,4 +479,11 @@ tibble(item = sym(paste0("xgb", "_test")) |> eval()) |>
          gt() |>
          tab_header("xgboost")
 
+saveRDS(v5_candidate_test, here::here("Data", "Method Comparison", "v5_candidate_test.rds"))
+saveRDS(ridge_candidate_test, here::here("Data", "Method Comparison", "ridge_candidate_test.rds"))
+saveRDS(xgboost_candidate_test, here::here("Data", "Method Comparison", "xgboost_candidate_test.rds"))
+
+v5_candidate_test
+ridge_candidate_test
+xgboost_candidate_test
 ```
