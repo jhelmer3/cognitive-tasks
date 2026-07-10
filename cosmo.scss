@@ -32,6 +32,7 @@ $teal:    #20c997 !default;
 $cyan:    #9954bb !default;
 
 $theme-tan: #eceadf;
+$theme-tan-sunken: #e2e0d4;
 $theme-darkbrown: #202020;
 
 $primary:       $blue !default;
@@ -145,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
 // Panel Tabset
 
 .panel-tabset > .tab-content {
-  background-color: #e2e0d4; // or any hex
+  background-color: $theme-tan-sunken;
 }
 
 // Mermaid flowcharts - covers both Mermaid v9 and v10 output
@@ -179,6 +180,7 @@ h1, h2, h3, h4, h5, h6 {
 // Callout notes
 
 .callout-note {
+  border-color: #a89f8c !important;
   border-left-color: #a89f8c !important;  // the left accent bar
   
   .callout-icon::before {
@@ -187,11 +189,11 @@ h1, h2, h3, h4, h5, h6 {
   
   &.callout-style-default {
     > .callout-header {
-      background-color: #d6d3c6;  // header band background
+      background-color: $theme-tan-sunken !important;  // header band background
       color: #202020;             // header text color
     }
     > .callout-body {
-      background-color: #e8e6da;  // body background
+      background-color: $theme-tan;  // body background
     }
   }
 }
