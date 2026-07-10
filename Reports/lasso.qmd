@@ -27,8 +27,6 @@ library(tidyverse)
 library(tidymodels)
 library(vip)
 library(gt)
-
-set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -45,6 +43,7 @@ startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 ```{r}
 #| code-fold: show
 source(here::here("Scripts", "get_startup.R"))
+source(here::here("Scripts", "j_gt.R"))
 ```
 
 #### Cleaning
@@ -853,7 +852,7 @@ fit_stat_cols <- fit_statistics |>
   names()
 
 comparison_tbl <- fit_statistics |>
-  gt() |>
+  j_gt() |>
   fmt_number(decimals = 3) |>
     tab_style(cell_fill(color = "#e2eee2"),
             cells_body(columns = rmse, rows = rmse == min(rmse))) |>
@@ -877,7 +876,7 @@ comparison_tbl <- fit_statistics |>
 #       style = cell_fill(color = "#e2eee2"),
 #       locations = cells_body(columns = all_of(x$col), rows = x$idx)
 #     ),
-#     .init = gt(fit_statistics)
+#     .init = j_gt(fit_statistics)
 #   ) |>
 #   fmt_number(decimals = 3) |>
 #   tab_style(cell_text(weight = "bold"),

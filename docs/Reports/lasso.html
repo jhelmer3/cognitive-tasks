@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jessica Helmer">
-<meta name="dcterms.date" content="2026-07-07">
+<meta name="dcterms.date" content="2026-07-10">
 
 <title>LASSO Regression – Cognitive Task Modeling</title>
 <style>
@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e8068862e0223af10105e1c7351101e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2e96068d7d2d8cbbd6b632ff443c7a9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -287,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 7, 2026</p>
+      <p class="date">July 10, 2026</p>
     </div>
   </div>
   
@@ -309,9 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set_theme</span>(<span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">16</span>, <span class="at">paper =</span> <span class="st">"#eceadf"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -329,7 +327,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"get_startup.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"get_startup.R"</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"j_gt.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -1234,7 +1233,7 @@ No Tuning Models
 <span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
 <span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>comparison_tbl <span class="ot">&lt;-</span> fit_statistics <span class="sc">|&gt;</span></span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">j_gt</span>() <span class="sc">|&gt;</span></span>
 <span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
 <span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#e2eee2"</span>),</span>
 <span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cells_body</span>(<span class="at">columns =</span> rmse, <span class="at">rows =</span> rmse <span class="sc">==</span> <span class="fu">min</span>(rmse))) <span class="sc">|&gt;</span></span>
@@ -1258,7 +1257,7 @@ No Tuning Models
 <span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a><span class="co">#       style = cell_fill(color = "#e2eee2"),</span></span>
 <span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a><span class="co">#       locations = cells_body(columns = all_of(x$col), rows = x$idx)</span></span>
 <span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a><span class="co">#     ),</span></span>
-<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     .init = gt(fit_statistics)</span></span>
+<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     .init = j_gt(fit_statistics)</span></span>
 <span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a><span class="co">#   ) |&gt;</span></span>
 <span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a><span class="co">#   fmt_number(decimals = 3) |&gt;</span></span>
 <span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a><span class="co">#   tab_style(cell_text(weight = "bold"),</span></span>
@@ -1297,15 +1296,15 @@ No Tuning Models
   font-size: 16px;
   font-weight: normal;
   font-style: normal;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   width: auto;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
   border-left-style: none;
@@ -1326,7 +1325,7 @@ No Tuning Models
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-bottom-width: 0;
 }
 
@@ -1338,14 +1337,14 @@ No Tuning Models
   padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  border-top-color: #FFFFFF;
+  border-top-color: #ECEADF;
   border-top-width: 0;
 }
 
 #fzkleyyqzx .gt_heading {
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-align: center;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1361,12 +1360,12 @@ No Tuning Models
 }
 
 #fzkleyyqzx .gt_col_headings {
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1377,9 +1376,9 @@ No Tuning Models
 
 #fzkleyyqzx .gt_col_heading {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   border-left-style: none;
   border-left-width: 1px;
@@ -1397,9 +1396,9 @@ No Tuning Models
 
 #fzkleyyqzx .gt_column_spanner_outer {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   padding-top: 0;
   padding-bottom: 0;
@@ -1417,8 +1416,8 @@ No Tuning Models
 
 #fzkleyyqzx .gt_column_spanner {
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1437,16 +1436,16 @@ No Tuning Models
   padding-left: 5px;
   padding-right: 5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1460,15 +1459,15 @@ No Tuning Models
 #fzkleyyqzx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   vertical-align: middle;
 }
 
@@ -1481,14 +1480,14 @@ No Tuning Models
 }
 
 #fzkleyyqzx .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
   border-top-style: solid;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1501,20 +1500,20 @@ No Tuning Models
 
 #fzkleyyqzx .gt_stub {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-width: 1px;
+  border-right-color: #D6D3C6;
   padding-left: 5px;
   padding-right: 5px;
 }
 
 #fzkleyyqzx .gt_stub_row_group {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
@@ -1536,7 +1535,7 @@ No Tuning Models
 
 #fzkleyyqzx .gt_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1546,7 +1545,7 @@ No Tuning Models
 
 #fzkleyyqzx .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
 }
 
 #fzkleyyqzx .gt_first_summary_row.thick {
@@ -1560,12 +1559,12 @@ No Tuning Models
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
 }
 
 #fzkleyyqzx .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1599,16 +1598,16 @@ No Tuning Models
 
 #fzkleyyqzx .gt_table_body {
   border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-width: 1px;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1px;
+  border-bottom-color: #A89F8C;
 }
 
 #fzkleyyqzx .gt_footnotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1631,7 +1630,7 @@ No Tuning Models
 
 #fzkleyyqzx .gt_sourcenotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;

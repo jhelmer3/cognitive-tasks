@@ -3,6 +3,18 @@ title: "Proposal"
 format: 
   html:
     code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+date: last-modified
+toc: true
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+html-table-processing: none
 ---
 
 ::: panel-tabset
@@ -13,8 +25,6 @@ format:
 #| code-fold: show
 library(tidyverse)
 library(gt)
-
-set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -30,6 +40,7 @@ lasso_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "lasso_r2_w_t
 ```{r}
 #| code-fold: show
 source(here::here("Scripts", "get_startup.R"))
+source(here::here("Scripts", "j_gt.R"))
 ```
 
 #### Cleaning
@@ -40,15 +51,15 @@ source(here::here("Scripts", "get_startup.R"))
 
 ## Introduction
 
-Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events. Previous forecaster talent-spotting took months, collecting data on forecasters accuracy throughout long forecasting tournaments including IARPA's Aggregative Contingent Estimation tournament. 
+Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events. Previous forecaster talent-spotting took months, typically collecting data on forecasters' accuracy throughout long forecasting tournaments including IARPA's Aggregative Contingent Estimation tournament. 
 
 The development of the recent Forecasting Proficiency Test (FPT) moved the goalpost in forecaster skill measurement, creating a 60-minute test that can capture over 70% of the variation in forecaster accuracy. However, while certainly an improvement on the previous effort it took to measure people's forecasting ability, 60-minutes still remains a long time that may prevent otherwise interested parties from using the FPT, so, in this work, we aim to create a shorter, roughly 15-minute version of the FPT that decreases the time burden on examinees with minimal loss to measurement efficacy.
 
 ### FPT Background
 
-The FPT is made up of a combination of forecasting items and cognitive tasks. Forecasting items were included because accuracy on previous forecasting items was the most predictive measure of forecasting ability compared to all other included measures. However, a test exclusively made up of forecasting items would not provide information on people's accuracy on those items until those items resolved, which is often weeks or months in the future. Therefore, the FPT also included cognitive measures that showed to be associated with forecasting ability.
+The FPT is made up of a combination of forecasting items and cognitive tasks. Forecasting items were included because accuracy on previous forecasting items was the most predictive measure of forecasting ability compared to all other included measures. However, a test exclusively made up of forecasting items would not provide information on a forecaster's accuracy on those items until those items resolved, which is often weeks or months in the future. Therefore, the FPT also included cognitive measures that showed to be associated with forecasting ability. Some of the cognitive tasks included had already been shown to be associated with forecasting ability, and some had not been examined in conjuction with a forecasting context before.
 
-To develop the FPT, seven weeks of data was collected from over 1,000 participants on both a set of forecasts elicited on forecasting items across domains and on a large battery of cognitive tasks. Some of the cognitive tasks included had already been shown to be associated with forecasting ability, and some had not been examined in conjuction with a forecasting context before. To select cognitive tasks to include in the final FPT versions, sum scores were calculated for each participant on each task, and then associations between cognitive task scores and forecasting ability were examined. Multiple hour-long final FPT versions were created with different ratios of forecasting items to cognitive measures (balancing the best predictive ability of the forecasting items with the immediate scoreability of the cognitive measures), and the cognitive measures for each version were selected by identifying the set of cognitive tasks with the greatest association with forecasting ability that still fit into the allotted expected testing time for cognitive tasks for that FPT version.
+To develop the FPT, seven weeks of data was collected from over 1,000 participants on both a set of forecasts elicited on forecasting items across domains and on a large battery of cognitive tasks.  To select cognitive tasks to include in the final FPT versions, sum scores were calculated for each participant on each task, and then associations between cognitive task scores and forecasting ability were examined. Multiple hour-long final FPT versions were created with different ratios of forecasting items to cognitive measures (balancing the better predictive ability of the forecasting items with the immediate scoreability of the cognitive measures), and the cognitive measures for each version were selected by identifying the set of cognitive tasks with the greatest associations with forecasting ability that still fit into the allotted expected testing time for cognitive tasks for that FPT version.
 
 #### Current Benchmarks
 
@@ -56,12 +67,12 @@ The cognitive tasks included in the all-cognitive-task version of the 60-minute 
 
 #### Cognitive Measures in Question
 
-Overall, we currently only focus on the cognitive tasks that in the original FPT paper, showed strong enough associations to forecasting ability to be included in any of the FPT versions. 
+Overall, we currently only focus on the cognitive tasks that in the original FPT paper that showed strong enough associations with forecasting ability to warrent being included FPT version with the most cognitive tasks. 
 
 ::: panel-tabset
 ##### Denominator Neglect
 
-Denominator Neglect was overall the strongest performing tasks in the FPT. It is a binary choice task between lotteries two ratios of gold and silver coins, with the goal of maximizing the chance of picking a gold coin. Each choice had one lottery with a small denominator (10 coins) and one lottery with a large denominator (400 coins), intended to target the denominator negelect bias, the idea that people will discount the numerator size when the denominator size was large. 
+Denominator Neglect was overall the strongest performing task in the FPT. It is a binary choice task between lotteries of two ratios of gold and silver coins, with the goal of maximizing the chance of picking a gold coin. This task was intended to target the denominator neglect bias, the idea that people will discount the numerator size of a ratio when the denominator size was large. Each choice had one lottery with a small denominator (10 coins) and one lottery with a large denominator (400 coins).
 
 The task had multiple conditions within it. The first was whether the choice was in harmony with the denominator neglect bias (i.e., the larger-denominator ratio was also the larger lottery and therefore the correct choice) or in conflict with the denominator neglect bias (i.e., the larger-denominator ratio was in fact the smaller lottery). The task also varied in its presentation of the ratios: in the Separate version, the lotteries were shown in either text form (e.g., 3 gold coins out of 10) or in visual form (an array of three gold coins out of 10 gold coins). In a given choice pair, either lottery could be shown in either text or visual, such that some choices had one lottery text and one lottery visual, some had both text, and some had both visual. In the Combined version, all lotteries were presented in *both* text and array form.
 
@@ -72,6 +83,10 @@ The lotteries also varied in the proportion of gold coins in the small-denominat
 Describe
 
 Hard, Easy versions
+
+##### Time Series
+
+Describe noise x n_datapoints x direction x function
 
 ##### Adult Decision Making Competency: Decision Rules
 
@@ -90,15 +105,21 @@ We did not include the Coherence Forecasting Scale (CFS) in this attempt to shor
 We did not include Matrix Reasoning in this attempt to shorten the FPT. The items were grouped into lists, with most lists having different items from all other lists but some lists having 1--2 items cross between lists. Participants each only saw one list. Because of this complexity and the lack of shared items among participants, we did not attempt to examine item-level scores from this measure.
 :::
 
+Using all items from Denominator Neglect: Separate, Denominator Neglect: Combined, Bayesian Update: Easy, Bayesian Update: Hard, Time Series, Adult Decision Making Competency: Decision Rules, and Number Series yielded 99 candidate items to be included in the shorter FPT test.
+
 ### Potential Improvement
 
-Because the selection of tasks for the FPT was done by examining task sum scores' association with forecasting ability, variation of the informativeness of individual items within tasks towards forecasting ability remains unexplored. By identifying if some items within tasks are more informative than others, we may be able to reduce the amount of items administered to an examinee while still maintaining good predictive ability of forecasting ability. 
+Because the selection of tasks for the original FPT was done by examining task sum scores' association with forecasting ability, variation of the informativeness of individual items within tasks towards forecasting ability remains unexplored. By identifying if some items within tasks are more informative than others, we may be able to reduce the amount of items administered to an examinee while still maintaining good predictive ability of forecasting ability. 
 
-#### Some Differences and Challenges
+::: {.callout-note collapse="true"}
+#### Some Differences and Challenges On My Mind
 
-One interesting difference between this project and most psychometric work is that in most psychometric work, items are administered in a test aimed to capture some latent construct. Here, the cognitive tasks administered are not even necessarily intending to directly measure forecasting ability. So our primary interest is not in the cognitive tasks' ability to measure their intended cognitive construct themselves, but instead in the items' that have strong ability to capture their intended construct and also measure a construct that has a strong relationship with forecasting ability itself. In this work, we already have a measure of our intended construct (forecasting ability), and we want to identify items within tasks that have strong associations with that measured construct. What common models like the 2PL here offer is the information about the items measuring the latent construct, but not (directly) the construct's association with forecasting ability.
+One interesting difference between this project and most psychometric work is that in most psychometric work, items are administered in a test aimed to capture some latent construct. Here, the cognitive tasks administered are not even necessarily intending to directly measure forecasting ability; they were developed themselves to measure a different cognitive construct and just happen to be related to forecasting ability. So, our primary interest is not in the cognitive tasks' ability to measure their intended cognitive construct themselves, but instead in the items' that (1) have strong ability to capture their intended construct and (2) are capturing a construct that itself has a strong relationship with forecasting ability. 
+
+In this work, we already have a measure of our intended construct (forecasting ability), and we want to identify items within tasks that have strong associations with that measured construct. What common models like the 2PL here offer is the information about the items measuring the latent construct, but not (directly) the construct's association with forecasting ability.
 
 Another challenge here is that many of the cognitive measures have different outcome scales. For example, some follow a binary correct-incorrect pattern (e.g., Denominator Neglect, Decision Rules), while others are scored as a continuous distance from the correct response (e.g., Bayesian Update, Time Series).
+:::
 
 ### Objective
 
@@ -107,19 +128,57 @@ Overall, our goal for this project is to create a shorter version of the FPT, id
 
 ## Methods
 
-### Candidate Test Creation
-
 We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all potential items in terms of their usefulness in predicting forecasting ability. Then, in order of their ranks, we selected as many items as we could to create a test that would still be expected to take under 15 minutes to complete. We used the existing data collected in the FPT development study to conduct this analysis.
 
-The methods we used to select items were a greedy search algorithm, elastic net regression, and the XGBoost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores. 
+The methods we used to select items were a greedy search algorithm, ridge regression, and the XGBoost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores. 
 
 #### Outcome: Forecasting Ability
 
-As our outcome and target indicator of forecasting accuracy, we used data from the forecasts participants in the FPT development study. This was data on 36 forecasting items elicited in the quantile format on topics across domains. These forecasts were scored against the outcome with the s-score, and participants' mean forecast accuracy was used as our outcome indicator of interest to represent forecasting ability.
+As our outcome and target indicator of forecasting accuracy, we used data from the forecasts participants made in the FPT development study. This was data on 36 forecasting items elicited in the quantile format on topics across domains. These forecasts were scored against the items' outcomes with the s-score, and participants' mean forecast accuracy was used as our outcome indicator of interest to represent forecasting ability.
+
+#### Testing Time
+
+A key component of this search algorithm was incorporating the time it took participants (generally) to complete the different tasks, to investigate not just the predictive ability of each item, but its predictive ability relative to its time cost. We calculated these testing times from the existing FPT data. Each task had a reported overall median testing time, $time_{task}$. We also used the existing data to calculate the "start-up cost" $time_{task_{startup}}$of each task: the time that it took participants to read instructions and complete practice trials for the task. We then, for each task, calculated the expected testing time for each item within each task as $time_{task_{item}} = \frac{ time_{task} - time_{task_{startup}} }{ n_{task_{items}} }$.
 
 #### Search Algorithm
 
-The first method we used to rank most informative items was with a search algorithm. This algorithm worked by iterating through all items from the set of included cognitive tasks and identifying the item that, when added to a "test" of previously-added items, yields the greatest ratio of increase in predictive ability to increase in testing time, $\frac{\text{added }R^2}{\text{added time}}$. Specifically, the numerator represents the increase in the $R^2$ of a model with the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy compared to the $R^2$ of a model of sum scores just of the previously selected test items. The algorithm repeated this until all items had been added to the test, and the order in which the iterms were added to the tests determined their rank. We then examined the $R^2$ of the test as it grew in items with the search algorithm.
+The first method we used to rank most informative items was with a search algorithm that was overall looking for items that maximized the increase in predictive ability relative to their increase in testing time. 
+
+This algorithm worked by iterating through all items from the set of included cognitive tasks and identifying the item that, when added to a "test" of previously-added items, yielded the greatest ratio of increase in predictive ability to increase in testing time, $\frac{\text{added }R^2}{\text{added time}}$. Specifically, the numerator represents the increase in the $R^2$ of a model with the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy compared to the $R^2$ of a model of sum scores just of the previously selected test items.
+
+::: {.callout-note collapse="true"}
+### Search Algorithm as Steps
+
+1. Initialize an empty test with no items.
+
+2. Iterate through all items within the set of included cognitive tasks (e.g., DN-C_1, DN-C_2, .., DN-S_48, BU-E_1, BU-E_2 $\in$ DN-C, DN-S, BU-E, BU-H, TS, ADMC-DR, NS).
+
+3. For each iteration $i$, calculate two pieces of information:
+
+  i. The added predictive ability of the candidate item, $R^2_{added}$. Do this by calculating the $R^2$ of a model that regresses the item on forecasting ability, $sscores = \beta_0 + \beta_1 \text{item}_i$. Calculate the difference $R^2_{added} = R^2_{i} - R^2_{test}$. In this first step with the empty test, $R^2_{test} = 0$. 
+  
+  ii. The added expected testing time for the item, $t_{added}$. If the item was the first from its task to appear in the test, $t_{added_i} = time_{task_{item}} + time_{task_{startup}}$. If items from the item's task had already appeared in the test, $t_{added_i} = time_{task_{item}}$.
+  
+  iii. Calculate the ratio $\frac{ R^2_{added} }{ t_{added} }$.
+  
+4. Identify the item that had $max(\frac{ R^2_{added} }{ t_{added} })$. Add that item to the test.
+
+5. Iterate through all remaining items. For each further repetition, the calculation of  $R^2_{added}$ will be slightly more involved.
+
+6. For each iteration $i$, calculate two pieces of information:
+
+  i. The added predictive ability of the candidate item, $R^2_{added}$. First, calculate the sum scores for all tasks included, and regress those task sum scores on forecasting ability. E.g., if on a given iteration, the test included three DN-C items, the model would look like $sscores = \beta_0 + \beta_{\text{DN-C}} \text{DN-C}$. If the test included two DN-S items and one NS item, the model would look like $sscores = \beta_0 + \beta_{\text{DN-S}} \text{DN-S} + \beta_{NS} NS$. 
+  
+  Then, calculate the $R^2$ of that model, and calculate the difference $R^2_{added} = R^2_{i} - R^2_{test}$.
+  
+  ii. The added expected testing time for the item, $t_{added}$. As before, if the item was the first from its task to appear in the test, $t_{added_i} = time_{task_{item}} + time_{task_{startup}}$. If items from the item's task had already appeared in the test, $t_{added_i} = time_{task_{item}}$.
+
+7. Identify the item that had $max(\frac{ R^2_{added} }{ t_{added} })$. Add that item to the test.
+
+8. Repeat until all items have been added to the test.
+:::
+
+The algorithm repeated this until all items had been added to the test, and the order in which the items were added to the tests determined their rank. We then examined the $R^2$ of the test as it grew in items with the search algorithm.
 
 ```{r}
 #| column: margin
@@ -137,7 +196,11 @@ v5_r2_w_time |>
 
 #### Ridge Regression
 
-The next method we used to select items was ridge regression. Ridge regression is a regression technique that can be helpful when the number of predictors is large. We regressed scores from all items from the selected cognitive tests on forecasting ability. We chose ridge regression out of the family of ridge, elastic net, and LASSO regression, where elastic net blends LASSO regression and ridge regression by letting a mixture paramter define the weight given to the penalty terms used by each method (Zou and Hastie, 2005), by examining their fit statistics after training each model on a subset of the data. The ridge and LASSO regression models both tuned their penalty parameters on the training data, and the elastic net model also was able to tune its mixture parameter with values incrementing between .05 and .95 by .15.
+The next method we used to select items was ridge regression. We did not specifically target ridge regression at first but instead compared the performance of models from the family of ridge, elastic net, and LASSO regression to see which showed the strongest predictive ability within our sample to warrant being used to develop a shorter FPT.
+
+Ridge, elastic net, and LASSO regression are all related techniques in that they follow familiar linear regression procedures but incorporate a penalty term to prevent model complexity. Elastic net works as a combination of the ridge and LASSO, incorporating a mixing parameter to determine how much weigh to give to the ridge vs. the LASSO component (Zou and Hastie, 2005). They are each often used when the number of predictors is high. In our case, we used all 99 candidate items as separate predictors, $$ sscores = \beta_0 + \beta_{\text{DN-C}_1} \text{DN-C}_1 + \beta_{\text{DN-C}_2} \text{DN-C}_2 + ... \beta_{\text{DN-S}_{24}} \text{DN-S}_{24} + \beta_{\text{BU-E}_1} \text{BU-E}_1 + ... + \beta_{\text{NS}_9} \text{NS}_9$$. 
+
+We separated our data into a training and testing set, and we tuned all three models (ridge, elastic net, and LASSO) on the training set. All three methods tuned their penalty parameters, and elastic net also tuned its mixing parameter. We then fit the tuned model for each method that had the minimum Root Mean Squared Error (RMSE), and fit that model on the testing data. We compared fit statistics between the three methods to decide which method to use in developing a new candidate test.
 
 ```{r}
 readRDS(here::here("Figures", "regression_comparison_tbl.rds"))
@@ -147,9 +210,9 @@ Ridge regression showed the strongest out-of-sample fit on all of Root Mean Squa
 
 #### XGBoost
 
-The third method we used to select items was the XGBoost algorithm. XGBoost is a high-performing ensemble decision tree algorithm. Decision tree algorithms work by finding a cut point with predictors that maximizes the variance in the outcome on either side of the cut point. XGBoost creates many trees, and the proportion of times that a given predictor appears in the trees is an indicator of its relative importance in explaining variance in the outcome. It differs from typcal random forest algorithms in that the trees it builds are not fully independent: they learn and adapt based on already-existing trees.
+The third method we used to select items was the XGBoost algorithm. XGBoost is a well known and high-performing gradient-boosted ensemble method. This method works by creating an "ensemble" of many regression trees which identify cut-points in a series predictors that maximize variance in the outcome on either side of the cut-point. Gradient-boosting adds to this strategy by fitting each regression tree sequentially on the residuals of the previous model, allowing the trees to learn and build on each other instead of operating independently (Islam, 2024). XGBoost is a specific variant of these gradient-boosted ensemble methods known for its high speed, capability to handle complex patterns, and predictive ability (Chen & Guestrin, 2016).
 
-Like the ridge regression method, we again regressed scores on every item from the selected tests on forecasting ability. We tuned the XGBoost algorithm on a training subset of the data, allowing all of the tree depth, the minimum number of observations in a node to allow it to be split again, the learning rate, the number of predictors to sample out of all predictors, and the proportion of observations sampled to tune. We then let the SHAP values from the final tuned model to define the item ranks.
+The proportion of times that a given predictor is selected by the algorithm to appear in a regression tree can serve as a measure of its importance in predicting the outcome. We then let the SHAP values from the final tuned model to define the item ranks.
 
 ### Testing the Tests
 
@@ -163,13 +226,15 @@ readRDS(here::here("Data", "Method Comparison", "ridge_candidate_test.rds"))
 readRDS(here::here("Data", "Method Comparison", "xgboost_candidate_test.rds"))
 ```
 
-All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy in four arms.
+All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we will evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy from participants in a new study with four arms.
 
-Each arm will contain three components: the cognitive test of interest, six forecasting items, and some cognitive tests not included in the tests of interest to serve as anchor items across participants. 
+Each arm will contain three components: the (1) cognitive test of interest, (2) six forecasting items, and (3) cognitive tests not included in the tests of interest to serve as anchor items across participants. 
 
-The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).
+1. The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).
 
-The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test. 
+2. 
+
+3. The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test. 
 
 We will collect data from participants on Prolific, and participants will be randomized into one of the four arms.
 
@@ -183,12 +248,14 @@ flowchart LR
     C --> F[Forecasting Items]
     D --> F[Forecasting Items]
     E --> F[Forecasting Items]
-    F --> G[Berlin Numeracy, \nCognitive Reflection Test]
+    F --> G[`Berlin Numeracy, \nCognitive Reflection Test`]
 ```
 
 ## Analysis
 
 We will compare the correlations between tests and forecasting scores. 
+
+Will be thinking about this more. Feels so silly go to back to sum scores after all this. But I feel like doing some sort of IRT setup incorporating all the items and tasks would be no less complex than doing it on all the cognitive tests as they are in the data, so if not trying to build out that sort of thing now as a test dev method, why do it on the smaller, more disjointed-from-each-other tests?
 
 
 

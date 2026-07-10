@@ -1,0 +1,26 @@
+---
+title: "GT test"
+html-table-processing: none
+---
+
+```{r}
+library(gt)
+
+source(here::here("Scripts", "j_gt.R"))
+```
+
+
+```{r}
+iris |>
+  head() |>
+  j_gt()
+```
+
+::: panel-tabset
+### Label
+```{r}
+iris |>
+  head() |>
+  j_gt(in_tabset = T)
+```
+:::

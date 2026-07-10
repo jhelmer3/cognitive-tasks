@@ -1,8 +1,8 @@
 /*-- scss:defaults --*/
-// quarto-scss-analysis-annotation { "origin": "cosmo (builtin theme)" }
 
 $theme: "cosmo" !default;
 
+$callout-color-note: #a89f8c;
 //
 // Color system
 //
@@ -96,7 +96,7 @@ $alert-border-width:            0 !default;
 $progress-height:               .5rem !default;
 
 // Code blocks
-$code-block-bg: #E3DFCF;
+$code-block-bg: #d6d3c6;
 
 
 /*-- scss:rules --*/
@@ -142,5 +142,42 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+// Panel Tabset
 
-// quarto-scss-analysis-annotation { "origin": null }
+.panel-tabset > .tab-content {
+  background-color: #e2e0d4; // or any hex
+}
+
+// Mermaid flowcharts
+
+.mermaid .edgePath .path {
+  stroke: #6b6558;    // arrow lines
+  stroke-width: 1.5px;
+}
+
+.mermaid .arrowheadPath {
+  fill: #6b6558;      // arrowhead fill
+  stroke: none;
+}
+
+// Callout notes
+
+.callout-note {
+  border-left-color: #a89f8c !important;  // the left accent bar
+  
+  .callout-icon::before {
+    background-image: none;  // removes the default SVG icon color
+  }
+  
+  &.callout-style-default {
+    > .callout-header {
+      background-color: #d6d3c6;  // header band background
+      color: #202020;             // header text color
+    }
+    > .callout-body {
+      background-color: #e8e6da;  // body background
+    }
+  }
+}
+
+

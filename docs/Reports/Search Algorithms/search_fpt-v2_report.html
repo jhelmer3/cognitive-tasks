@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-9e8068862e0223af10105e1c7351101e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-2e96068d7d2d8cbbd6b632ff443c7a9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -3350,18 +3350,18 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--0.87554 -0.24461  0.01654  0.28938  0.99390 
+-1.38005 -0.27982  0.00624  0.26926  1.22609 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 0.015320   0.040011   0.383    0.703    
-x           0.199697   0.008732  22.869   &lt;2e-16 ***
+(Intercept) 0.066450   0.045622   1.457    0.148    
+x           0.197713   0.008837  22.374   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.3995 on 98 degrees of freedom
-Multiple R-squared:  0.8422,    Adjusted R-squared:  0.8406 
-F-statistic:   523 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.4562 on 98 degrees of freedom
+Multiple R-squared:  0.8363,    Adjusted R-squared:  0.8346 
+F-statistic: 500.6 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -3382,19 +3382,19 @@ lm(formula = y ~ x, data = mutate(data.frame(y = rnorm(100)),
         rnorm(100), x4 = y + rnorm(100), x = x1 + x2 + x3 + x4))
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--1.70100 -0.62244 -0.07657  0.50458  2.59505 
+    Min      1Q  Median      3Q     Max 
+-2.5466 -0.6091  0.1222  0.7552  2.3682 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.108921   0.085971  -1.267 0.208179    
-x            0.031115   0.008203   3.793 0.000257 ***
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept) 0.030962   0.099178   0.312   0.7556   
+x           0.023368   0.008451   2.765   0.0068 **
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.8575 on 98 degrees of freedom
-Multiple R-squared:  0.128, Adjusted R-squared:  0.1191 
-F-statistic: 14.39 on 1 and 98 DF,  p-value: 0.0002572</code></pre>
+Residual standard error: 0.9875 on 98 degrees of freedom
+Multiple R-squared:  0.07237,   Adjusted R-squared:  0.0629 
+F-statistic: 7.645 on 1 and 98 DF,  p-value: 0.006801</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>

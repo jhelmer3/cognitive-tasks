@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jessica Helmer">
+<meta name="dcterms.date" content="2026-07-10">
 
 <title>Proposal – Cognitive Task Modeling</title>
 <style>
@@ -74,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0f90db893fe67c19b7c7dd9d8b9fe384.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-2e96068d7d2d8cbbd6b632ff443c7a9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -288,7 +290,6 @@ window.Quarto = {
   </ul></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
-  <li><a href="#candidate-test-creation" id="toc-candidate-test-creation" class="nav-link" data-scroll-target="#candidate-test-creation">Candidate Test Creation</a></li>
   <li><a href="#testing-the-tests" id="toc-testing-the-tests" class="nav-link" data-scroll-target="#testing-the-tests">Testing the Tests</a></li>
   </ul></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
@@ -307,7 +308,19 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jessica Helmer </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 10, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -325,9 +338,7 @@ window.Quarto = {
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set_theme</span>(<span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">16</span>, <span class="at">paper =</span> <span class="st">"#eceadf"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -345,7 +356,8 @@ window.Quarto = {
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"get_startup.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"get_startup.R"</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Scripts"</span>, <span class="st">"j_gt.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -370,7 +382,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="cognitive-measures-in-question">Cognitive Measures in Question</h4>
 <p>Overall, we currently only focus on the cognitive tasks that in the original FPT paper that showed strong enough associations with forecasting ability to warrent being included FPT version with the most cognitive tasks.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Denominator Neglect</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Bayesian Update</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Adult Decision Making Competency: Decision Rules</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Number Series</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false">Coherence Forecasting Scale</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false">Matrix Reasoning</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Denominator Neglect</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Bayesian Update</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Time Series</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Adult Decision Making Competency: Decision Rules</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false">Number Series</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false">Coherence Forecasting Scale</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-7" role="tab" aria-controls="tabset-2-7" aria-selected="false">Matrix Reasoning</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <p>Denominator Neglect was overall the strongest performing task in the FPT. It is a binary choice task between lotteries of two ratios of gold and silver coins, with the goal of maximizing the chance of picking a gold coin. This task was intended to target the denominator neglect bias, the idea that people will discount the numerator size of a ratio when the denominator size was large. Each choice had one lottery with a small denominator (10 coins) and one lottery with a large denominator (400 coins).</p>
@@ -382,29 +394,46 @@ window.Quarto = {
 <p>Hard, Easy versions</p>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-<p>Describe</p>
+<p>Describe noise x n_datapoints x direction x function</p>
 </div>
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
 <p>Describe</p>
 </div>
 <div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
-<p>We did not include the Coherence Forecasting Scale (CFS) in this attempt to shorten the FPT. The CFS has multiple testlets with grouped scores, and we did not attempt to examine item-level scores from this measure.</p>
+<p>Describe</p>
 </div>
 <div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+<p>We did not include the Coherence Forecasting Scale (CFS) in this attempt to shorten the FPT. The CFS has multiple testlets with grouped scores, and we did not attempt to examine item-level scores from this measure.</p>
+</div>
+<div id="tabset-2-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-7-tab">
 <p>We did not include Matrix Reasoning in this attempt to shorten the FPT. The items were grouped into lists, with most lists having different items from all other lists but some lists having 1–2 items cross between lists. Participants each only saw one list. Because of this complexity and the lack of shared items among participants, we did not attempt to examine item-level scores from this measure.</p>
 </div>
 </div>
 </div>
+<p>Using all items from Denominator Neglect: Separate, Denominator Neglect: Combined, Bayesian Update: Easy, Bayesian Update: Hard, Time Series, Adult Decision Making Competency: Decision Rules, and Number Series yielded 99 candidate items to be included in the shorter FPT test.</p>
 </section>
 </section>
 <section id="potential-improvement" class="level3">
 <h3 class="anchored" data-anchor-id="potential-improvement">Potential Improvement</h3>
-<p>Because the selection of tasks for the FPT was done by examining task sum scores’ association with forecasting ability, variation of the informativeness of individual items within tasks towards forecasting ability remains unexplored. By identifying if some items within tasks are more informative than others, we may be able to reduce the amount of items administered to an examinee while still maintaining good predictive ability of forecasting ability.</p>
-<section id="some-differences-and-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="some-differences-and-challenges">Some Differences and Challenges</h4>
-<p>One interesting difference between this project and most psychometric work is that in most psychometric work, items are administered in a test aimed to capture some latent construct. Here, the cognitive tasks administered are not even necessarily intending to directly measure forecasting ability. So our primary interest is not in the cognitive tasks’ ability to measure their intended cognitive construct themselves, but instead in the items’ that have strong ability to capture their intended construct and also measure a construct that has a strong relationship with forecasting ability itself. In this work, we already have a measure of our intended construct (forecasting ability), and we want to identify items within tasks that have strong associations with that measured construct. What common models like the 2PL here offer is the information about the items measuring the latent construct, but not (directly) the construct’s association with forecasting ability.</p>
+<p>Because the selection of tasks for the original FPT was done by examining task sum scores’ association with forecasting ability, variation of the informativeness of individual items within tasks towards forecasting ability remains unexplored. By identifying if some items within tasks are more informative than others, we may be able to reduce the amount of items administered to an examinee while still maintaining good predictive ability of forecasting ability.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Some Differences and Challenges On My Mind
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>One interesting difference between this project and most psychometric work is that in most psychometric work, items are administered in a test aimed to capture some latent construct. Here, the cognitive tasks administered are not even necessarily intending to directly measure forecasting ability; they were developed themselves to measure a different cognitive construct and just happen to be related to forecasting ability. So, our primary interest is not in the cognitive tasks’ ability to measure their intended cognitive construct themselves, but instead in the items’ that (1) have strong ability to capture their intended construct and (2) are capturing a construct that itself has a strong relationship with forecasting ability.</p>
+<p>In this work, we already have a measure of our intended construct (forecasting ability), and we want to identify items within tasks that have strong associations with that measured construct. What common models like the 2PL here offer is the information about the items measuring the latent construct, but not (directly) the construct’s association with forecasting ability.</p>
 <p>Another challenge here is that many of the cognitive measures have different outcome scales. For example, some follow a binary correct-incorrect pattern (e.g., Denominator Neglect, Decision Rules), while others are scored as a continuous distance from the correct response (e.g., Bayesian Update, Time Series).</p>
-</section>
+</div>
+</div>
+</div>
 </section>
 <section id="objective" class="level3">
 <h3 class="anchored" data-anchor-id="objective">Objective</h3>
@@ -413,17 +442,62 @@ window.Quarto = {
 </section>
 <section id="methods" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<section id="candidate-test-creation" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="candidate-test-creation">Candidate Test Creation</h3>
 <p>We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all potential items in terms of their usefulness in predicting forecasting ability. Then, in order of their ranks, we selected as many items as we could to create a test that would still be expected to take under 15 minutes to complete. We used the existing data collected in the FPT development study to conduct this analysis.</p>
-<p>The methods we used to select items were a greedy search algorithm, elastic net regression, and the XGBoost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores.</p>
+<p>The methods we used to select items were a greedy search algorithm, ridge regression, and the XGBoost decision tree algorithm, all optimizing towards the relationship of items with forecasting accuracy scores.</p>
 <section id="outcome-forecasting-ability" class="level4">
 <h4 class="anchored" data-anchor-id="outcome-forecasting-ability">Outcome: Forecasting Ability</h4>
-<p>As our outcome and target indicator of forecasting accuracy, we used data from the forecasts participants in the FPT development study. This was data on 36 forecasting items elicited in the quantile format on topics across domains. These forecasts were scored against the outcome with the s-score, and participants’ mean forecast accuracy was used as our outcome indicator of interest to represent forecasting ability.</p>
+<p>As our outcome and target indicator of forecasting accuracy, we used data from the forecasts participants made in the FPT development study. This was data on 36 forecasting items elicited in the quantile format on topics across domains. These forecasts were scored against the items’ outcomes with the s-score, and participants’ mean forecast accuracy was used as our outcome indicator of interest to represent forecasting ability.</p>
+</section>
+<section id="testing-time" class="level4">
+<h4 class="anchored" data-anchor-id="testing-time">Testing Time</h4>
+<p>A key component of this search algorithm was incorporating the time it took participants (generally) to complete the different tasks, to investigate not just the predictive ability of each item, but its predictive ability relative to its time cost. We calculated these testing times from the existing FPT data. Each task had a reported overall median testing time, <span class="math inline">\(time_{task}\)</span>. We also used the existing data to calculate the “start-up cost” <span class="math inline">\(time_{task_{startup}}\)</span>of each task: the time that it took participants to read instructions and complete practice trials for the task. We then, for each task, calculated the expected testing time for each item within each task as <span class="math inline">\(time_{task_{item}} = \frac{ time_{task} - time_{task_{startup}} }{ n_{task_{items}} }\)</span>.</p>
 </section>
 <section id="search-algorithm" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="search-algorithm">Search Algorithm</h4>
-<p>The first method we used to rank most informative items was with a search algorithm. This algorithm worked by iterating through all items from the set of included cognitive tasks and identifying the item that, when added to a “test” of previously-added items, yields the greatest ratio of increase in predictive ability to increase in testing time, <span class="math inline">\(\frac{\text{added }R^2}{\text{added time}}\)</span>. Specifically, the numerator represents the increase in the <span class="math inline">\(R^2\)</span> of a model with the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy compared to the <span class="math inline">\(R^2\)</span> of a model of sum scores just of the previously selected test items. The algorithm repeated this until all items had been added to the test, and the order in which the iterms were added to the tests determined their rank. We then examined the <span class="math inline">\(R^2\)</span> of the test as it grew in items with the search algorithm.</p>
+<p>The first method we used to rank most informative items was with a search algorithm that was overall looking for items that maximized the increase in predictive ability relative to their increase in testing time.</p>
+<p>This algorithm worked by iterating through all items from the set of included cognitive tasks and identifying the item that, when added to a “test” of previously-added items, yielded the greatest ratio of increase in predictive ability to increase in testing time, <span class="math inline">\(\frac{\text{added }R^2}{\text{added time}}\)</span>. Specifically, the numerator represents the increase in the <span class="math inline">\(R^2\)</span> of a model with the sum scores of all previously selected test items and the item in question compared predicting forecasting accuracy compared to the <span class="math inline">\(R^2\)</span> of a model of sum scores just of the previously selected test items.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Search Algorithm as Steps
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Initialize an empty test with no items.</p></li>
+<li><p>Iterate through all items within the set of included cognitive tasks (e.g., DN-C_1, DN-C_2, .., DN-S_48, BU-E_1, BU-E_2 <span class="math inline">\(\in\)</span> DN-C, DN-S, BU-E, BU-H, TS, ADMC-DR, NS).</p></li>
+<li><p>For each iteration <span class="math inline">\(i\)</span>, calculate two pieces of information:</p></li>
+</ol>
+<ol type="i">
+<li><p>The added predictive ability of the candidate item, <span class="math inline">\(R^2_{added}\)</span>. Do this by calculating the <span class="math inline">\(R^2\)</span> of a model that regresses the item on forecasting ability, <span class="math inline">\(sscores = \beta_0 + \beta_1 \text{item}_i\)</span>. Calculate the difference <span class="math inline">\(R^2_{added} = R^2_{i} - R^2_{test}\)</span>. In this first step with the empty test, <span class="math inline">\(R^2_{test} = 0\)</span>.</p></li>
+<li><p>The added expected testing time for the item, <span class="math inline">\(t_{added}\)</span>. If the item was the first from its task to appear in the test, <span class="math inline">\(t_{added_i} = time_{task_{item}} + time_{task_{startup}}\)</span>. If items from the item’s task had already appeared in the test, <span class="math inline">\(t_{added_i} = time_{task_{item}}\)</span>.</p></li>
+<li><p>Calculate the ratio <span class="math inline">\(\frac{ R^2_{added} }{ t_{added} }\)</span>.</p></li>
+</ol>
+<ol start="4" type="1">
+<li><p>Identify the item that had <span class="math inline">\(max(\frac{ R^2_{added} }{ t_{added} })\)</span>. Add that item to the test.</p></li>
+<li><p>Iterate through all remaining items. For each further repetition, the calculation of <span class="math inline">\(R^2_{added}\)</span> will be slightly more involved.</p></li>
+<li><p>For each iteration <span class="math inline">\(i\)</span>, calculate two pieces of information:</p></li>
+</ol>
+<ol type="i">
+<li>The added predictive ability of the candidate item, <span class="math inline">\(R^2_{added}\)</span>. First, calculate the sum scores for all tasks included, and regress those task sum scores on forecasting ability. E.g., if on a given iteration, the test included three DN-C items, the model would look like <span class="math inline">\(sscores = \beta_0 + \beta_{\text{DN-C}} \text{DN-C}\)</span>. If the test included two DN-S items and one NS item, the model would look like <span class="math inline">\(sscores = \beta_0 + \beta_{\text{DN-S}} \text{DN-S} + \beta_{NS} NS\)</span>.</li>
+</ol>
+<p>Then, calculate the <span class="math inline">\(R^2\)</span> of that model, and calculate the difference <span class="math inline">\(R^2_{added} = R^2_{i} - R^2_{test}\)</span>.</p>
+<ol start="2" type="i">
+<li>The added expected testing time for the item, <span class="math inline">\(t_{added}\)</span>. As before, if the item was the first from its task to appear in the test, <span class="math inline">\(t_{added_i} = time_{task_{item}} + time_{task_{startup}}\)</span>. If items from the item’s task had already appeared in the test, <span class="math inline">\(t_{added_i} = time_{task_{item}}\)</span>.</li>
+</ol>
+<ol start="7" type="1">
+<li><p>Identify the item that had <span class="math inline">\(max(\frac{ R^2_{added} }{ t_{added} })\)</span>. Add that item to the test.</p></li>
+<li><p>Repeat until all items have been added to the test.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<p>The algorithm repeated this until all items had been added to the test, and the order in which the items were added to the tests determined their rank. We then examined the <span class="math inline">\(R^2\)</span> of the test as it grew in items with the search algorithm.</p>
 <div class="cell page-columns page-full">
 <details class="code-fold">
 <summary>Code</summary>
@@ -448,30 +522,32 @@ window.Quarto = {
 </section>
 <section id="ridge-regression" class="level4">
 <h4 class="anchored" data-anchor-id="ridge-regression">Ridge Regression</h4>
-<p>The next method we used to select items was ridge regression. Ridge regression is a regression technique that can be helpful when the number of predictors is large. We regressed scores from all items from the selected cognitive tests on forecasting ability. We chose ridge regression out of the family of ridge, elastic net, and LASSO regression, where elastic net blends LASSO regression and ridge regression by letting a mixture paramter define the weight given to the penalty terms used by each method (Zou and Hastie, 2005), by examining their fit statistics after training each model on a subset of the data. The ridge and LASSO regression models both tuned their penalty parameters on the training data, and the elastic net model also was able to tune its mixture parameter with values incrementing between .05 and .95 by .15.</p>
+<p>The next method we used to select items was ridge regression. We did not specifically target ridge regression at first but instead compared the performance of models from the family of ridge, elastic net, and LASSO regression to see which showed the strongest predictive ability within our sample to warrant being used to develop a shorter FPT.</p>
+<p>Ridge, elastic net, and LASSO regression are all related techniques in that they follow familiar linear regression procedures but incorporate a penalty term to prevent model complexity. Elastic net works as a combination of the ridge and LASSO, incorporating a mixing parameter to determine how much weigh to give to the ridge vs.&nbsp;the LASSO component (Zou and Hastie, 2005). They are each often used when the number of predictors is high. In our case, we used all 99 candidate items as separate predictors, <span class="math display">\[ sscores = \beta_0 + \beta_{\text{DN-C}_1} \text{DN-C}_1 + \beta_{\text{DN-C}_2} \text{DN-C}_2 + ... \beta_{\text{DN-S}_{24}} \text{DN-S}_{24} + \beta_{\text{BU-E}_1} \text{BU-E}_1 + ... + \beta_{\text{NS}_9} \text{NS}_9\]</span>.</p>
+<p>We separated our data into a training and testing set, and we tuned all three models (ridge, elastic net, and LASSO) on the training set. All three methods tuned their penalty parameters, and elastic net also tuned its mixing parameter. We then fit the tuned model for each method that had the minimum Root Mean Squared Error (RMSE), and fit that model on the testing data. We compared fit statistics between the three methods to decide which method to use in developing a new candidate test.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Figures"</span>, <span class="st">"regression_comparison_tbl.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="wpsrajbghz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wpsrajbghz table {
+<div id="eojjpquwxd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eojjpquwxd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wpsrajbghz thead, #wpsrajbghz tbody, #wpsrajbghz tfoot, #wpsrajbghz tr, #wpsrajbghz td, #wpsrajbghz th {
+#eojjpquwxd thead, #eojjpquwxd tbody, #eojjpquwxd tfoot, #eojjpquwxd tr, #eojjpquwxd td, #eojjpquwxd th {
   border-style: none;
 }
 
-#wpsrajbghz p {
+#eojjpquwxd p {
   margin: 0;
   padding: 0;
 }
 
-#wpsrajbghz .gt_table {
+#eojjpquwxd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -497,12 +573,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_caption {
+#eojjpquwxd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wpsrajbghz .gt_title {
+#eojjpquwxd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -514,7 +590,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#wpsrajbghz .gt_subtitle {
+#eojjpquwxd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -526,7 +602,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#wpsrajbghz .gt_heading {
+#eojjpquwxd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -538,13 +614,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_bottom_border {
+#eojjpquwxd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_col_headings {
+#eojjpquwxd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -559,7 +635,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_col_heading {
+#eojjpquwxd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -579,7 +655,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#wpsrajbghz .gt_column_spanner_outer {
+#eojjpquwxd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -591,15 +667,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#wpsrajbghz .gt_column_spanner_outer:first-child {
+#eojjpquwxd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wpsrajbghz .gt_column_spanner_outer:last-child {
+#eojjpquwxd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wpsrajbghz .gt_column_spanner {
+#eojjpquwxd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -611,11 +687,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#wpsrajbghz .gt_spanner_row {
+#eojjpquwxd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wpsrajbghz .gt_group_heading {
+#eojjpquwxd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -641,7 +717,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#wpsrajbghz .gt_empty_group_heading {
+#eojjpquwxd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -656,15 +732,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#wpsrajbghz .gt_from_md > :first-child {
+#eojjpquwxd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wpsrajbghz .gt_from_md > :last-child {
+#eojjpquwxd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wpsrajbghz .gt_row {
+#eojjpquwxd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -683,7 +759,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#wpsrajbghz .gt_stub {
+#eojjpquwxd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -696,7 +772,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#wpsrajbghz .gt_stub_row_group {
+#eojjpquwxd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -710,15 +786,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#wpsrajbghz .gt_row_group_first td {
+#eojjpquwxd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wpsrajbghz .gt_row_group_first th {
+#eojjpquwxd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wpsrajbghz .gt_summary_row {
+#eojjpquwxd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -728,16 +804,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#wpsrajbghz .gt_first_summary_row {
+#eojjpquwxd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_first_summary_row.thick {
+#eojjpquwxd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wpsrajbghz .gt_last_summary_row {
+#eojjpquwxd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -747,7 +823,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_grand_summary_row {
+#eojjpquwxd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -757,7 +833,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#wpsrajbghz .gt_first_grand_summary_row {
+#eojjpquwxd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -767,7 +843,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_last_grand_summary_row_top {
+#eojjpquwxd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -777,11 +853,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_striped {
+#eojjpquwxd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wpsrajbghz .gt_table_body {
+#eojjpquwxd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -790,7 +866,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_footnotes {
+#eojjpquwxd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -804,7 +880,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_footnote {
+#eojjpquwxd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -813,7 +889,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#wpsrajbghz .gt_sourcenotes {
+#eojjpquwxd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -827,7 +903,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#wpsrajbghz .gt_sourcenote {
+#eojjpquwxd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -835,107 +911,100 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#wpsrajbghz .gt_left {
+#eojjpquwxd .gt_left {
   text-align: left;
 }
 
-#wpsrajbghz .gt_center {
+#eojjpquwxd .gt_center {
   text-align: center;
 }
 
-#wpsrajbghz .gt_right {
+#eojjpquwxd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wpsrajbghz .gt_font_normal {
+#eojjpquwxd .gt_font_normal {
   font-weight: normal;
 }
 
-#wpsrajbghz .gt_font_bold {
+#eojjpquwxd .gt_font_bold {
   font-weight: bold;
 }
 
-#wpsrajbghz .gt_font_italic {
+#eojjpquwxd .gt_font_italic {
   font-style: italic;
 }
 
-#wpsrajbghz .gt_super {
+#eojjpquwxd .gt_super {
   font-size: 65%;
 }
 
-#wpsrajbghz .gt_footnote_marks {
+#eojjpquwxd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wpsrajbghz .gt_asterisk {
+#eojjpquwxd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wpsrajbghz .gt_indent_1 {
+#eojjpquwxd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wpsrajbghz .gt_indent_2 {
+#eojjpquwxd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wpsrajbghz .gt_indent_3 {
+#eojjpquwxd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wpsrajbghz .gt_indent_4 {
+#eojjpquwxd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wpsrajbghz .gt_indent_5 {
+#eojjpquwxd .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wpsrajbghz .katex-display {
+#eojjpquwxd .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wpsrajbghz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#eojjpquwxd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_col_headings header">
-<th id="method" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Method</th>
-<th id="rmse" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">RMSE</th>
-<th id="rsq" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">RSQ</th>
-<th id="mae" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">MAE</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="method">Lasso</td>
-<td class="gt_row gt_right" headers="rmse">0.632</td>
-<td class="gt_row gt_right" headers="rsq">0.371</td>
-<td class="gt_row gt_right" headers="mae">0.466</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="method">Ridge</td>
-<td class="gt_row gt_right" headers="rmse" style="background-color: #E2EEE2">0.625</td>
-<td class="gt_row gt_right" headers="rsq" style="background-color: #E2EEE2">0.385</td>
-<td class="gt_row gt_right" headers="mae" style="background-color: #E2EEE2">0.461</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="method">Elastic Net More Tuning</td>
-<td class="gt_row gt_right" headers="rmse">0.627</td>
-<td class="gt_row gt_right" headers="rsq">0.382</td>
-<td class="gt_row gt_right" headers="mae">0.463</td>
-</tr>
-</tbody>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="method">Method</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="rmse">RMSE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="rsq">RSQ</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="mae">MAE</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="method" class="gt_row gt_left">Lasso</td>
+<td headers="rmse" class="gt_row gt_right">0.632</td>
+<td headers="rsq" class="gt_row gt_right">0.371</td>
+<td headers="mae" class="gt_row gt_right">0.466</td></tr>
+    <tr><td headers="method" class="gt_row gt_left">Ridge</td>
+<td headers="rmse" class="gt_row gt_right" style="background-color: #E2EEE2;">0.625</td>
+<td headers="rsq" class="gt_row gt_right" style="background-color: #E2EEE2;">0.385</td>
+<td headers="mae" class="gt_row gt_right" style="background-color: #E2EEE2;">0.461</td></tr>
+    <tr><td headers="method" class="gt_row gt_left">Elastic Net More Tuning</td>
+<td headers="rmse" class="gt_row gt_right">0.627</td>
+<td headers="rsq" class="gt_row gt_right">0.382</td>
+<td headers="mae" class="gt_row gt_right">0.463</td></tr>
+  </tbody>
+  
 </table>
-
 </div>
 </div>
 </div>
@@ -943,9 +1012,8 @@ window.Quarto = {
 </section>
 <section id="xgboost" class="level4">
 <h4 class="anchored" data-anchor-id="xgboost">XGBoost</h4>
-<p>The third method we used to select items was the XGBoost algorithm. XGBoost is a high-performing ensemble decision tree algorithm. Decision tree algorithms work by finding a cut point with predictors that maximizes the variance in the outcome on either side of the cut point. XGBoost creates many trees, and the proportion of times that a given predictor appears in the trees is an indicator of its relative importance in explaining variance in the outcome. It differs from typcal random forest algorithms in that the trees it builds are not fully independent: they learn and adapt based on already-existing trees.</p>
-<p>Like the ridge regression method, we again regressed scores on every item from the selected tests on forecasting ability. We tuned the XGBoost algorithm on a training subset of the data, allowing all of the tree depth, the minimum number of observations in a node to allow it to be split again, the learning rate, the number of predictors to sample out of all predictors, and the proportion of observations sampled to tune. We then let the SHAP values from the final tuned model to define the item ranks.</p>
-</section>
+<p>The third method we used to select items was the XGBoost algorithm. XGBoost is a well known and high-performing gradient-boosted ensemble method. This method works by creating an “ensemble” of many regression trees which identify cut-points in a series predictors that maximize variance in the outcome on either side of the cut-point. Gradient-boosting adds to this strategy by fitting each regression tree sequentially on the residuals of the previous model, allowing the trees to learn and build on each other instead of operating independently (Islam, 2024). XGBoost is a specific variant of these gradient-boosted ensemble methods known for its high speed, capability to handle complex patterns, and predictive ability (Chen &amp; Guestrin, 2016).</p>
+<p>The proportion of times that a given predictor is selected by the algorithm to appear in a regression tree can serve as a measure of its importance in predicting the outcome. We then let the SHAP values from the final tuned model to define the item ranks.</p>
 </section>
 <section id="testing-the-tests" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="testing-the-tests">Testing the Tests</h3>
@@ -958,23 +1026,24 @@ window.Quarto = {
 </details>
 <div class="cell column-page quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
-<div id="msgmzsegst" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#msgmzsegst table {
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="qbepysakog" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qbepysakog table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#msgmzsegst thead, #msgmzsegst tbody, #msgmzsegst tfoot, #msgmzsegst tr, #msgmzsegst td, #msgmzsegst th {
+#qbepysakog thead, #qbepysakog tbody, #qbepysakog tfoot, #qbepysakog tr, #qbepysakog td, #qbepysakog th {
   border-style: none;
 }
 
-#msgmzsegst p {
+#qbepysakog p {
   margin: 0;
   padding: 0;
 }
 
-#msgmzsegst .gt_table {
+#qbepysakog .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -984,15 +1053,15 @@ window.Quarto = {
   font-size: 16px;
   font-weight: normal;
   font-style: normal;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   width: auto;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
   border-left-style: none;
@@ -1000,12 +1069,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_caption {
+#qbepysakog .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#msgmzsegst .gt_title {
+#qbepysakog .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1013,11 +1082,11 @@ window.Quarto = {
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-bottom-width: 0;
 }
 
-#msgmzsegst .gt_subtitle {
+#qbepysakog .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1025,14 +1094,14 @@ window.Quarto = {
   padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  border-top-color: #FFFFFF;
+  border-top-color: #ECEADF;
   border-top-width: 0;
 }
 
-#msgmzsegst .gt_heading {
-  background-color: #FFFFFF;
+#qbepysakog .gt_heading {
+  background-color: #ECEADF;
   text-align: center;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1041,19 +1110,19 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_bottom_border {
+#qbepysakog .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_col_headings {
-  border-top-style: solid;
+#qbepysakog .gt_col_headings {
+  border-top-style: none;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1062,11 +1131,11 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_col_heading {
+#qbepysakog .gt_col_heading {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   border-left-style: none;
   border-left-width: 1px;
@@ -1082,11 +1151,11 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#msgmzsegst .gt_column_spanner_outer {
+#qbepysakog .gt_column_spanner_outer {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   padding-top: 0;
   padding-bottom: 0;
@@ -1094,18 +1163,18 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#msgmzsegst .gt_column_spanner_outer:first-child {
+#qbepysakog .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#msgmzsegst .gt_column_spanner_outer:last-child {
+#qbepysakog .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#msgmzsegst .gt_column_spanner {
+#qbepysakog .gt_column_spanner {
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1114,26 +1183,26 @@ window.Quarto = {
   width: 100%;
 }
 
-#msgmzsegst .gt_spanner_row {
+#qbepysakog .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#msgmzsegst .gt_group_heading {
+#qbepysakog .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1144,38 +1213,38 @@ window.Quarto = {
   text-align: left;
 }
 
-#msgmzsegst .gt_empty_group_heading {
+#qbepysakog .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   vertical-align: middle;
 }
 
-#msgmzsegst .gt_from_md > :first-child {
+#qbepysakog .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#msgmzsegst .gt_from_md > :last-child {
+#qbepysakog .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#msgmzsegst .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#qbepysakog .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
   border-top-style: solid;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1186,22 +1255,22 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#msgmzsegst .gt_stub {
+#qbepysakog .gt_stub {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-width: 1px;
+  border-right-color: #D6D3C6;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#msgmzsegst .gt_stub_row_group {
+#qbepysakog .gt_stub_row_group {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
@@ -1213,17 +1282,17 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#msgmzsegst .gt_row_group_first td {
+#qbepysakog .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#msgmzsegst .gt_row_group_first th {
+#qbepysakog .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#msgmzsegst .gt_summary_row {
+#qbepysakog .gt_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1231,28 +1300,28 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#msgmzsegst .gt_first_summary_row {
+#qbepysakog .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
 }
 
-#msgmzsegst .gt_first_summary_row.thick {
+#qbepysakog .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#msgmzsegst .gt_last_summary_row {
+#qbepysakog .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
 }
 
-#msgmzsegst .gt_grand_summary_row {
+#qbepysakog .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1260,7 +1329,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#msgmzsegst .gt_first_grand_summary_row {
+#qbepysakog .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1270,7 +1339,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_last_grand_summary_row_top {
+#qbepysakog .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1280,22 +1349,22 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_striped {
+#qbepysakog .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#msgmzsegst .gt_table_body {
+#qbepysakog .gt_table_body {
   border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-width: 1px;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1px;
+  border-bottom-color: #A89F8C;
 }
 
-#msgmzsegst .gt_footnotes {
+#qbepysakog .gt_footnotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1307,7 +1376,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_footnote {
+#qbepysakog .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1316,9 +1385,9 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#msgmzsegst .gt_sourcenotes {
+#qbepysakog .gt_sourcenotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1330,7 +1399,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#msgmzsegst .gt_sourcenote {
+#qbepysakog .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1338,240 +1407,176 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#msgmzsegst .gt_left {
+#qbepysakog .gt_left {
   text-align: left;
 }
 
-#msgmzsegst .gt_center {
+#qbepysakog .gt_center {
   text-align: center;
 }
 
-#msgmzsegst .gt_right {
+#qbepysakog .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#msgmzsegst .gt_font_normal {
+#qbepysakog .gt_font_normal {
   font-weight: normal;
 }
 
-#msgmzsegst .gt_font_bold {
+#qbepysakog .gt_font_bold {
   font-weight: bold;
 }
 
-#msgmzsegst .gt_font_italic {
+#qbepysakog .gt_font_italic {
   font-style: italic;
 }
 
-#msgmzsegst .gt_super {
+#qbepysakog .gt_super {
   font-size: 65%;
 }
 
-#msgmzsegst .gt_footnote_marks {
+#qbepysakog .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#msgmzsegst .gt_asterisk {
+#qbepysakog .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#msgmzsegst .gt_indent_1 {
+#qbepysakog .gt_indent_1 {
   text-indent: 5px;
 }
 
-#msgmzsegst .gt_indent_2 {
+#qbepysakog .gt_indent_2 {
   text-indent: 10px;
 }
 
-#msgmzsegst .gt_indent_3 {
+#qbepysakog .gt_indent_3 {
   text-indent: 15px;
 }
 
-#msgmzsegst .gt_indent_4 {
+#qbepysakog .gt_indent_4 {
   text-indent: 20px;
 }
 
-#msgmzsegst .gt_indent_5 {
+#qbepysakog .gt_indent_5 {
   text-indent: 25px;
 }
 
-#msgmzsegst .katex-display {
+#qbepysakog .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#msgmzsegst div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qbepysakog div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading header">
-<th colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="text-align: left;">Search Algorithm</th>
-</tr>
-<tr class="gt_col_headings even">
-<th id="item" class="gt_col_heading gt_columns_bottom_border gt_left" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">item</th>
-<th id="properties" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">properties</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_1</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_4</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_6</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_8</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_9</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_0</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">40,60</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.06, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_12_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_12_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.04, 0.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_13_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.04, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_13_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_14_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_14_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_16_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_16_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_18_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_18_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_19_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_19_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_23_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_23_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_24_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_24_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ns_5</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">3/21, ____, 13/11, 18/6, 23/1, 28/-4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_30, linear, negative</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_7</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">high, datapoints_30, linear, negative</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_9</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_10, linear, positive</td>
-</tr>
-</tbody>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #a89f8c;">Search Algorithm</td>
+    </tr>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="item">item</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="properties">properties</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_1</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_2</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_3</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_4</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_6</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_8</td>
+<td headers="properties" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_9</td>
+<td headers="properties" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_0</td>
+<td headers="properties" class="gt_row gt_center">40,60</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_2</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.06, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_12_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_12_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.04, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_13_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.04, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_13_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_14_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_14_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_16_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_16_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_18_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_18_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_19_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_19_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_23_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_23_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_24_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_24_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ns_5</td>
+<td headers="properties" class="gt_row gt_center">3/21, ____, 13/11, 18/6, 23/1, 28/-4</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_2</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_30, linear, negative</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_7</td>
+<td headers="properties" class="gt_row gt_center">high, datapoints_30, linear, negative</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_9</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_10, linear, positive</td></tr>
+  </tbody>
+  
 </table>
-
 </div>
-<div id="chhppweeyk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#chhppweeyk table {
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="ncbpdptros" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ncbpdptros table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#chhppweeyk thead, #chhppweeyk tbody, #chhppweeyk tfoot, #chhppweeyk tr, #chhppweeyk td, #chhppweeyk th {
+#ncbpdptros thead, #ncbpdptros tbody, #ncbpdptros tfoot, #ncbpdptros tr, #ncbpdptros td, #ncbpdptros th {
   border-style: none;
 }
 
-#chhppweeyk p {
+#ncbpdptros p {
   margin: 0;
   padding: 0;
 }
 
-#chhppweeyk .gt_table {
+#ncbpdptros .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1581,15 +1586,15 @@ window.Quarto = {
   font-size: 16px;
   font-weight: normal;
   font-style: normal;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   width: auto;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
   border-left-style: none;
@@ -1597,12 +1602,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_caption {
+#ncbpdptros .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#chhppweeyk .gt_title {
+#ncbpdptros .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1610,11 +1615,11 @@ window.Quarto = {
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-bottom-width: 0;
 }
 
-#chhppweeyk .gt_subtitle {
+#ncbpdptros .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1622,14 +1627,14 @@ window.Quarto = {
   padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  border-top-color: #FFFFFF;
+  border-top-color: #ECEADF;
   border-top-width: 0;
 }
 
-#chhppweeyk .gt_heading {
-  background-color: #FFFFFF;
+#ncbpdptros .gt_heading {
+  background-color: #ECEADF;
   text-align: center;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1638,19 +1643,19 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_bottom_border {
+#ncbpdptros .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_col_headings {
-  border-top-style: solid;
+#ncbpdptros .gt_col_headings {
+  border-top-style: none;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1659,11 +1664,11 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_col_heading {
+#ncbpdptros .gt_col_heading {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   border-left-style: none;
   border-left-width: 1px;
@@ -1679,11 +1684,11 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#chhppweeyk .gt_column_spanner_outer {
+#ncbpdptros .gt_column_spanner_outer {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   padding-top: 0;
   padding-bottom: 0;
@@ -1691,18 +1696,18 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#chhppweeyk .gt_column_spanner_outer:first-child {
+#ncbpdptros .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#chhppweeyk .gt_column_spanner_outer:last-child {
+#ncbpdptros .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#chhppweeyk .gt_column_spanner {
+#ncbpdptros .gt_column_spanner {
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1711,26 +1716,26 @@ window.Quarto = {
   width: 100%;
 }
 
-#chhppweeyk .gt_spanner_row {
+#ncbpdptros .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#chhppweeyk .gt_group_heading {
+#ncbpdptros .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1741,38 +1746,38 @@ window.Quarto = {
   text-align: left;
 }
 
-#chhppweeyk .gt_empty_group_heading {
+#ncbpdptros .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   vertical-align: middle;
 }
 
-#chhppweeyk .gt_from_md > :first-child {
+#ncbpdptros .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#chhppweeyk .gt_from_md > :last-child {
+#ncbpdptros .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#chhppweeyk .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#ncbpdptros .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
   border-top-style: solid;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1783,22 +1788,22 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#chhppweeyk .gt_stub {
+#ncbpdptros .gt_stub {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-width: 1px;
+  border-right-color: #D6D3C6;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#chhppweeyk .gt_stub_row_group {
+#ncbpdptros .gt_stub_row_group {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
@@ -1810,17 +1815,17 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#chhppweeyk .gt_row_group_first td {
+#ncbpdptros .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#chhppweeyk .gt_row_group_first th {
+#ncbpdptros .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#chhppweeyk .gt_summary_row {
+#ncbpdptros .gt_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1828,28 +1833,28 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#chhppweeyk .gt_first_summary_row {
+#ncbpdptros .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
 }
 
-#chhppweeyk .gt_first_summary_row.thick {
+#ncbpdptros .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#chhppweeyk .gt_last_summary_row {
+#ncbpdptros .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
 }
 
-#chhppweeyk .gt_grand_summary_row {
+#ncbpdptros .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1857,7 +1862,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#chhppweeyk .gt_first_grand_summary_row {
+#ncbpdptros .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1867,7 +1872,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_last_grand_summary_row_top {
+#ncbpdptros .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1877,22 +1882,22 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_striped {
+#ncbpdptros .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#chhppweeyk .gt_table_body {
+#ncbpdptros .gt_table_body {
   border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-width: 1px;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1px;
+  border-bottom-color: #A89F8C;
 }
 
-#chhppweeyk .gt_footnotes {
+#ncbpdptros .gt_footnotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1904,7 +1909,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_footnote {
+#ncbpdptros .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1913,9 +1918,9 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#chhppweeyk .gt_sourcenotes {
+#ncbpdptros .gt_sourcenotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1927,7 +1932,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#chhppweeyk .gt_sourcenote {
+#ncbpdptros .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1935,216 +1940,164 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#chhppweeyk .gt_left {
+#ncbpdptros .gt_left {
   text-align: left;
 }
 
-#chhppweeyk .gt_center {
+#ncbpdptros .gt_center {
   text-align: center;
 }
 
-#chhppweeyk .gt_right {
+#ncbpdptros .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#chhppweeyk .gt_font_normal {
+#ncbpdptros .gt_font_normal {
   font-weight: normal;
 }
 
-#chhppweeyk .gt_font_bold {
+#ncbpdptros .gt_font_bold {
   font-weight: bold;
 }
 
-#chhppweeyk .gt_font_italic {
+#ncbpdptros .gt_font_italic {
   font-style: italic;
 }
 
-#chhppweeyk .gt_super {
+#ncbpdptros .gt_super {
   font-size: 65%;
 }
 
-#chhppweeyk .gt_footnote_marks {
+#ncbpdptros .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#chhppweeyk .gt_asterisk {
+#ncbpdptros .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#chhppweeyk .gt_indent_1 {
+#ncbpdptros .gt_indent_1 {
   text-indent: 5px;
 }
 
-#chhppweeyk .gt_indent_2 {
+#ncbpdptros .gt_indent_2 {
   text-indent: 10px;
 }
 
-#chhppweeyk .gt_indent_3 {
+#ncbpdptros .gt_indent_3 {
   text-indent: 15px;
 }
 
-#chhppweeyk .gt_indent_4 {
+#ncbpdptros .gt_indent_4 {
   text-indent: 20px;
 }
 
-#chhppweeyk .gt_indent_5 {
+#ncbpdptros .gt_indent_5 {
   text-indent: 25px;
 }
 
-#chhppweeyk .katex-display {
+#ncbpdptros .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#chhppweeyk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ncbpdptros div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading header">
-<th colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="text-align: left;">LASSO</th>
-</tr>
-<tr class="gt_col_headings even">
-<th id="item" class="gt_col_heading gt_columns_bottom_border gt_left" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">item</th>
-<th id="properties" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">properties</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_1</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_4</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_8</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_9</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_0</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">40,60</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.06, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_14_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_14_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_24_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_24_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_5_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_5_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.s_24_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.s_24_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ns_5</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">3/21, ____, 13/11, 18/6, 23/1, 28/-4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ns_6</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">200, 198, 192, 174, ____</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_30, linear, negative</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_10, linear, negative</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_7</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">high, datapoints_30, linear, negative</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_9</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_10, linear, positive</td>
-</tr>
-</tbody>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #a89f8c;">Ridge</td>
+    </tr>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="item">item</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="properties">properties</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_1</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_2</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_3</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_4</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_8</td>
+<td headers="properties" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_9</td>
+<td headers="properties" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_0</td>
+<td headers="properties" class="gt_row gt_center">40,60</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_2</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_3</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.06, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_14_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_14_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_24_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_24_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_5_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_5_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.s_24_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.s_24_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ns_5</td>
+<td headers="properties" class="gt_row gt_center">3/21, ____, 13/11, 18/6, 23/1, 28/-4</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ns_6</td>
+<td headers="properties" class="gt_row gt_center">200, 198, 192, 174, ____</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_2</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_30, linear, negative</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_3</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_10, linear, negative</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_7</td>
+<td headers="properties" class="gt_row gt_center">high, datapoints_30, linear, negative</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_9</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_10, linear, positive</td></tr>
+  </tbody>
+  
 </table>
-
 </div>
-<div id="erqedzjnas" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#erqedzjnas table {
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="olyiuicttz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#olyiuicttz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#erqedzjnas thead, #erqedzjnas tbody, #erqedzjnas tfoot, #erqedzjnas tr, #erqedzjnas td, #erqedzjnas th {
+#olyiuicttz thead, #olyiuicttz tbody, #olyiuicttz tfoot, #olyiuicttz tr, #olyiuicttz td, #olyiuicttz th {
   border-style: none;
 }
 
-#erqedzjnas p {
+#olyiuicttz p {
   margin: 0;
   padding: 0;
 }
 
-#erqedzjnas .gt_table {
+#olyiuicttz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2154,15 +2107,15 @@ window.Quarto = {
   font-size: 16px;
   font-weight: normal;
   font-style: normal;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   width: auto;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
   border-left-style: none;
@@ -2170,12 +2123,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_caption {
+#olyiuicttz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#erqedzjnas .gt_title {
+#olyiuicttz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2183,11 +2136,11 @@ window.Quarto = {
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-bottom-width: 0;
 }
 
-#erqedzjnas .gt_subtitle {
+#olyiuicttz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2195,14 +2148,14 @@ window.Quarto = {
   padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  border-top-color: #FFFFFF;
+  border-top-color: #ECEADF;
   border-top-width: 0;
 }
 
-#erqedzjnas .gt_heading {
-  background-color: #FFFFFF;
+#olyiuicttz .gt_heading {
+  background-color: #ECEADF;
   text-align: center;
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #ECEADF;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -2211,19 +2164,19 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_bottom_border {
+#olyiuicttz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_col_headings {
-  border-top-style: solid;
+#olyiuicttz .gt_col_headings {
+  border-top-style: none;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -2232,11 +2185,11 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_col_heading {
+#olyiuicttz .gt_col_heading {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   border-left-style: none;
   border-left-width: 1px;
@@ -2252,11 +2205,11 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#erqedzjnas .gt_column_spanner_outer {
+#olyiuicttz .gt_column_spanner_outer {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
-  font-weight: normal;
+  font-weight: bold;
   text-transform: inherit;
   padding-top: 0;
   padding-bottom: 0;
@@ -2264,18 +2217,18 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#erqedzjnas .gt_column_spanner_outer:first-child {
+#olyiuicttz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#erqedzjnas .gt_column_spanner_outer:last-child {
+#olyiuicttz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#erqedzjnas .gt_column_spanner {
+#olyiuicttz .gt_column_spanner {
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1.25px;
+  border-bottom-color: #A89F8C;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -2284,26 +2237,26 @@ window.Quarto = {
   width: 100%;
 }
 
-#erqedzjnas .gt_spanner_row {
+#olyiuicttz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#erqedzjnas .gt_group_heading {
+#olyiuicttz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -2314,38 +2267,38 @@ window.Quarto = {
   text-align: left;
 }
 
-#erqedzjnas .gt_empty_group_heading {
+#olyiuicttz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
   vertical-align: middle;
 }
 
-#erqedzjnas .gt_from_md > :first-child {
+#olyiuicttz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#erqedzjnas .gt_from_md > :last-child {
+#olyiuicttz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#erqedzjnas .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#olyiuicttz .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
   border-top-style: solid;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -2356,22 +2309,22 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#erqedzjnas .gt_stub {
+#olyiuicttz .gt_stub {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-width: 1px;
+  border-right-color: #D6D3C6;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#erqedzjnas .gt_stub_row_group {
+#olyiuicttz .gt_stub_row_group {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
@@ -2383,17 +2336,17 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#erqedzjnas .gt_row_group_first td {
+#olyiuicttz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#erqedzjnas .gt_row_group_first th {
+#olyiuicttz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#erqedzjnas .gt_summary_row {
+#olyiuicttz .gt_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -2401,28 +2354,28 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#erqedzjnas .gt_first_summary_row {
+#olyiuicttz .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #D6D3C6;
 }
 
-#erqedzjnas .gt_first_summary_row.thick {
+#olyiuicttz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#erqedzjnas .gt_last_summary_row {
+#olyiuicttz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #D6D3C6;
 }
 
-#erqedzjnas .gt_grand_summary_row {
+#olyiuicttz .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -2430,7 +2383,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#erqedzjnas .gt_first_grand_summary_row {
+#olyiuicttz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2440,7 +2393,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_last_grand_summary_row_top {
+#olyiuicttz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2450,22 +2403,22 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_striped {
+#olyiuicttz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#erqedzjnas .gt_table_body {
+#olyiuicttz .gt_table_body {
   border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-width: 1px;
+  border-top-color: #A89F8C;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-width: 1px;
+  border-bottom-color: #A89F8C;
 }
 
-#erqedzjnas .gt_footnotes {
+#olyiuicttz .gt_footnotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2477,7 +2430,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_footnote {
+#olyiuicttz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2486,9 +2439,9 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#erqedzjnas .gt_sourcenotes {
+#olyiuicttz .gt_sourcenotes {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #ECEADF;
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2500,7 +2453,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#erqedzjnas .gt_sourcenote {
+#olyiuicttz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2508,185 +2461,145 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#erqedzjnas .gt_left {
+#olyiuicttz .gt_left {
   text-align: left;
 }
 
-#erqedzjnas .gt_center {
+#olyiuicttz .gt_center {
   text-align: center;
 }
 
-#erqedzjnas .gt_right {
+#olyiuicttz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#erqedzjnas .gt_font_normal {
+#olyiuicttz .gt_font_normal {
   font-weight: normal;
 }
 
-#erqedzjnas .gt_font_bold {
+#olyiuicttz .gt_font_bold {
   font-weight: bold;
 }
 
-#erqedzjnas .gt_font_italic {
+#olyiuicttz .gt_font_italic {
   font-style: italic;
 }
 
-#erqedzjnas .gt_super {
+#olyiuicttz .gt_super {
   font-size: 65%;
 }
 
-#erqedzjnas .gt_footnote_marks {
+#olyiuicttz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#erqedzjnas .gt_asterisk {
+#olyiuicttz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#erqedzjnas .gt_indent_1 {
+#olyiuicttz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#erqedzjnas .gt_indent_2 {
+#olyiuicttz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#erqedzjnas .gt_indent_3 {
+#olyiuicttz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#erqedzjnas .gt_indent_4 {
+#olyiuicttz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#erqedzjnas .gt_indent_5 {
+#olyiuicttz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#erqedzjnas .katex-display {
+#olyiuicttz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#erqedzjnas div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#olyiuicttz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading header">
-<th colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="text-align: left;">xgboost</th>
-</tr>
-<tr class="gt_col_headings even">
-<th id="item" class="gt_col_heading gt_columns_bottom_border gt_left" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">item</th>
-<th id="properties" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">properties</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_1</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_4</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_5</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_8</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">admc.dr_9</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_0</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">40,60</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_3</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_4</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_6</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">40,60</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">bu.e_7</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">30,70</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.08, 0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_1_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.05, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_10_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.06, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_23_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.07, 0.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_23_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_6_conflict</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.01, 0.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">dn.c_6_harmony</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">0.02, 0.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" style="text-align: left;" headers="item">ts_2</td>
-<td class="gt_row gt_center" style="text-align: left;" headers="properties">low, datapoints_30, linear, negative</td>
-</tr>
-</tbody>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #a89f8c;">XGBoost</td>
+    </tr>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="item">item</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="properties">properties</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_1</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_2</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_3</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_4</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_5</td>
+<td headers="properties" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_8</td>
+<td headers="properties" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">admc.dr_9</td>
+<td headers="properties" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_0</td>
+<td headers="properties" class="gt_row gt_center">40,60</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_2</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_3</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_4</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_6</td>
+<td headers="properties" class="gt_row gt_center">40,60</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">bu.e_7</td>
+<td headers="properties" class="gt_row gt_center">30,70</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.08, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_1_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.05, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_10_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.06, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_23_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.07, 0.2</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_23_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_6_conflict</td>
+<td headers="properties" class="gt_row gt_center">0.01, 0.3</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">dn.c_6_harmony</td>
+<td headers="properties" class="gt_row gt_center">0.02, 0.1</td></tr>
+    <tr><td headers="item" class="gt_row gt_left">ts_2</td>
+<td headers="properties" class="gt_row gt_center">low, datapoints_30, linear, negative</td></tr>
+  </tbody>
+  
 </table>
-
 </div>
 </div>
 </div>
-<p>All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy in four arms.</p>
-<p>Each arm will contain three components: the cognitive test of interest, six forecasting items, and some cognitive tests not included in the tests of interest to serve as anchor items across participants.</p>
-<p>The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).</p>
-<p>The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test.</p>
+</div>
+<p>All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we will evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy from participants in a new study with four arms.</p>
+<p>Each arm will contain three components: the (1) cognitive test of interest, (2) six forecasting items, and (3) cognitive tests not included in the tests of interest to serve as anchor items across participants.</p>
+<ol type="1">
+<li><p>The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).</p></li>
+<li></li>
+<li><p>The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test.</p></li>
+</ol>
 <p>We will collect data from participants on Prolific, and participants will be randomized into one of the four arms.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -2714,6 +2627,7 @@ window.Quarto = {
 <section id="analysis" class="level2">
 <h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
 <p>We will compare the correlations between tests and forecasting scores.</p>
+<p>Will be thinking about this more. Feels so silly go to back to sum scores after all this. But I feel like doing some sort of IRT setup incorporating all the items and tasks would be no less complex than doing it on all the cognitive tests as they are in the data, so if not trying to build out that sort of thing now as a test dev method, why do it on the smaller, more disjointed-from-each-other tests?</p>
 
 
 </section>

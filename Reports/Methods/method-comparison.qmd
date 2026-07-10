@@ -1,6 +1,6 @@
 ---
 title: "Method Comparison"
-subtitle: "Search algorithm, LASSO regression, and {xgboost}"
+subtitle: "Search algorithm, ridge regression, and XGBoost"
 date: last-modified
 toc: true
 format: 
@@ -27,8 +27,6 @@ self-contained: true
 #| code-fold: show
 library(tidyverse)
 library(gt)
-
-set_theme(theme_classic(base_size = 16, paper = "#eceadf"))
 ```
 
 #### Reading
@@ -39,7 +37,7 @@ v5_dat <- readRDS(here::here("Data", "v5_dat.rds"))
 
 v5 <- readRDS(here::here("Data", "Search Algorithms", "v5test_dat.rds"))
 xgb <- readRDS(here::here("Data", "xgboost", "xgb_item-importance.rds"))
-lasso <- readRDS(here::here("Data", "ridge_regression.rds"))
+ridge <- readRDS(here::here("Data", "ridge_regression.rds"))
 
 startup_costs <- readRDS(here::here("Data", "startup_costs.rds"))
 
@@ -51,11 +49,12 @@ if (!dir.exists(here::here("Data", "Method Comparison"))) dir.create(here::here(
 ```{r}
 #| code-fold: show
 source(here::here("Scripts", "get_startup.R"))
+source(here::here("Scripts", "j_gt.R"))
 ```
 
 #### Cleaning
 ```{r}
-methods <- list("v5", "lasso", "xgb")
+methods <- list("v5", "ridge", "xgb")
 
 v5_ranked <- v5 |> 
   select(item, v5_rank = rep) |>
@@ -68,15 +67,15 @@ xgb_ranked <- xgb |>
   select(xgb_rank, item = Variable) |>
   arrange(xgb_rank)
 
-lasso_ranked <- lasso |>
-  mutate(lasso_rank = n() - rank(Importance) + 1) |>
-  select(lasso_rank, item = Variable) |>
-  arrange(lasso_rank)
+ridge_ranked <- ridge |>
+  mutate(ridge_rank = n() - rank(Importance) + 1) |>
+  select(ridge_rank, item = Variable) |>
+  arrange(ridge_rank)
 
 ranks <- v5_ranked |>
   full_join(xgb_ranked,
             by = "item") |>
-  full_join(lasso_ranked,
+  full_join(ridge_ranked,
             by = "item") |>
   inner_join(v5_dat |>
                select(task, item, time) |>
@@ -97,18 +96,12 @@ Spearman Rank
 ```{r}
 ranks |>
   select(`Search Algorithm` = v5_rank,
-         `xgboost` = xgb_rank,
-         LASSO = lasso_rank) |>
+         `XGBoost` = xgb_rank,
+         `Ridge` = ridge_rank) |>
   cor(method = "spearman") |>
   as.data.frame() |>
   rownames_to_column() |>
-  gt::gt() |>
-  gt::fmt_number() |>
-  tab_style(style = list(
-              cell_fill(color = "#eceadf"),
-              cell_borders(sides = c("left", "right", "top", "bottom"), 
-                          color = scales::col_darker("#eceadf", 15))),
-            locations = list(cells_body(), cells_column_labels(), cells_title(), cells_stub(), cells_stubhead()))
+  j_gt()
 ```
 :::
 
@@ -118,18 +111,12 @@ Kendall's Tau
 ```{r}
 ranks |>
   select(`Search Algorithm` = v5_rank,
-         `xgboost` = xgb_rank,
-         LASSO = lasso_rank) |>
+         `XGBoost` = xgb_rank,
+         `Ridge` = ridge_rank) |>
   cor(method = "kendall") |>
   as.data.frame() |>
   rownames_to_column() |>
-  gt::gt() |>
-  gt::fmt_number() |>
-  tab_style(style = list(
-              cell_fill(color = "#eceadf"),
-              cell_borders(sides = c("left", "right", "top", "bottom"), 
-                          color = scales::col_darker("#eceadf", 15))),
-            locations = list(cells_body(), cells_column_labels(), cells_title(), cells_stub(), cells_stubhead()))
+  j_gt()
 ```
 :::
 ::::
@@ -145,12 +132,12 @@ ranks |>
 
 ranks |>
   mutate(task = str_split_i(item, "_", 1)) |>
-  ggplot(aes(x = v5_rank, y = lasso_rank, label = item, color = task)) +
+  ggplot(aes(x = v5_rank, y = ridge_rank, label = item, color = task)) +
   geom_text()
 
 ranks |>
   mutate(task = str_split_i(item, "_", 1)) |>
-  ggplot(aes(x = lasso_rank, y = xgb_rank, label = item, color = task)) +
+  ggplot(aes(x = ridge_rank, y = xgb_rank, label = item, color = task)) +
   geom_text()
 ```
 
@@ -231,9 +218,9 @@ saveRDS(xgb_r2_w_time, here::here("Data", "Method Comparison", "xgb_r2_w_time.rd
 ::: {.column width="33%"}
 ```{r}
 #| eval: true
-lasso_r2_w_time <- map(1:99,
+ridge_r2_w_time <- map(1:99,
     \(i) {
-      included_items <- lasso_ranks_w_timing |>
+      included_items <- ridge_ranks_w_timing |>
         select(item, task, v5_rank, cum_time) |>
         head(i)
       
@@ -254,7 +241,7 @@ lasso_r2_w_time <- map(1:99,
                   cum_time = included_items |> filter(cum_time == max(cum_time)) |> pull(cum_time))}) |>
   list_rbind()
 
-saveRDS(lasso_r2_w_time, here::here("Data", "Method Comparison", "lasso_r2_w_time.rds"))
+saveRDS(ridge_r2_w_time, here::here("Data", "Method Comparison", "ridge_r2_w_time.rds"))
 ```
 :::
 ::::
@@ -264,10 +251,10 @@ saveRDS(lasso_r2_w_time, here::here("Data", "Method Comparison", "lasso_r2_w_tim
 #| layout-ncol: 3
 v5_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "v5_r2_w_time.rds"))
 xgb_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "xgb_r2_w_time.rds"))
-lasso_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "lasso_r2_w_time.rds"))
+ridge_r2_w_time <- readRDS(here::here("Data", "Method Comparison", "ridge_r2_w_time.rds"))
 
-walk2(list(v5_r2_w_time, xgb_r2_w_time, lasso_r2_w_time),
-      list("Search Algorithm", "xgboost", "LASSO"),
+walk2(list(v5_r2_w_time, xgb_r2_w_time, ridge_r2_w_time),
+      list("Search Algorithm", "XGBoost", "Ridge"),
       \(d, name) (d |>
                     mutate(task = str_split_i(item, "_", 1)) |>
                     ggplot(aes(x = cum_time, y = test_r2)) +
@@ -288,12 +275,12 @@ v5_ranks_w_timing |>
               filter(cum_time <= 15) |>
               count(task, name = "xgb"),
             by = "task") |>
-  full_join(lasso_ranks_w_timing |>
+  full_join(ridge_ranks_w_timing |>
               filter(cum_time <= 15) |>
-              count(task, name = "lasso"),
+              count(task, name = "ridge"),
             by = "task") |>
   arrange(task) |>
-  gt(rowname_col = "task") |>
+  j_gt(rowname_col = "task") |>
   sub_missing(missing_text = "") |>
   tab_style(style = cell_text(weight = "bold"),
             locations = cells_column_labels())
@@ -305,15 +292,15 @@ v5_ranks_w_timing |>
               filter(cum_time <= 15) |>
               count(task, name = "xgb"),
             by = "task") |>
-  full_join(lasso_ranks_w_timing |>
+  full_join(ridge_ranks_w_timing |>
               filter(cum_time <= 15) |>
-              count(task, name = "lasso"),
+              count(task, name = "ridge"),
             by = "task") |>
   mutate(task = str_split_i(task, "\\.", 1)) |>
   summarize(.by = task,
             across(everything(), ~ sum(.x, na.rm = T))) |>
   arrange(task) |>
-  gt(rowname_col = "task") |>
+  j_gt(rowname_col = "task") |>
   sub_missing(missing_text = "") |>
   sub_zero(zero_text = " ") |>
   tab_style(style = cell_text(weight = "bold"),
@@ -337,15 +324,16 @@ ranks |>
   map(\(item) tibble(item = item,
                      count = sum(c(item %in% v5_test,
                                    item %in% xgb_test,
-                                   item %in% lasso_test)))) |>
+                                   item %in% ridge_test)))) |>
   bind_rows() |>
   filter_out(count == 0) |>
   arrange(desc(count)) |>
   mutate(task = str_split_i(item, "_", 1),
          .before = item)  |>
-  gt(rowname_col = c("task", "item")) |>
+  j_gt(rowname_col = c("task", "item")) |>
   tab_style(style = cell_text(weight = "bold"),
-            locations = cells_column_labels())
+            locations = cells_column_labels()) |>
+  fmt_number(count, decimals = 0)
 ```
 
 
@@ -426,20 +414,6 @@ item_properties <- rbind(
 ```{r}
 #| column: page
 #| layout-ncol: 3
-# methods |>
-#   map(\(method) tibble(item = sym(paste0(method, "_test")) |> eval()) |>
-#          left_join(item_properties,
-#                    by = "item") |>
-#          arrange(item) |>
-#          pmap(\(item, properties) tibble(item, properties) |>
-#                 unnest(cols = c()) |>
-#                 mutate(item = ifelse(str_detect(item, "dn"), item_ct, item),
-#                        .keep = "unused") |>
-#                 nest(properties = !item)) |>
-#          list_rbind() |>
-#          gt() |>
-#          tab_header(method)) 
-
 v5_candidate_test <- tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
          left_join(item_properties,
                    by = "item") |>
@@ -450,10 +424,10 @@ v5_candidate_test <- tibble(item = sym(paste0("v5", "_test")) |> eval()) |>
                        .keep = "unused") |>
                 nest(properties = !item)) |>
          list_rbind() |>
-         gt() |>
+         j_gt() |>
          tab_header("Search Algorithm")
 
-ridge_candidate_test <- tibble(item = sym(paste0("lasso", "_test")) |> eval()) |>
+ridge_candidate_test <- tibble(item = sym(paste0("ridge", "_test")) |> eval()) |>
          left_join(item_properties,
                    by = "item") |>
          arrange(item) |>
@@ -463,8 +437,8 @@ ridge_candidate_test <- tibble(item = sym(paste0("lasso", "_test")) |> eval()) |
                        .keep = "unused") |>
                 nest(properties = !item)) |>
          list_rbind() |>
-         gt() |>
-         tab_header("LASSO")
+         j_gt() |>
+         tab_header("Ridge")
 
 xgboost_candidate_test <- tibble(item = sym(paste0("xgb", "_test")) |> eval()) |>
          left_join(item_properties,
@@ -476,8 +450,8 @@ xgboost_candidate_test <- tibble(item = sym(paste0("xgb", "_test")) |> eval()) |
                        .keep = "unused") |>
                 nest(properties = !item)) |>
          list_rbind() |>
-         gt() |>
-         tab_header("xgboost")
+         j_gt() |>
+         tab_header("XGBoost")
 
 saveRDS(v5_candidate_test, here::here("Data", "Method Comparison", "v5_candidate_test.rds"))
 saveRDS(ridge_candidate_test, here::here("Data", "Method Comparison", "ridge_candidate_test.rds"))
