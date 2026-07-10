@@ -148,16 +148,32 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #e2e0d4; // or any hex
 }
 
-// Mermaid flowcharts
+// Mermaid flowcharts - covers both Mermaid v9 and v10 output
 
-.mermaid .edgePath .path {
-  stroke: #6b6558;    // arrow lines
-  stroke-width: 1.5px;
-}
-
-.mermaid .arrowheadPath {
-  fill: #6b6558;      // arrowhead fill
-  stroke: none;
+.mermaid-js {
+  // Edge lines (v9)
+  .edgePath .path {
+    stroke: #6b6558 !important;
+    stroke-width: 1.5px !important;
+  }
+  
+  // Edge lines (v10+)
+  .flowchart-link {
+    stroke: #6b6558 !important;
+    stroke-width: 1.5px !important;
+  }
+  
+  // Arrowheads (v9)
+  .arrowheadPath {
+    fill: #6b6558 !important;
+    stroke: none !important;
+  }
+  
+  // Arrowheads (v10+)
+  marker path {
+    fill: #6b6558 !important;
+    stroke: none !important;
+  }
 }
 
 // Callout notes

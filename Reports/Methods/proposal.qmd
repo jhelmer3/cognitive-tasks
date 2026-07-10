@@ -248,7 +248,7 @@ flowchart LR
     C --> F[Forecasting Items]
     D --> F[Forecasting Items]
     E --> F[Forecasting Items]
-    F --> G[`Berlin Numeracy, \nCognitive Reflection Test`]
+    F --> G[Berlin Numeracy<br>Cognitive Reflection Scale]
 ```
 
 ## Analysis
