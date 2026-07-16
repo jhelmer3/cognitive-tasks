@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>My Experiment</title>
-        <script src="https://unpkg.com/fpt-battery@latest"></script>
-        <link rel="stylesheet" href="https://unpkg.com/fpt-battery@latest/dist/fpt-battery.css" />
-    </head>
-    <body></body>
-    <script>
-        const config = {
-            tasks: 
-            [
-              { 
+<head>
+    <title>My Experiment</title>
+    <script src="https://unpkg.com/fpt-battery@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/fpt-battery@latest/dist/fpt-battery.css" />
+</head>
+<body></body>
+<script>
+    const config = {
+        tasks: [
+            {
                 task_name: 'time_series',
-                custom_task_settings: 
-                {
-				          FUNCTIONS: ['linear'],
-				          DIRECTIONS: ['negative'],
-				          datapoints: ['datapoints_30'],
-				          test_trials_n: 2,
-				          test_trials_per_block: 2,
-				          test_blocks: 1,
-				          pt_trials_n: 2,
-				          pt_trials_per_block: 2,
-				          pt_blocks: 1,
-				          }
-              },
-              
-              { 
-			          task_name: 'denominator_neglect', 
-			          custom_task_settings: 
-			          {
-				          task_version: 'B',
-				          small_lottery_gold_coin_props: [0.2, 0.3],
-				          large_lottery_gold_coin_prop_range_diff: [0.08],
-				          pt_trials_n: 4,
-				          pt_trials_per_block: 4,
-				          pt_blocks: 1,
-				          test_trials_n: 4,
-				          test_trials_per_block: 4,
-				          test_blocks: 1,
-				          }
-			          }
-              ]
-        };
-        const fpt_battery = initFPTBattery(config);
-        fpt_battery.run();
-    </script>
+                custom_task_settings: {
+                    FUNCTIONS: ['linear'],
+                    DIRECTIONS: ['negative'],
+                    datapoints: ['datapoints_30'],
+                    NOISE: { low: 1.9 },
+                    graphs_per_condition: 1,
+                    pt_trials_n: 2,
+                    pt_trials_per_block: 2,
+                }
+            },
+            {
+                task_name: 'denominator_neglect',
+                custom_task_settings: {
+                    task_version: 'B',
+                    small_lottery_gold_coin_props: [0.2, 0.3],
+                    large_lottery_gold_coin_prop_range_diff: [0.08],
+                    // 2 × 2 × 1 = 4 trials
+                    test_trials_n: 4,
+                    test_trials_per_block: 4,
+                    pt_trials_n: 2,
+                    pt_trials_per_block: 2,
+                }
+            }
+        ],
+        // unpkg no longer publishes assets/ (only dist/) as of fpt-battery 0.6.1 -
+        // pointing at the GitHub repo directly via jsDelivr instead, so this stays live
+        // rather than frozen. Switch to a downloaded local ./assets/ copy once the
+        // study is actually running, to freeze media to that point in time.
+        media_basepath: 'https://cdn.jsdelivr.net/gh/nikbpetrov/FPT-Battery@main/assets/',
+    };
+    const fpt_battery = initFPTBattery(config);
+    fpt_battery.run();
+</script>
 </html>

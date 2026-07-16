@@ -63,7 +63,7 @@ To develop the FPT, seven weeks of data was collected from over 1,000 participan
 
 #### Current Benchmarks
 
-The cognitive tasks included in the all-cognitive-task version of the 60-minute FPT accounted for 54% of the variance in forecaster-level accuracy.
+The cognitive tasks included in the most-cognitive-task version of the 60-minute FPT, with 48 minutes of expected testing time, accounted for 54% of the variance in forecaster-level accuracy. The cognitive tasks included in the shortest-cognitive task version, with 12 minutes of expected testing time, accounted for 43% of the variance in forecaster-level accuracy.
 
 #### Cognitive Measures in Question
 
@@ -226,37 +226,88 @@ readRDS(here::here("Data", "Method Comparison", "ridge_candidate_test.rds"))
 readRDS(here::here("Data", "Method Comparison", "xgboost_candidate_test.rds"))
 ```
 
+
+:::: {.callout-note collapse="true"}
+### Test Version Demos
+
+::: panel-tabset
+### Search Algorithm
+```{r}
+#| file: "../../Test Versions/new_tests/fpt-test_search_local.html"
+#| eval: false
+#| code-summary: "HTML code"
+#| code-overflow: wrap
+
+```
+
+```{=html}
+<iframe src="../../Test Versions/new_tests/fpt-test_search_local.html" width="763px" height="500px"></iframe>
+```
+
+### Ridge Regression
+```{r}
+#| file: "../../Test Versions/new_tests/fpt-test_ridge_local.html"
+#| eval: false
+#| code-summary: "HTML code"
+#| code-overflow: wrap
+
+```
+
+```{=html}
+<iframe src="../../Test Versions/new_tests/fpt-test_ridge_local.html" width="763px" height="500px"></iframe>
+```
+
+### XGBoost
+```{r}
+#| file: "../../Test Versions/new_tests/fpt-test_xgboost_local.html"
+#| eval: false
+#| code-summary: "HTML code"
+#| code-overflow: wrap
+
+```
+
+```{=html}
+<iframe src="../../Test Versions/new_tests/fpt-test_xgboost_local.html" width="763px" height="500px"></iframe>
+```
+
+:::
+
+::::
+
 All of these tests were developed based on retrodictive relationships between theoretical tests and forecasting accuracy scores within an existing sample, as if those tests had been the ones administered to that sample. Next, we will evaluate the performance of these new tests on a new sample, comparing between versions and with the original version of the FPT. To do this, we will collect data on test performance as well as on forecasting accuracy from participants in a new study with four arms.
 
 Each arm will contain three components: the (1) cognitive test of interest, (2) six forecasting items, and (3) cognitive tests not included in the tests of interest to serve as anchor items across participants. 
 
 1. The cognitive test of interest will either be the 15-minute test developed from the search algorithm, ridge regression, or XGBoost, or it will be the (which regular FPT version? the one with six forecasting items?).
 
-2. 
+2. Six quantile forecasting items.
 
 3. The anchor items will be the Berlin Numeracy scale and the Cognitive Reflection Test. 
 
 We will collect data from participants on Prolific, and participants will be randomized into one of the four arms.
 
-```{mermaid}
-flowchart LR
-    A[Prolific] --> B[Search Algorithm Test]
-    A[Prolific] --> C[Ridge Regression Test]
-    A[Prolific] --> D[XGBoost Test]
-    A[Prolific] --> E[Original FPT Test]
-    B --> F[Forecasting Items]
-    C --> F[Forecasting Items]
-    D --> F[Forecasting Items]
-    E --> F[Forecasting Items]
-    F --> G[Berlin Numeracy<br>Cognitive Reflection Scale]
-```
+::: {.callout-warning collapse="show"}
+### Some Open Questions About the Study Design
+
+We know we want to have separate groups of participants take each new shortened FPT version, make some forecasts, and take some brief anchor cognitive tasks for comparison across groups, which is expected to take 50 minutes of testing time. What I'd love some input on is how to setup our "control" FPT conditions. 
+
+If we want to have a condition where participants take the most cognitive-task-heavy version of the FPT, that would start with 48 minutes of expected testing time. Then, six forecasting questions with the FPT paper's estimated four minutes per question, would bring it to 72 minutes, and the anchor questions would total about 80 minutes of testing. Since this is quite a bit more than the shortened-FPT versions' expected testing time, we would either be paying these participants more (probably not good incentive-wise), or we could have some filler task for the shortened-FPT participants, which would increase the total study cost.
+
+Alternatively, or in addition to, we could use the shortest cognitive task FPT as a control, which is expected to take 12 minutes of cognitive testing, and overall would have about the same expected total time as the new short-FPT versions. If we only use this shortest-original-FPT as the control, we won't have a direct comparison with how it would have performed at capturing forecasting accuracy on the items / at that time as the rest of the shortened versions, which seems not totally ideal, but also maybe isn't necessarily super important?
+:::
+
+![Timeline for potential arms of the study. Below, timeline for the original proposed FPT versions, top to bottom as least to most cognitive testing.](../../Figures/study-flow.drawio.svg)
+
 
 ## Analysis
 
-We will compare the correlations between tests and forecasting scores. 
+Our goal is to estimate the proportion of variance that each of the cognitive tasks can explain in forecasters' forecast accuracy. For each test, we will calculate participants' sum scores on each task included. We will then regress scores from each task on aggregate (or multilevel?) forecast accuracy from the six forecasting items. We will compare the resulting $R^2$s from each test to see which test is accounting for the most variance and recovering forecast accuracy.
+
+::: {.callout-note collapse="true"}
+### More Analysis Thoughts
 
 Will be thinking about this more. Feels so silly go to back to sum scores after all this. But I feel like doing some sort of IRT setup incorporating all the items and tasks would be no less complex than doing it on all the cognitive tests as they are in the data, so if not trying to build out that sort of thing now as a test dev method, why do it on the smaller, more disjointed-from-each-other tests?
-
+:::
 
 
 

@@ -16,8 +16,10 @@ knitr:
 
 #### Setup
 
-```{r}
-#| message: false
+
+::: {.cell}
+
+```{.r .cell-code}
 library(tidyverse)
 library(rstan)
 
@@ -27,21 +29,30 @@ options(mc.cores = parallel::detectCores())
 
 set.seed(123)
 ```
+:::
 
 
-```{r}
-#| message: false
+
+
+::: {.cell}
+
+```{.r .cell-code}
 dn_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/task_datasets/data_denominator_neglect.csv")
 
 anchoraig_full <- rio::import("https://raw.githubusercontent.com/forecastingresearch/fpt/refs/heads/main/data_cognitive_tasks/metadata_tables/task_aig_version.csv")
 ```
+:::
+
 
 
 #### Cleaning
 
 ::: panel-tabset
 #### Combined
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 anchor_ids_c <- anchoraig_full %>%
   filter(task == "denominator_neglect_version_A" |
            task == "denominator_neglect_version_B") %>%
@@ -69,9 +80,14 @@ dn_dat_c <- rio::import("https://raw.githubusercontent.com/forecastingresearch/f
 
 saveRDS(dn_dat_c, here::here("Data", "Denominator Neglect", "dn_dat_c.rds"))
 ```
+:::
+
 
 #### Separate
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 anchor_ids_s <- anchoraig_full %>%
   filter(task == "denominator_neglect_version_A" |
            task == "denominator_neglect_version_B") %>%
@@ -105,6 +121,8 @@ saveRDS(dn_dat_s, here::here("Data", "Denominator Neglect", "dn_dat_s.rds"))
 ```
 :::
 
+:::
+
 ## Denominator Neglect
 
 Denominator Neglect is a ratio comparison task in which participants choose between lotteries of gold and silver coins. Participants' goal is to get the most gold coins over the course of the trials and therefore should select the lottery with the highest proportion of gold coins. 
@@ -119,7 +137,10 @@ The following analysis focuses only on the combined version, "Version B."
 
 ### Modeling
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.c_wide <- dn_dat_c |>
   select(subject_id, item, correct) |>
   mutate(item = paste0("item_", item)) |>
@@ -127,9 +148,13 @@ dn.c_wide <- dn_dat_c |>
   select(-subject_id) |>
   drop_na()
 ```
+:::
 
-```{r}
-#| eval: true
+
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.c_m <- stan(here::here("Models", "2pl-code.stan"), 
              data = list(J = nrow(dn.c_wide),
                          K = ncol(dn.c_wide),
@@ -137,16 +162,38 @@ dn.c_m <- stan(here::here("Models", "2pl-code.stan"),
              chains = 4,
              iter = 2500,
              seed = 50401)
-saveRDS(dn.c_m, here::here("Models", "denominator-neglect-c_2pl.rds"))
 ```
 
-``` {r}
+::: {.cell-output .cell-output-stderr}
+
+```
+hash mismatch so recompiling; make sure Stan code ends with a blank line
+```
+
+
+:::
+
+```{.r .cell-code}
+saveRDS(dn.c_m, here::here("Models", "denominator-neglect-c_2pl.rds"))
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.c_m <- readRDS(here::here("Models", "denominator-neglect-c_2pl.rds"))
 ```
+:::
+
 
 Probabilities of correct response given difficulty and discrimination estimates and hypothetical $\theta$ values.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 ps.c <- rstan::extract(dn.c_m, c("a", "b")) |>
   as.data.frame() |>
   mutate(rep = row_number()) |>
@@ -162,28 +209,47 @@ ps.c <- rstan::extract(dn.c_m, c("a", "b")) |>
          info = a^2 * (p_1 * p_0),
          choice_type = ifelse(as.numeric(item) <= 24, "conflict", "harmony"))
 ```
+:::
+
 
 ### Results
 
 Below are the item response curves.
 
-```{r}
-#| fig-width: 10.5
-#| fig-height: 10
+
+::: {.cell}
+
+```{.r .cell-code}
 readRDS(here::here("Figures", "Denominator Neglect", "irc_denominator-neglect.rds"))
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-9-1.png){width=1008}
+:::
+:::
+
+
 And below are the information curves.
 
-```{r}
-#| fig-width: 10.5
-#| fig-height: 10
+
+::: {.cell}
+
+```{.r .cell-code}
 readRDS(here::here("Figures", "Denominator Neglect", "ic_denominator-neglect.rds"))
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-10-1.png){width=1008}
+:::
+:::
+
+
 Test information curve
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 tic.c <- ps.c %>%
   summarize(.by = c(rep, th),
             test_info = sum(info)) |>
@@ -208,9 +274,17 @@ tic.c <- ps.c %>%
 tic.c
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-11-1.png){width=672}
+:::
+:::
 
-```{r}
-#| eval: true
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 top_items.c <- data.frame(conf_item = as.numeric(),
                           harm_item = as.numeric(),
                           test_info_mean = as.numeric(),
@@ -247,8 +321,13 @@ for (i in seq(24)) {
 
 saveRDS(top_items.c, here::here("Data", "Denominator Neglect", "top_items-c.rds"))
 ```
+:::
 
-```{r}
+
+
+::: {.cell}
+
+```{.r .cell-code}
 top_items.c <- readRDS(here::here("Data", "Denominator Neglect", "top_items-c.rds"))
 
 top_items.c |>
@@ -263,6 +342,12 @@ top_items.c |>
         strip.text.x = element_blank())
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-13-1.png){width=672}
+:::
+:::
+
+
 
 ## Denominator Neglect: Separate
 
@@ -273,7 +358,10 @@ The following analysis focuses only on the separate version, "Version A."
 
 ### Modeling
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.s_wide <- dn_dat_s |>
   select(subject_id, item, correct) |>
   mutate(item = paste0("item_", item)) |>
@@ -281,9 +369,13 @@ dn.s_wide <- dn_dat_s |>
   select(-subject_id) |>
   drop_na()
 ```
+:::
 
-```{r}
-#| eval: true
+
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.s_m <- stan(here::here("Models", "2pl-code.stan"), 
              data = list(J = nrow(dn.s_wide),
                          K = ncol(dn.s_wide),
@@ -293,14 +385,24 @@ dn.s_m <- stan(here::here("Models", "2pl-code.stan"),
              seed = 50401)
 saveRDS(dn.s_m, here::here("Models", "denominator-neglect-s_2pl.rds"))
 ```
+:::
 
-``` {r}
+
+
+::: {.cell}
+
+```{.r .cell-code}
 dn.s_m <- readRDS(here::here("Models", "denominator-neglect-s_2pl.rds"))
 ```
+:::
+
 
 Probabilities of correct response given difficulty and discrimination estimates and hypothetical $\theta$ values.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 ps.s <- rstan::extract(dn.s_m, c("a", "b")) |>
   as.data.frame() |>
   mutate(rep = row_number()) |>
@@ -316,28 +418,47 @@ ps.s <- rstan::extract(dn.s_m, c("a", "b")) |>
          info = a^2 * (p_1 * p_0),
          choice_type = ifelse(as.numeric(item) <= 24, "conflict", "harmony"))
 ```
+:::
+
 
 ### Results
 
 Below are the item response curves.
 
-```{r}
-#| fig-width: 10.5
-#| fig-height: 10
+
+::: {.cell}
+
+```{.r .cell-code}
 readRDS(here::here("Figures", "Denominator Neglect", "irc_denominator-neglect.rds"))
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-18-1.png){width=1008}
+:::
+:::
+
+
 And below are the information curves.
 
-```{r}
-#| fig-width: 10.5
-#| fig-height: 10
+
+::: {.cell}
+
+```{.r .cell-code}
 readRDS(here::here("Figures", "Denominator Neglect", "ic_denominator-neglect.rds"))
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-19-1.png){width=1008}
+:::
+:::
+
+
 Test information curve
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 tic.s <- ps.s %>%
   summarize(.by = c(rep, th),
             test_info = sum(info)) |>
@@ -362,9 +483,17 @@ tic.s <- ps.s %>%
 tic.s
 ```
 
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-20-1.png){width=672}
+:::
+:::
 
-```{r}
-#| eval: true
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 top_items.s <- data.frame(conf_item = as.numeric(),
                           harm_item = as.numeric(),
                           test_info_mean = as.numeric(),
@@ -401,8 +530,13 @@ for (i in seq(24)) {
 
 saveRDS(top_items.s, here::here("Data", "Denominator Neglect", "top_items-s.rds"))
 ```
+:::
 
-```{r}
+
+
+::: {.cell}
+
+```{.r .cell-code}
 top_items.s <- readRDS(here::here("Data", "Denominator Neglect", "top_items-s.rds"))
 
 top_items.c |>
@@ -416,6 +550,12 @@ top_items.c |>
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())
 ```
+
+::: {.cell-output-display}
+![](denominator-neglect_report_files/figure-html/unnamed-chunk-22-1.png){width=672}
+:::
+:::
+
 
 
 
@@ -739,5 +879,6 @@ top_items.c |>
 
 
 <!-- ``` -->
+
 
 

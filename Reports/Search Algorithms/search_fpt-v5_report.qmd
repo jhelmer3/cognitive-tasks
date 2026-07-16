@@ -24,6 +24,8 @@ knitr:
 #| message: false
 #| code-fold: show
 library(tidyverse)
+
+set.seed(123)
 ```
 
 #### Reading

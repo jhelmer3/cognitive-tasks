@@ -181,21 +181,41 @@ h1, h2, h3, h4, h5, h6 {
 
 .callout-note {
   border-color: #a89f8c !important;
-  border-left-color: #a89f8c !important;  // the left accent bar
-  
+  border-left-color: #a89f8c !important;
+  overflow: hidden;  // clips header/body backgrounds to the already-rounded outer border
+
   .callout-icon::before {
-    background-image: none;  // removes the default SVG icon color
+    background-image: none;
   }
-  
+
   &.callout-style-default {
     > .callout-header {
-      background-color: $theme-tan-sunken !important;  // header band background
-      color: #202020;             // header text color
+      background-color: $theme-tan-sunken !important;
+      color: #202020;
     }
     > .callout-body {
-      background-color: $theme-tan;  // body background
+      background-color: $theme-tan;
     }
   }
 }
 
+.callout-warning {
+  border-color: $orange !important;
+  border-left-color: $orange !important;
+  overflow: hidden;  // clips header/body backgrounds to the already-rounded outer border
+
+  .callout-icon::before {
+    background-image: none;
+  }
+
+  &.callout-style-default {
+    > .callout-header {
+      background-color: $light-orange !important;
+      color: #202020;
+    }
+    > .callout-body {
+      background-color: $theme-tan;
+    }
+  }
+}
 
