@@ -303,6 +303,16 @@ Alternatively, or in addition to, we could use the shortest cognitive task FPT a
 
 Our goal is to estimate the proportion of variance that each of the cognitive tasks can explain in forecasters' forecast accuracy. For each test, we will calculate participants' sum scores on each task included. We will then regress scores from each task on aggregate (or multilevel?) forecast accuracy from the six forecasting items. We will compare the resulting $R^2$s from each test to see which test is accounting for the most variance and recovering forecast accuracy.
 
+We could also bootstrap $R^2$ values from the models for each test to look at their distributions, which could help in making comparisons between the resulting $R^2$ values. For example, here's 200 bootstraps of the $R^2$ values of the models from the tests on the existing data (both on the $R^2$ scale and z-scale).
+
+```{r}
+#| fig-height: 4
+#| fig-width: 11
+#| message: false
+readRDS(here::here("Figures", "r2s_plts"))
+```
+
+
 ::: {.callout-note collapse="true"}
 ### More Analysis Thoughts
 

@@ -461,3 +461,108 @@ v5_candidate_test
 ridge_candidate_test
 xgboost_candidate_test
 ```
+
+
+```{r}
+map(c("v5", "ridge", "xgb"), \(test_data_name) test_data_name |>
+      paste0("_r2_w_time") |>
+      sym() |>
+      eval() |>
+      filter(cum_time <= 15) |>
+      filter(cum_time == max(cum_time)) |>
+      select(test_r2) |>
+      mutate(method = test_data_name)) |>
+  list_rbind() |>
+  pivot_wider(names_from = method, values_from = test_r2) |>
+  j_gt() |>
+  cols_label(v5 = "Search",
+             ridge = "Ridge",
+             xgb = "XGBoost") |>
+  tab_header(md("$R^2$ of Each Test"))
+```
+
+
+```{r}
+n_bootstraps <- 200
+
+bootstrapped_r2 <- map(c("v5", "ridge", "xgb"), \(test_data_name) {
+  test_data <- test_data_name |>
+    paste0("_r2_w_time") |>
+    sym() |>
+    eval()
+  
+  test_15_min_items <- test_data |>
+    filter(cum_time <= 15) |>
+    pull(item)
+  
+  test_15_min_dat <- v5_dat |>
+    filter(item %in% test_15_min_items) |>
+    summarize(.by = c(subject_id, task),
+              sscore = first(sscore),
+              score = mean(score)) |>
+    mutate(formula = paste("sscore ~", task |> unique() |> paste(collapse = "+"))) |>
+    pivot_wider(names_from = task, values_from = score) |>
+    drop_na()
+  
+  map(1:n_bootstraps, \(i)
+      test_15_min_dat |>
+        slice_sample(n = nrow(test_15_min_dat), replace = T) |>
+        summarize(test = test_data_name,
+                  bootstrap_id = i,
+                  test_r2 = summary(lm(as.formula(first(formula)),
+                                       data = pick(everything())))$r.squared)) |>
+    list_rbind()
+}
+) |> list_rbind()
+
+r2s_plts <- patchwork::wrap_plots(
+  bootstrapped_r2 |>
+  ggplot(aes(x = test_r2, y = test, fill = test)) +
+  ggridges::geom_density_ridges() +
+    theme(aspect.ratio = 1/1.5),
+  
+  bootstrapped_r2 |>
+  mutate(test_r2_z = (test_r2 - mean(test_r2)) / sd(test_r2)) |>
+  ggplot(aes(x = test_r2_z, y = test, fill = test)) +
+  ggridges::geom_density_ridges() +
+    theme(aspect.ratio = 1/1.5), 
+  guides = "collect"
+)
+
+r2s_plts
+saveRDS(r2s_plts, here::here("Figures", "r2s_plts"))
+
+
+bootstrapped_r2 |>
+  lm(test_r2 ~ test, data = _) |>
+  anova()
+
+cohens_ds <- bootstrapped_r2 |>
+  select(test1 = test) |>
+  unique() |>
+  crossing(test2 = bootstrapped_r2 |>
+             pull(test) |>
+             unique()) |>
+  filter_out(test1 == test2) |>
+  pmap(
+    \(test1, test2) {
+      d <- bootstrapped_r2 |>
+        filter(test == test1 | test == test2)
+      
+      d |>
+        summarize(test1 = test1,
+                  test2 = test2,
+                  cohens_d = effectsize::cohens_d(test_r2 ~ test, data = d)$Cohens_d)
+    }
+  ) |>
+  list_rbind()
+
+cohens_ds |>
+  ggplot(aes(x = test1, y = test2, alpha = cohens_d)) +
+  geom_tile(show.legend = F, fill = "orange2") +
+  geom_text(aes(label = round(cohens_d, 2)), alpha = 1) +
+  scale_alpha_continuous(range = c(0, max(cohens_ds$cohens_d))) +
+  theme(aspect.ratio = 1)
+```
+
+
