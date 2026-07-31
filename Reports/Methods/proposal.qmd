@@ -230,14 +230,14 @@ readRDS(here::here("Data", "Method Comparison", "xgboost_candidate_test.rds"))
 :::: {.callout-note collapse="true"}
 ### Test Version Demos
 
-[Live Web Demo](http://143.244.171.86/publix/rbjP0pD8JmG){.btn .btn-outline-primary .btn role="button" target="_blank"}
+[Live Web Demo](http://142.93.52.117/publix/a4rPAvPZgRV){.btn .btn-outline-primary .btn role="button" target="_blank"}
 
 This link has placeholders for study overview and informed consent, then randomizes into one of the tests. The page that tells you which test you were randomized into will be for testing only.
 
 ::: panel-tabset
 ### Search Algorithm
 
-[Search Web Demo](http://143.244.171.86/publix/rbjP0pD8JmG?forceTask=search){.btn .btn-outline-primary .btn role="button" target="_blank"}
+[Search Web Demo](http://142.93.52.117/publix/a4rPAvPZgRV?forceTask=search){.btn .btn-outline-primary .btn role="button" target="_blank"}
 
 ```{r}
 #| file: "../../Test Versions/new_tests/fpt-test_search_local.html"
@@ -253,7 +253,7 @@ This link has placeholders for study overview and informed consent, then randomi
 
 ### Ridge Regression
 
-[Ridge Web Demo](http://143.244.171.86/publix/rbjP0pD8JmG?forceTask=ridge){.btn .btn-outline-primary .btn role="button" target="_blank"}
+[Ridge Web Demo](http://142.93.52.117/publix/a4rPAvPZgRV?forceTask=ridge){.btn .btn-outline-primary .btn role="button" target="_blank"}
 
 ```{r}
 #| file: "../../Test Versions/new_tests/fpt-test_ridge_local.html"
@@ -269,7 +269,7 @@ This link has placeholders for study overview and informed consent, then randomi
 
 ### XGBoost
 
-[xgboost Web Demo](http://143.244.171.86/publix/rbjP0pD8JmG?forceTask=xgboost){.btn .btn-outline-primary .btn role="button" target="_blank"}
+[xgboost Web Demo](http://142.93.52.117/publix/a4rPAvPZgRV?forceTask=xgboost){.btn .btn-outline-primary .btn role="button" target="_blank"}
 
 ```{r}
 #| file: "../../Test Versions/new_tests/fpt-test_xgboost_local.html"
