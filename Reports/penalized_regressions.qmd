@@ -1,0 +1,85 @@
+---
+title: "Penalized Regressions"
+date: last-modified
+toc: true
+format: 
+  html:
+    code-fold: true
+    grid: 
+      margin-width: 350px
+      gutter-width: 1em
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+lightbox: auto
+---
+
+::: panel-tabset
+#### Setup
+
+```{r}
+#| message: false
+#| code-fold: show
+library(tidyverse)
+library(targets)
+library(tarchetypes) 
+library(gt)
+```
+
+#### Reading
+
+```{r}
+#| code-fold: show
+tar_load(
+  penalized_regression_fit_statistics_combined,
+  store = here::here("_targets")
+)
+
+tar_load(
+  j_gt_hash,
+  store = here::here("_targets")
+)
+```
+
+#### Functions
+
+```{r}
+#| code-fold: show
+tar_source(here::here("R"))
+```
+:::
+
+## Comparing Methods
+
+```{r}
+fit_statistics <- penalized_regression_fit_statistics_combined |>
+  mutate(method = case_when(
+    str_detect(method, "lasso") ~ "LASSO",
+    str_detect(method, "elasticnet") ~ "Elastic Net",
+    str_detect(method, "ridge") ~ "Ridge"
+  )) |>
+  select(method, metric = .metric, estimate = .estimate) |>
+  pivot_wider(names_from = metric, values_from = estimate)
+
+fit_stat_cols <- fit_statistics |>
+  select(-method) |> 
+  names()
+
+fit_statistics |>
+  j_gt() |>
+  fmt_number(decimals = 3) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = rmse, rows = rmse == min(rmse))) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = rsq, rows = rsq == max(rsq))) |>
+    tab_style(cell_fill(color = "#e2eee2"),
+            cells_body(columns = mae, rows = mae == min(mae))) |>
+  tab_style(cell_text(weight = "bold"),
+            cells_column_labels()) |>
+  cols_label_with(columns = -method, str_to_upper) |>
+  cols_label_with(columns = method, str_to_title)
+```
+

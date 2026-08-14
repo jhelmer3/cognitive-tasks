@@ -1,0 +1,155 @@
+---
+title: "Developing a Fifteen-Minute Forecasting Proficiency Test"
+format: 
+  html: default
+  typst:
+    margin:
+      x: 1in
+      y: 1in
+    columns: 2
+    template-partials:
+      - ../typst-template.typ
+date: last-modified
+author: Jessica Helmer
+knitr:
+    opts_chunk: 
+      dev: png
+      dev.args:
+        bg: transparent
+execute:
+  echo: false
+  message: false
+---
+
+## Introduction
+
+Identifying talented forecasters is crucial for ensuring decision-makers across levels and domains have access to informative forecasts about future events, but this talent-spotting process has historically required expensive, months-long forecasting tournaments. The development of the recent Forecasting Proficiency Test (FPT) moved the goalpost in forecaster skill measurement, creating a 60-minute test that captured over 70% of the variation in forecaster accuracy. However, 60 minutes may still be too long for some researchers or forecasters to implement in practice. In this work, we develop a 15-minute version of the FPT that still maintains high talent-spotting capabilities.
+
+#### Current Benchmarks
+
+The cognitive tasks included in the most-cognitive-task version of the 60-minute FPT, with 48 minutes of expected testing time, accounted for 54% of the variance in forecaster-level accuracy in-sample. The cognitive tasks included in the shortest-cognitive task version, with 12 minutes of expected testing time, accounted for 43% of the variance in forecaster-level accuracy in-sample.
+
+## Methods
+
+To develop candidate shorter versions of the FPT, we used the data collected for the FPT test development, which had data from over 1,000 participants on both a set of 36 forecasts and on a large battery of cognitive tasks. Because scoring forecasts typically requires waiting until the forecasting items have resolved, we exclusively focus on the cognitive tasks as measures of forecasting skill in this work.
+
+We also only focused on the cognitive tasks that in the original FPT paper that showed strong enough associations with forecasting ability to warrant being included in any FPT version. Using all items from Denominator Neglect: Separate, Denominator Neglect: Combined, Bayesian Update: Easy, Bayesian Update: Hard, Time Series, Adult Decision Making Competency: Decision Rules, and Number Series yielded 99 candidate items to potentially be included in the new test. We split this data into a training, validation, and testing set to build and compare the performance of each method.
+
+### Candidate Test Creation Methods
+
+We used three different methods to identify candidate tests for these new FPT versions. Our overall strategy was to use each method to achieve some ranking of all potential items in terms of their usefulness in predicting forecasting ability. Then we selected as many items as we could to create a test expected to take under 15 minutes to complete. All methods were optimizing towards the strength of relationship of items with forecasting accuracy scores. 
+
+#### Search Algorithm
+
+This algorithm iterated through all candidate items and identified the item that, when added to a "test" of previously-added items, yielded the greatest ratio of increase in predictive ability to increase in testing time, $\frac{\text{added }R^2}{\text{added time}}$. The numerator represents the increase in the $R^2$ of a model with the sum scores of all previously selected test items and the item in question compared to the $R^2$ of a model of scores just of the previously selected test items.
+
+#### Elastic Net Regression
+
+We chose elastic net regression as an item selection method by comparing the performance of models from the family of ridge, elastic net, and LASSO regression to see which showed the strongest predictive ability. We used all 99 candidate items as separate predictors. Elastic net regression showed the strongest validation set fit per Root Mean Squared Error, so we proceeded with elastic net with a mixture parameter of 0.05, and we used the slope parameter estimates from the final tuned model to determine the item ranks.
+
+#### XGBoost
+
+XGBoost is a well known and high-performing gradient-boosted ensemble method. It sequentially builds an "ensemble" of many regression trees that learn from previous trees identify cut-points in a series predictors that maximize variance in the outcome on either side of the cut-point. The proportion of times that a given predictor is selected by the algorithm to appear in a regression tree can serve as a measure of its importance in predicting the outcome, and we used this importance measure to determine the item ranks.
+
+## Results
+
+After identifying the 15-minute test created by each method, we built a linear model of the sum scores from each task predicting forecasting accuracy and fit it on the held-out testing data. The $R^2$ of each model are displayed below.
+
+```{=typst}
+#align(center)[
+```
+
+```{r}
+#| message: false
+library(tidyverse)
+library(targets)
+library(tarchetypes)
+library(gt)
+
+tar_source(here::here("R"))
+
+tar_load(c(search_algorithm_short_test, search_algorithm_short_test_r2, search_algorithm_short_test_r2_train,
+           elasticnet_short_test, elasticnet_short_test_r2, elasticnet_short_test_r2_train,
+           xgboost_short_test, xgboost_short_test_r2, xgboost_short_test_r2_train),
+         store = here::here("_targets"))
+
+tar_load(c(j_gt_hash),
+         store = here::here("_targets"))
+
+test_r2s <- tibble(
+  "Data" = c("Testing", "Training"),
+  "Search" = c(search_algorithm_short_test_r2, search_algorithm_short_test_r2_train),
+  "Elastic Net" = c(elasticnet_short_test_r2, elasticnet_short_test_r2_train),
+  "XGBoost" = c(xgboost_short_test_r2, xgboost_short_test_r2_train))
+
+max_r2_test <- test_r2s |>
+  filter(Data == "Testing") |>
+  pivot_longer(!Data, names_to = "test", values_to = "r2") |>
+  filter(r2 == max(r2))
+
+search_algorithm_short_time <- search_algorithm_short_test |>
+  filter(cum_time == max(cum_time)) |>
+  pull(cum_time) |>
+  round(2)
+```
+
+```{r}
+test_r2s |>
+  gt() |>
+  fmt_number(decimals = 2)  |>
+  text_transform(
+    locations = cells_body(columns = c(Search, `Elastic Net`, XGBoost)),
+    fn = \(r2) sub("^(-?)0\\.", "\\1.", r2)
+  ) |>
+  tab_header(md("$R^2$ of Test for Each Method")) |>
+  tab_options(
+    table.font.size = px(14),
+    table.font.names = "Libertinus Serif"
+  ) 
+```
+
+```{=typst}
+]
+```
+
+While these item selection methods overall created fairly similar tests, given that the `r max_r2_test$test` method had the highest $R^2$ on the testing data, we recommend that test as a 15-minute FPT version. It contains `r search_algorithm_short_test$item |> unique() |> length()` items, with a breakdown by task below.
+
+```{=typst}
+#align(center)[
+```
+
+```{r}
+search_algorithm_short_test |>
+  summarize(.by = task,
+            `Items` = n()) |>
+  mutate(Task = recode_values(
+    task,
+    "admc.dr" ~ "ADMC: Decision Rules",
+    "dn.c" ~ "Denominator Neglect: Combined",
+    "ts" ~ "Time Series",
+    "bu.e" ~ "Bayesian Update: Easy",
+    "dn.s" ~ "Denominator Neglect: Separate"
+  ),
+  .keep = "unused",
+  .before = `Items`) |>
+  arrange(Task) |>
+  gt() |> 
+  fmt_number(decimals = 0) |>
+  tab_header("Search Algorithm Short Test") |>
+  tab_footnote(glue::glue("Expected testing time: {search_algorithm_short_time} minutes.")) |>
+  tab_options(
+    table.font.size = px(14),
+    table.font.names = "Libertinus Serif"
+  )
+```
+
+```{=typst}
+]
+```
+
+Overall, this work was able to build a real-time scoreable measure of forecasting ability that takes a quarter of the time of existing FPTs and still maintains high predictive accuracy.
+
+
+<!-- ::: {.content-visible when-format="typst"} -->
+<!-- More details, code, and analysis can be found at [jhelmer3.github.io/cognitive-tasks](https://jhelmer3.github.io/cognitive-tasks/). -->
+<!-- ::: -->

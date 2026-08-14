@@ -148,7 +148,7 @@ Searching through items of different combinations of FPT tasks, maximizing $\fra
 
 :::: {.columns .v-center-container}
 ::: {.column width="70%"}
-### LASSO
+### Elastic Net
 
 
 :::
@@ -157,7 +157,7 @@ Searching through items of different combinations of FPT tasks, maximizing $\fra
 :::
 
 ::: {.column width="25%" .l-center-container}
-[LASSO](/Reports/lasso.qmd){.btn .btn-outline-primary .btn role="button"}
+[Elastic Net](/Reports/penalized_regressions.qmd){.btn .btn-outline-primary .btn role="button"}
 :::
 ::::
 

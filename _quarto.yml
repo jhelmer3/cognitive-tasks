@@ -27,7 +27,7 @@ website:
           - Reports/Search Algorithms/search_fpt-v5_report.qmd
       - text: "Regressions"
         menu: 
-          - Reports/lasso.qmd
+          - Reports/penalized_regressions.qmd
           - Reports/xgboost.qmd
       - text: "Methods"
         menu:
@@ -37,6 +37,7 @@ website:
       - text: "Custom FPTs"
         menu:
           - Test Versions/test0.qmd
+      - Reports/post-summer.qmd
     tools:
       - icon: github
         href: https://github.com/jhelmer3/cognitive-tasks
